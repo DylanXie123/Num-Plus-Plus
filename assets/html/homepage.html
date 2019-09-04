@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>MathQuill Demo</title>
+
+<link rel="stylesheet" href="./mathquill.css"/>
+<style type="text/css">
+body {
+    height: 100px;
+}
+#math-field {
+    position: absolute;
+    left:2%; top:5%;
+    width:95%; height:90%;
+    text-align: right;
+    background-color: yellow;
+    color: red;
+}
+</style>
+
+<script src="./jquery-3.4.1.min.js"></script>
+<script src="./mathquill.min.js"></script>
+
+<script>
+    var MQ = MathQuill.getInterface(2);
+</script>
+</head>
+
+<body id="math-body">
+
+<span id="math-field"></span>
+
+<script>
+var textSpan;
+
+var mathFieldSpan = document.getElementById('math-field');
+
+var mathField = MQ.MathField(mathFieldSpan, {
+    spaceBehavesLikeTab: true,
+    substituteTextarea: function() {
+        return document.createElement('span');
+    },
+});
+
+var mathBlock = document.getElementsByClassName("mq-root-block")[0];
+const sizeconstant = 50;
+mathBlock.style.height = sizeconstant*2.5 + "px";
+mathBlock.style.fontSize = sizeconstant + "px";
+
+function initial() {
+    mathField.focus();
+}
+
+function addCmd(message) {
+    mathField.cmd(message);
+    mathBlock.style.height = sizeconstant*2.5 + "px";
+    mathBlock.style.fontSize = sizeconstant + "px";
+    if (mathBlock.scrollHeight > 100) {
+        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize);
+        var scale = mathBlock.offsetHeight / (mathBlock.scrollHeight / textsize);
+        console.log(scale);
+        mathBlock.style.fontSize = scale+"px";
+    }
+    mathField.focus();
+    post();
+}
+
+function addString(message) {
+    mathField.write(message);
+    mathField.focus();
+    post();
+}
+
+function delString() {
+    mathField.keystroke('Backspace');
+    mathBlock.style.height = sizeconstant*2.5 + "px";
+    mathBlock.style.fontSize = sizeconstant + "px";
+    if (mathBlock.scrollHeight > 100) {
+        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize);
+        var scale = mathBlock.offsetHeight / (mathBlock.scrollHeight / textsize);
+        console.log(scale);
+        mathBlock.style.fontSize = scale+"px";
+    }
+    mathField.focus();
+    post();
+}
+
+function delAll() {
+    mathField.keystroke('Ctrl-A Backspace');
+    mathBlock.style.height = sizeconstant*2.5 + "px";
+    mathBlock.style.fontSize = sizeconstant + "px";
+    mathField.focus();
+    post();
+}
+
+function post() {
+    latexString.postMessage(mathField.latex());
+}
+
+</script>
+
+</body>
+</html>

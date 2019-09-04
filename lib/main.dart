@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:math_expressions/math_expressions.dart';
-import 'dart:math' as math;
+import 'package:webview_flutter/webview_flutter.dart';
+
+// user-defined widget
+import 'server.dart';
+import 'mybutton.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -21,131 +24,147 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final mycontroller = new CalcController();
+WebViewController webViewController;
 
-class CalcController extends TextEditingController {
-  var _temp = 0;
-
-  void addString(String text) {
-    _temp = super.selection.baseOffset;
-    _temp = _temp > 0 ? _temp : 0;
-
-    super.text = super.text.substring(0, _temp) + text + super.text.substring(_temp);
-
-    super.selection = TextSelection.collapsed(
-      offset: _temp + text.length,
-    );
+void addExpression(String msg) {
+  if (msg.startsWith(r'\') || msg.contains(r'/')) {
+    webViewController.evaluateJavascript("addCmd('$msg')");
+    print("addCmd('$msg')");
+  } else {
+    webViewController.evaluateJavascript("addString($msg)");
   }
-
-  void deleteString() {
-    _temp = super.selection.baseOffset;
-    
-    if(_temp > 0) {
-      super.text = super.text.substring(0, _temp-1) +  super.text.substring(_temp);
-
-      super.selection = TextSelection.collapsed(
-      offset: _temp - 1,
-    );
-    }
-    
-  }
-
 }
 
-class MyButton extends StatelessWidget{
-  final String _text;
-  final double _width = 20.0; //40.0 is better
-  
-  MyButton(this._text);
+void delExpression() {
+  webViewController.evaluateJavascript("delString()");
+}
+
+void delAllExpression() {
+  webViewController.evaluateJavascript("delAll()");
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Server _server;
+  String baseUrl;
+
+  String expressionText = '';
 
   @override
-  Widget build (BuildContext context){
-    return Container(
-      height: _width * 2,
-      width: _width * 2,
-      alignment: Alignment.center,
-      child: InkResponse(
-        radius: _width * 1.2,
-        splashFactory: InkRipple.splashFactory,
-        highlightColor: Colors.transparent,
-        onTap: () {
-          mycontroller.addString(_text);
-        },
-        child: Container(
-          height: _width * 2,
-          width: _width * 2,
-          alignment: Alignment.center,
-          child: Text(
-            _text,
-            style: TextStyle(
-              fontSize: _width / 1.3,
-              color: Colors.black,
-              fontFamily: 'RobotoMono',
-            ),
-          ),
-        ),
-      ),
-    );
+  void initState() {
+    _server = Server();
+    baseUrl = "http://localhost:8080/assets/html/homepage.html";
+    super.initState();
+    _server.start();
   }
-}
-
-class HomePage extends StatelessWidget {
-  
-  final TextEditingController _resultcontroller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuit');
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Demo'),
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
-          TextField(
-            readOnly: true,
-            showCursor: true,
-            autofocus: true,
-            controller: mycontroller,
+          Container(
+            height: 150.0,
+            child: WebView(
+              onWebViewCreated: (controller) {
+                webViewController = controller;
+                webViewController.loadUrl("$baseUrl");
+              },
+              onPageFinished: (url) {},
+              javascriptMode: JavascriptMode.unrestricted,
+              javascriptChannels: Set.from([
+                JavascriptChannel(
+                  name: 'latexString',
+                  onMessageReceived: (JavascriptMessage message) {
+                    setState(() {
+                      expressionText = message.message;  
+                    });
+                  }
+                ),
+              ]),
+            ),
           ),
-          TextField(
-            readOnly: true,
-            controller: _resultcontroller,
-            autofocus: false,
+          Text(expressionText),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: <Widget>[
+                MyButton(
+                  onPressed: () {
+                    addExpression('/');
+                  },
+                  text: 'frac',
+                ),
+                MyButton(
+                  onPressed: () {
+                    delExpression();
+                  },
+                  text: 'Del',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('43');
+                  },
+                  text: '43',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\sqrt');
+                  },
+                  text: 'sqrt',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\sin');
+                    addExpression('\\(');
+                  },
+                  text: 'sin',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\(');
+                  },
+                  text: 'c',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\)');
+                  },
+                  text: ')',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\int');
+                  },
+                  text: 'int',
+                ),
+                MyButton(
+                  onPressed: () {
+                    delAllExpression();
+                  },
+                  text: 'AC',
+                ),
+              ],
+            ),
           ),
-          MyButton('3'),
-          MyButton('7'),
-          MyButton('sin('),
-          MyButton(')'),
-          MyButton('nrt'),
-          MyButton('*'),
-          MyButton('.'),
-          MyButton(math.pi.toString()),
-          RaisedButton(
-            onPressed: () {
-              mycontroller.deleteString();
-            },
-            child: Icon(Icons.backspace),
-          ),
-          RaisedButton(
-            onPressed: () {
-              mycontroller.clear();
-              _resultcontroller.clear();
-            },
-            child: Text('Clear'),
-          ),
-          RaisedButton(
-            onPressed: () {
-              Parser p = new Parser();
-              Expression exp = p.parse(mycontroller.text);
-              ContextModel cm = new ContextModel();
-              double eval = exp.evaluate(EvaluationType.REAL, cm);
-              _resultcontroller.clear();
-              _resultcontroller.text += eval.toString();
-            },
-            child: Text('='),
-          )
         ],
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _server.close();
+    super.dispose();
+  }
+
 }
+
