@@ -26,6 +26,7 @@ dependencies:
   math_expressions: ^1.1.1
   webview_flutter: ^0.3.13
   mime: ^0.9.6+3
+  petitparser: ^2.4.0
 
 dev_dependencies:
   flutter_test:
