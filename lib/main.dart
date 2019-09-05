@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-// user-defined widget
 import 'server.dart';
 import 'mybutton.dart';
+import 'latex_parser.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -27,12 +27,8 @@ class MyApp extends StatelessWidget {
 WebViewController webViewController;
 
 void addExpression(String msg) {
-  if (msg.startsWith(r'\') || msg.contains(r'/')) {
-    webViewController.evaluateJavascript("addCmd('$msg')");
-    print("addCmd('$msg')");
-  } else {
-    webViewController.evaluateJavascript("addString($msg)");
-  }
+  webViewController.evaluateJavascript("addCmd('$msg')");
+  print("addCmd('$msg')");
 }
 
 void delExpression() {
@@ -53,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   String baseUrl;
 
   String expressionText = '';
+  String resultText = '';
 
   @override
   void initState() {
@@ -92,10 +89,11 @@ class _HomePageState extends State<HomePage> {
               ]),
             ),
           ),
-          Text(expressionText),
+          Text('Input: ' + expressionText),
+          Text('Output: ' + resultText),
           Expanded(
             child: GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: 4,
               children: <Widget>[
                 MyButton(
                   onPressed: () {
@@ -111,9 +109,45 @@ class _HomePageState extends State<HomePage> {
                 ),
                 MyButton(
                   onPressed: () {
-                    addExpression('43');
+                    addExpression('2');
                   },
-                  text: '43',
+                  text: '2',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('4');
+                  },
+                  text: '4',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('.');
+                  },
+                  text: '.',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('^');
+                  },
+                  text: '^',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('e');
+                  },
+                  text: 'e',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\\\times');
+                  },
+                  text: '*',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('+');
+                  },
+                  text: '+',
                 ),
                 MyButton(
                   onPressed: () {
@@ -132,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     addExpression('\\(');
                   },
-                  text: 'c',
+                  text: '(',
                 ),
                 MyButton(
                   onPressed: () {
@@ -149,8 +183,22 @@ class _HomePageState extends State<HomePage> {
                 MyButton(
                   onPressed: () {
                     delAllExpression();
+                    setState(() {
+                      resultText = '';
+                    });
                   },
                   text: 'AC',
+                ),
+                MyButton(
+                  onPressed: () {
+                    setState(() {
+                      LatexParser lp = LatexParser();
+                      lp.parse(expressionText);
+                      resultText = lp.result.toString();
+                      print(lp.result);
+                    });
+                  },
+                  text: '=',
                 ),
               ],
             ),
