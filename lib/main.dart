@@ -195,7 +195,9 @@ class _HomePageState extends State<HomePage> {
                       LatexParser lp = LatexParser();
                       lp.parse(expressionText);
                       resultText = lp.result.toString();
-                      print(lp.result);
+                      if (lp.result.isSuccess) {
+                        print(lp.result.value);
+                      }
                     });
                   },
                   text: '=',
