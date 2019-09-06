@@ -6,6 +6,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'server.dart';
 import 'mybutton.dart';
 import 'latex_parser.dart';
+import 'function.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -185,6 +186,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 MyButton(
                   onPressed: () {
+                    addExpression('x');
+                  },
+                  text: 'x',
+                ),
+                MyButton(
+                  onPressed: () {
                     delAllExpression();
                     setState(() {
                       mathExpression = '';
@@ -200,14 +207,19 @@ class _HomePageState extends State<HomePage> {
                       lp.parse(latexExpression);
                       mathExpression = lp.result.toString();
                       if (lp.result.isSuccess) {
-                        print(lp.result.value);
+                        print(lp.result.value is String);
                       }
-                      // Parser p = new Parser();
-                      // Expression exp = p.parse(lp.result.value);
-                      // ContextModel cm = new ContextModel();
-                      // double eval = exp.evaluate(EvaluationType.REAL, cm);
-                      // resultText = eval.toString();
-                      // print(eval);
+                      if (mathExpression.contains('x')) {
+                        MyFunction f = MyFunction(lp.result.value);
+                        resultText = f.calc(1).toString();
+                      } else {
+                        Parser p = new Parser();
+                        Expression exp = p.parse(lp.result.value);
+                        ContextModel cm = new ContextModel();
+                        double eval = exp.evaluate(EvaluationType.REAL, cm);
+                        resultText = eval.toString();
+                        print(eval);
+                      }
                     });
                   },
                   text: '=',
