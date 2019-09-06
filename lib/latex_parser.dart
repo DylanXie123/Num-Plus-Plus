@@ -21,11 +21,23 @@ class LatexParser {
     return result;
   }
 
+  // (experimental)
+  List<num> divide(num a, num b) {
+    if (intCheck(a) is int && intCheck(b) is int) {
+      int t = a.toInt();
+      int divisor = t.gcd(b);
+      return [intCheck(a/divisor),intCheck(b/divisor)];
+    } else {
+      return [a/b];
+    }
+  }
+  
   //TODO: Add log_ function support
   void parse(String latexmath) {
 
     final builder = new ExpressionBuilder();    
 
+    // Numbers
     Parser number() => digit().plus().seq(char('.').seq(digit().plus()).optional()).flatten().map((a) => num.tryParse(a));
 
     // Constant
@@ -36,18 +48,13 @@ class LatexParser {
       pi() |
       e();
 
+    // Variable (experimental)
+    Parser variable() => char('x');
+
     // Binary Operators
     Parser binary(String element) => string('$element'+'{').seq(number().or(constant())).seq(char('}'));
 
-    List<num> divide(num a, num b) {
-      if (intCheck(a) is int && intCheck(b) is int) {
-        int t = a.toInt();
-        int divisor = t.gcd(b);
-        return [intCheck(a/divisor),intCheck(b/divisor)];
-      } else {
-        return [a/b];
-      }
-    }
+    
 
     // Unary Operators
     // Parser func() =>
@@ -56,8 +63,7 @@ class LatexParser {
     //   string('\\sqrt');
     
     builder.group()
-      ..primitive(number())
-      ..primitive(constant())
+      ..primitive(number()|constant()|variable())
       ..wrapper(char('{'), char('}'), (l, a, r) => a)
       ..wrapper(char('('), char(')'), (l, a, r) => a)
       ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => a);
@@ -65,7 +71,7 @@ class LatexParser {
     // prefix group
     builder.group()
       ..prefix(char('-'), (op, a) => -a)
-      ..prefix(binary('\\frac'), (op, a) => divide(op[1],a))
+      ..prefix(binary('\\frac'), (op, a) => op[1] / a)
       ..prefix(string('\\sqrt'), (op, a) => math.sqrt(a))
       ..prefix(string('\\ln'), (op, a) => math.log(a))
       ..prefix(string('\\sin'), (op, a) => math.sin(a));
@@ -76,7 +82,7 @@ class LatexParser {
 
     // left-associative group
     builder.group() // make \times default operator
-      ..left(binary('\\frac'), (a, op, b) => a * divide(op[1],a))
+      ..left(binary('\\frac'), (a, op, b) => a * op[1] / a)
       ..left(string('\\sin'), (a, op, b) => a * math.sin(b));
 
     builder.group()
