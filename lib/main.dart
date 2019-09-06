@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 import 'server.dart';
 import 'mybutton.dart';
@@ -48,7 +49,8 @@ class _HomePageState extends State<HomePage> {
   Server _server;
   String baseUrl;
 
-  String expressionText = '';
+  String latexExpression = '';
+  String mathExpression = '';
   String resultText = '';
 
   @override
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuit');
+    // print('Rebuit');
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Demo'),
@@ -82,14 +84,15 @@ class _HomePageState extends State<HomePage> {
                   name: 'latexString',
                   onMessageReceived: (JavascriptMessage message) {
                     setState(() {
-                      expressionText = message.message;  
+                      latexExpression = message.message;  
                     });
                   }
                 ),
               ]),
             ),
           ),
-          Text('Input: ' + expressionText),
+          Text('Latex: ' + latexExpression),
+          Text('Math: ' + mathExpression),
           Text('Output: ' + resultText),
           Expanded(
             child: GridView.count(
@@ -184,6 +187,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     delAllExpression();
                     setState(() {
+                      mathExpression = '';
                       resultText = '';
                     });
                   },
@@ -193,11 +197,17 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     setState(() {
                       LatexParser lp = LatexParser();
-                      lp.parse(expressionText);
-                      resultText = lp.result.toString();
+                      lp.parse(latexExpression);
+                      mathExpression = lp.result.toString();
                       if (lp.result.isSuccess) {
                         print(lp.result.value);
                       }
+                      // Parser p = new Parser();
+                      // Expression exp = p.parse(lp.result.value);
+                      // ContextModel cm = new ContextModel();
+                      // double eval = exp.evaluate(EvaluationType.REAL, cm);
+                      // resultText = eval.toString();
+                      // print(eval);
                     });
                   },
                   text: '=',

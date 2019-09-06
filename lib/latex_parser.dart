@@ -6,14 +6,15 @@ class LatexParser {
   
   LatexParser();
 
-  int factorial(int a) {
-    if (a < 0) {
+  int factorial(String a) {
+    int v = int.tryParse(a);
+    if (v < 0) {
       throw "Can't do factorial! Input is smaller than 0";
     }
     num result = 1;
-    while (a > 1) {
-      result *= a;
-      a--;
+    while (v > 1) {
+      result *= v;
+      v--;
       if (result < 0) {
         throw "Out of range";
       }
@@ -38,62 +39,55 @@ class LatexParser {
     final builder = new ExpressionBuilder();    
 
     // Numbers
-    Parser number() => digit().plus().seq(char('.').seq(digit().plus()).optional()).flatten().map((a) => num.tryParse(a));
+    Parser number() => digit().plus().seq(char('.').seq(digit().plus()).optional()).flatten();
 
     // Constant
-    Parser pi() => string('\\pi').map((v) => math.pi);
-    Parser e() => char('e').map((v) => math.e);
+    Parser pi() => string('\\pi').map((v) => math.pi.toString());
+    Parser e() => char('e').map((v) => math.e.toString());
 
     Parser constant() =>
       pi() |
       e();
 
     // Variable (experimental)
-    Parser variable() => char('x');
+    Parser variable() => char('x').flatten();
 
     // Binary Operators
-    Parser binary(String element) => string('$element'+'{').seq(number().or(constant())).seq(char('}'));
+    Parser binary(String element) => string('$element'+'{').seq((number()|constant()|variable())).seq(char('}'));
 
-    
-
-    // Unary Operators
-    // Parser func() =>
-    //   string('\\sin') |
-    //   string('\\ln') |
-    //   string('\\sqrt');
-    
     builder.group()
       ..primitive(number()|constant()|variable())
-      ..wrapper(char('{'), char('}'), (l, a, r) => a)
-      ..wrapper(char('('), char(')'), (l, a, r) => a)
-      ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => a);
+      ..wrapper(char('{'), char('}'), (l, a, r) => a.toString())
+      ..wrapper(char('('), char(')'), (l, a, r) => a.toString())
+      ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => a.toString());
 
     // prefix group
     builder.group()
-      ..prefix(char('-'), (op, a) => -a)
-      ..prefix(binary('\\frac'), (op, a) => op[1] / a)
-      ..prefix(string('\\sqrt'), (op, a) => math.sqrt(a))
-      ..prefix(string('\\ln'), (op, a) => math.log(a))
-      ..prefix(string('\\sin'), (op, a) => math.sin(a));
+      ..prefix(char('-'), (op, a) => '-($a)')
+      // TODO: frac goes wrong when numerator is a expression
+      ..prefix(binary('\\frac'), (op, a) => '(${op[1]}) / ($a)')
+      ..prefix(string('\\sqrt'), (op, a) => 'sqrt($a)')
+      ..prefix(string('\\ln'), (op, a) => 'ln($a)')
+      ..prefix(string('\\sin'), (op, a) => 'sin($a)');
     
     //postfix group
     builder.group()
-      ..postfix(char('!'), (a, op) => factorial(a));
+      ..postfix(char('!'), (a, op) => factorial(a).toString());
 
     // left-associative group
-    builder.group() // make \times default operator
-      ..left(binary('\\frac'), (a, op, b) => a * op[1] / a)
-      ..left(string('\\sin'), (a, op, b) => a * math.sin(b));
-
     builder.group()
-      ..left(string('\\times'), (a, op, b) => a * b)
-      ..left(char('/'), (a, op, b) => a / b)
-      ..left(char('+'), (a, op, b) => a + b)
-      ..left(char('-'), (a, op, b) => a - b);
+      ..left(string('\\times'), (a, op, b) => '($a) * ($b)')
+      ..left(char('/'), (a, op, b) => '($a) / ($b)')
+      ..left(char('+'), (a, op, b) => '($a) + ($b)')
+      ..left(char('-'), (a, op, b) => '($a) - ($b)');
+    
+    builder.group() // make \times default operator
+          ..left(binary('\\frac'), (a, op, b) => '($a) * (${op[1]}) / ($a)')
+          ..left(string('\\sin'), (a, op, b) => '($a) * sin($b)');
 
     // right-associative group
     builder.group()
-      ..right(char('^'), (a, op, b) => math.pow(a, b));
+      ..right(char('^'), (a, op, b) => '($a) ^ ($b)');
 
 
     final parser = builder.build().end();
