@@ -76,7 +76,7 @@ class LatexParser {
       ..left(char('-'), (a, op, b) => '$a - $b');
     
     builder.group() // make \times default operator
-      // ..left(binary('\\frac'), (a, op, b) => '(($a) * ($op) / ($a))')
+      ..left(char('{').and(), (a, op, b) => '$a * $b')
       ..left(string('\\sin'), (a, op, b) => '$a * sin$b');
 
     // right-associative group
