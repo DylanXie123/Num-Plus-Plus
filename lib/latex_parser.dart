@@ -52,28 +52,17 @@ class LatexParser {
     // Variable (experimental)
     Parser variable() => char('x').flatten();
 
-    // Binary Operators
-    Parser binary(String element) => string('$element'+'{').seq(any().starGreedy(string('}{'))).seq(char('}')).map((v) {
-      String t = '';
-      for (var i = 0; i < v[1].length; i++) {
-        t += v[1][i];
-      }
-      return builder.build().parse(t).value;
-    });
-
     builder.group()
       ..primitive(number()|constant()|variable())
-      ..wrapper(char('{'), char('}'), (l, a, r) => a.toString())
-      ..wrapper(char('('), char(')'), (l, a, r) => a.toString())
-      ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => a.toString());
+      ..wrapper(char('{'), char('}'), (l, a, r) => '(' + a.toString() + ')')
+      ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => '(' + a.toString() + ')');
 
     // prefix group
     builder.group()
-      ..prefix(char('-'), (op, a) => '(-($a))')
-      ..prefix(binary('\\frac'), (op, a) => '(($op) / ($a))')
-      ..prefix(string('\\sqrt'), (op, a) => 'sqrt($a)')
-      ..prefix(string('\\ln'), (op, a) => 'ln($a)')
-      ..prefix(string('\\sin'), (op, a) => 'sin($a)');
+      ..prefix(char('-'), (op, a) => '-($a)')
+      ..prefix(string('\\sqrt'), (op, a) => 'sqrt$a')
+      ..prefix(string('\\ln'), (op, a) => 'ln$a')
+      ..prefix(string('\\sin'), (op, a) => 'sin$a');
     
     //postfix group
     builder.group()
@@ -81,25 +70,71 @@ class LatexParser {
 
     // left-associative group
     builder.group()
-      ..left(string('\\times'), (a, op, b) => '(($a) * ($b))')
-      ..left(char('/'), (a, op, b) => '(($a) / ($b))')
-      ..left(char('+'), (a, op, b) => '(($a) + ($b))')
-      ..left(char('-'), (a, op, b) => '(($a) - ($b))');
+      ..left(string('\\times'), (a, op, b) => '$a * $b')
+      ..left(string('\\frac'), (a, op, b) => '$a / $b')
+      ..left(char('+'), (a, op, b) => '$a + $b')
+      ..left(char('-'), (a, op, b) => '$a - $b');
     
     builder.group() // make \times default operator
-      ..left(binary('\\frac'), (a, op, b) => '(($a) * ($op) / ($a))')
-      ..left(string('\\sin'), (a, op, b) => '(($a) * sin($b))');
+      // ..left(binary('\\frac'), (a, op, b) => '(($a) * ($op) / ($a))')
+      ..left(string('\\sin'), (a, op, b) => '$a * sin$b');
 
     // right-associative group
     builder.group()
-      ..right(char('^'), (a, op, b) => '(($a) ^ ($b))');
+      ..right(char('^'), (a, op, b) => '$a ^ $b');
 
 
     final parser = builder.build().end();
     // // for debug
     // final parser = builder.build();
 
-    id1 = parser.parse(latexmath);
+    id1 = parser.parse(binary2unary(latexmath));
+  }
+
+  String binary2unary (String latexmath) {
+    Map p = Map();
+    Map l = Map();
+    List result = [];
+
+    for (var i = 0; i < latexmath.length; i++) {
+      if(latexmath.startsWith('\\frac{', i)) {
+        p[i] = '\\frac{';
+        i += 5;
+        continue;
+      }
+      switch (latexmath[i]) {
+        case '{':
+          p[i] = '{';
+          break;
+        case '}':
+          p[i] = '}';
+          break;
+      }
+    }
+    print(p);
+
+    for (var i = 0; i < p.values.length; i++) {
+      if(p.values.elementAt(i).contains('{')) {
+        l[p.keys.elementAt(i)] = p.values.elementAt(i);
+        continue;
+      }
+      if (p.values.elementAt(i) == '}') {
+        if (l.values.elementAt(l.values.length-1) == '{') {
+          l.remove(l.keys.elementAt(l.keys.length-1));
+        } else {
+          result.add(l.keys.elementAt(l.keys.length-1));
+          result.add(p.keys.elementAt(i));
+          l.remove(l.keys.elementAt(l.keys.length-1));
+        }
+      }
+    }
+    print(result);
+
+    for (var i = 0; i < result.length; i+=2) {
+      latexmath =  latexmath.substring(0,result[i]) + latexmath.substring(result[i]+5,result[i+1]+1) + '\\frac' + latexmath.substring(result[i+1]+1);
+    }
+    print('bi2un: ' + latexmath);
+    return latexmath;
   }
 
   get result => id1;
