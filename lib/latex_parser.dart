@@ -133,8 +133,8 @@ class LatexParser {
     for (var i = 0; i < result.length; i+=2) {
       latexmath =  latexmath.substring(0,result[i]) + latexmath.substring(result[i]+5,result[i+1]+1) + '\\frac' + latexmath.substring(result[i+1]+1);
     }
-    print('bi2un: ' + latexmath);
-    return latexmath;
+    print('bi2un: ' + latexmath.replaceAll(' ', ''));
+    return latexmath.replaceAll(' ', '');
   }
 
   get result => id1;
