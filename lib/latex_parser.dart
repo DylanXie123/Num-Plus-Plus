@@ -32,8 +32,7 @@ class LatexParser {
       return [a/b];
     }
   }
-  
-  //TODO: Add log_ function support
+
   void parse(String latexmath) {
 
     final builder = new ExpressionBuilder();    
@@ -60,6 +59,8 @@ class LatexParser {
     // prefix group
     builder.group()
       ..prefix(char('-'), (op, a) => '-($a)')
+      ..prefix(string('\\log_').seq(digit()|constant()|variable()), (op ,a) => '${op[1]} log $a')
+      ..prefix(string('\\log_{').seq(number()|constant()|variable()).seq(char('}')), (op ,a) => '${op[1]} log $a')
       ..prefix(string('\\sqrt'), (op, a) => 'sqrt$a')
       ..prefix(string('\\ln'), (op, a) => 'ln$a')
       ..prefix(string('\\sin'), (op, a) => 'sin$a');
@@ -141,7 +142,6 @@ class LatexParser {
   get result => id1;
 }
 
-// TODO: Make it possible for List input
 num intCheck(num a) {
   if (a.ceil() == a.floor()) {
     return a.toInt();

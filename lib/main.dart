@@ -180,6 +180,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 MyButton(
                   onPressed: () {
+                    addExpression('\\log');
+                    addExpression('_');
+                  },
+                  text: 'log',
+                ),
+                MyButton(
+                  onPressed: () {
                     addExpression('\\int');
                   },
                   text: 'int',
