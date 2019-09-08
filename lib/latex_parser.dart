@@ -66,6 +66,7 @@ class LatexParser {
     
     //postfix group
     builder.group()
+      ..postfix(number()|constant()|variable(), (a, b) => '$a * $b')
       ..postfix(char('!'), (a, op) => factorial(a).toString());
 
     // left-associative group
