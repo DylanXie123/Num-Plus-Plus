@@ -85,6 +85,12 @@ function delAll() {
     post();
 }
 
+function simulateKey(key) {
+    mathField.keystroke(key);
+    mathField.focus();
+    post();
+}
+
 function post() {
     latexString.postMessage(mathField.latex());
 }
