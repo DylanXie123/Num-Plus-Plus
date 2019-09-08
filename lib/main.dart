@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
           Text('Output: ' + resultText),
           Expanded(
             child: GridView.count(
-              crossAxisCount: 4,
+              crossAxisCount: 5,
               children: <Widget>[
                 MyButton(
                   onPressed: () {
