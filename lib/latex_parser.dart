@@ -54,6 +54,7 @@ class LatexParser {
     builder.group()
       ..primitive(number()|constant()|variable())
       ..wrapper(char('{'), char('}'), (l, a, r) => '(' + a.toString() + ')')
+      ..wrapper(string('\\left|'), string('\\right|'), (l, a, r) => 'abs($a)')
       ..wrapper(string('\\left('), string('\\right)'), (l, a, r) => '(' + a.toString() + ')');
 
     // prefix group
@@ -63,7 +64,8 @@ class LatexParser {
       ..prefix(string('\\log_{').seq(number()|constant()|variable()).seq(char('}')), (op ,a) => '${op[1]} log $a')
       ..prefix(string('\\sqrt'), (op, a) => 'sqrt$a')
       ..prefix(string('\\ln'), (op, a) => 'ln$a')
-      ..prefix(string('\\sin'), (op, a) => 'sin$a');
+      ..prefix(string('\\sin'), (op, a) => 'sin$a')
+      ..prefix(string('\\arcsin'), (op, a) => 'arcsin$a');
     
     //postfix group
     builder.group()

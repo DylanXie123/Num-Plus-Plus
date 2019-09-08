@@ -41,6 +41,10 @@ void delAllExpression() {
   webViewController.evaluateJavascript("delAll()");
 }
 
+void addKey(String key) {
+  webViewController.evaluateJavascript("simulateKey('$key')");
+}
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -113,6 +117,18 @@ class _HomePageState extends State<HomePage> {
                 ),
                 MyButton(
                   onPressed: () {
+                    addExpression('0');
+                  },
+                  text: '0',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('1');
+                  },
+                  text: '1',
+                ),
+                MyButton(
+                  onPressed: () {
                     addExpression('2');
                   },
                   text: '2',
@@ -122,6 +138,12 @@ class _HomePageState extends State<HomePage> {
                     addExpression('4');
                   },
                   text: '4',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('7');
+                  },
+                  text: '7',
                 ),
                 MyButton(
                   onPressed: () {
@@ -152,6 +174,12 @@ class _HomePageState extends State<HomePage> {
                     addExpression('+');
                   },
                   text: '+',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('-');
+                  },
+                  text: '-',
                 ),
                 MyButton(
                   onPressed: () {
@@ -187,6 +215,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 MyButton(
                   onPressed: () {
+                    addExpression('\\arcsin');
+                    addExpression('\\(');
+                  },
+                  text: 'asin',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addExpression('\\|');
+                  },
+                  text: 'abs',
+                ),
+                MyButton(
+                  onPressed: () {
                     addExpression('\\int');
                   },
                   text: 'int',
@@ -196,6 +237,12 @@ class _HomePageState extends State<HomePage> {
                     addExpression('x');
                   },
                   text: 'x',
+                ),
+                MyButton(
+                  onPressed: () {
+                    addKey('Right');
+                  },
+                  text: 'Right',
                 ),
                 MyButton(
                   onPressed: () {
