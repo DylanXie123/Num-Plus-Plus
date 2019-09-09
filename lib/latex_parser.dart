@@ -81,7 +81,14 @@ class LatexParser {
     
     builder.group() // make \times default operator
       ..left(char('{').and(), (a, op, b) => '$a * $b')
-      ..left(string('\\sin'), (a, op, b) => '$a * sin$b');
+      ..left(string('\\left(').and(), (a, op, b) => '$a * $b')
+      ..left(string('\\left|').and(), (a, op, b) => '$a * $b')
+      // ..left(string('\\log_{'), (a, op, b) => '$a * sin$b')
+      // ..left(string('\\log_'), (a, op, b) => '$a * sin$b')
+      ..left(string('\\sin'), (a, op, b) => '$a * sin$b')
+      ..left(string('\\ln'), (a, op, b) => '$a * ln$b')
+      ..left(string('\\arcsin'), (a, op, b) => '$a * arcsin$b')
+      ..left(string('\\sqrt'), (a, op, b) => '$a * sqrt$b');
 
     // right-associative group
     builder.group()
