@@ -61,7 +61,6 @@ class LatexParser {
     builder.group()
       ..prefix(char('-'), (op, a) => '-($a)')
       ..prefix(string('\\log_').seq(digit()|constant()|variable()), (op ,a) => '${op[1]} log $a')
-      ..prefix(string('\\log_{').seq(number()|constant()|variable()).seq(char('}')), (op ,a) => '${op[1]} log $a')
       ..prefix(string('\\sqrt'), (op, a) => 'sqrt$a')
       ..prefix(string('\\ln'), (op, a) => 'ln$a')
       ..prefix(string('\\sin'), (op, a) => 'sin$a')
@@ -74,6 +73,7 @@ class LatexParser {
 
     // left-associative group
     builder.group()
+      ..left(string('\\log'), (a, op, b) => '$a log $b')
       ..left(string('\\times'), (a, op, b) => '$a * $b')
       ..left(string('\\frac'), (a, op, b) => '$a / $b')
       ..left(char('+'), (a, op, b) => '$a + $b')
@@ -103,46 +103,59 @@ class LatexParser {
   }
 
   String binary2unary (String latexmath) {
-    Map p = Map();
-    Map l = Map();
-    List result = [];
+    Map _parenthesisInfo = Map();
+    Map _temp = Map();
+    List _parenthesisLoc = [];
 
+    // get parenthesisInfo in Map form
     for (var i = 0; i < latexmath.length; i++) {
       if(latexmath.startsWith('\\frac{', i)) {
-        p[i] = '\\frac{';
+        _parenthesisInfo[i] = '\\frac{';
+        i += 5;
+        continue;
+      }
+      if (latexmath.startsWith('\\log_{', i)) {
+        _parenthesisInfo[i] = '\\log_{';
         i += 5;
         continue;
       }
       switch (latexmath[i]) {
         case '{':
-          p[i] = '{';
+          _parenthesisInfo[i] = '{';
           break;
         case '}':
-          p[i] = '}';
+          _parenthesisInfo[i] = '}';
           break;
       }
     }
-    print(p);
+    print(_parenthesisInfo);
 
-    for (var i = 0; i < p.values.length; i++) {
-      if(p.values.elementAt(i).contains('{')) {
-        l[p.keys.elementAt(i)] = p.values.elementAt(i);
+    // remove unnecessary parenthesis
+    for (var i = 0; i < _parenthesisInfo.values.length; i++) {
+      if(_parenthesisInfo.values.elementAt(i).contains('{')) {
+        _temp[_parenthesisInfo.keys.elementAt(i)] = _parenthesisInfo.values.elementAt(i);
         continue;
-      }
-      if (p.values.elementAt(i) == '}') {
-        if (l.values.elementAt(l.values.length-1) == '{') {
-          l.remove(l.keys.elementAt(l.keys.length-1));
+      } else {
+        if (_temp.values.elementAt(_temp.values.length-1) == '{') {
+          _temp.remove(_temp.keys.elementAt(_temp.keys.length-1));
         } else {
-          result.add(l.keys.elementAt(l.keys.length-1));
-          result.add(p.keys.elementAt(i));
-          l.remove(l.keys.elementAt(l.keys.length-1));
+          _parenthesisLoc.add(_temp.keys.elementAt(_temp.keys.length-1));
+          _parenthesisLoc.add(_parenthesisInfo.keys.elementAt(i));
+          _temp.remove(_temp.keys.elementAt(_temp.keys.length-1));
         }
       }
     }
-    print(result);
+    print(_parenthesisLoc);
 
-    for (var i = 0; i < result.length; i+=2) {
-      latexmath =  latexmath.substring(0,result[i]) + latexmath.substring(result[i]+5,result[i+1]+1) + '\\frac' + latexmath.substring(result[i+1]+1);
+    // refactor the string
+    for (var i = 0; i < _parenthesisLoc.length; i+=2) {
+      String msg = '';
+      if (_parenthesisInfo[_parenthesisLoc[i]] == '\\frac{') {
+        msg = '\\frac';
+      } else {
+        msg = '\\log ';
+      }
+      latexmath =  latexmath.substring(0,_parenthesisLoc[i]) + latexmath.substring(_parenthesisLoc[i]+5,_parenthesisLoc[i+1]+1) + msg + latexmath.substring(_parenthesisLoc[i+1]+1);
     }
     print('bi2un: ' + latexmath.replaceAll(' ', ''));
     return latexmath.replaceAll(' ', '');
