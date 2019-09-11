@@ -1,40 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>MathQuill Demo</title>
-
 <link rel="stylesheet" href="./mathquill.css"/>
 <style type="text/css">
-body {
-    height: 100px;
-}
 #math-field {
     position: absolute;
-    left:2%; top:5%;
-    width:95%; height:90%;
+    left:1%; top:2%;
+    width:98%; height:96%;
     text-align: right;
     background-color: yellow;
     color: red;
 }
 </style>
-
 <script src="./jquery-3.4.1.min.js"></script>
 <script src="./mathquill.min.js"></script>
-
-<script>
-    var MQ = MathQuill.getInterface(2);
-</script>
 </head>
 
-<body id="math-body">
+<body>
 
 <span id="math-field"></span>
 
 <script>
-var textSpan;
-
+var MQ = MathQuill.getInterface(2);
 var mathFieldSpan = document.getElementById('math-field');
+const clientHeight = mathFieldSpan.clientHeight;
 
 // TODO: maybe use auto~ command to make sin a whole
 var mathField = MQ.MathField(mathFieldSpan, {
@@ -45,19 +35,18 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-const sizeconstant = 50;
-mathBlock.style.height = sizeconstant*2.5 + "px";
-mathBlock.style.fontSize = sizeconstant + "px";
+mathBlock.style.overflow = "scroll";
+
+mathBlock.style.height = clientHeight + "px";
+mathBlock.style.fontSize = clientHeight/3 + "px";
 
 function addCmd(message) {
     mathField.cmd(message);
-    mathBlock.style.height = sizeconstant*2.5 + "px";
-    mathBlock.style.fontSize = sizeconstant + "px";
-    if (mathBlock.scrollHeight > 100) {
-        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize);
-        var scale = mathBlock.offsetHeight / (mathBlock.scrollHeight / textsize);
-        console.log(scale);
-        mathBlock.style.fontSize = scale+"px";
+    mathBlock.style.height = clientHeight + "px";
+    mathBlock.style.fontSize = clientHeight/3 + "px";
+    while (mathBlock.scrollHeight > clientHeight) {
+        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
+        mathBlock.style.fontSize = textsize+"px";
     }
     mathField.focus();
     post();
@@ -65,13 +54,11 @@ function addCmd(message) {
 
 function delString() {
     mathField.keystroke('Backspace');
-    mathBlock.style.height = sizeconstant*2.5 + "px";
-    mathBlock.style.fontSize = sizeconstant + "px";
-    if (mathBlock.scrollHeight > 100) {
-        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize);
-        var scale = mathBlock.offsetHeight / (mathBlock.scrollHeight / textsize);
-        console.log(scale);
-        mathBlock.style.fontSize = scale+"px";
+    mathBlock.style.height = clientHeight + "px";
+    mathBlock.style.fontSize = clientHeight/3 + "px";
+    while (mathBlock.scrollHeight > clientHeight) {
+        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
+        mathBlock.style.fontSize = textsize+"px";
     }
     mathField.focus();
     post();
@@ -79,8 +66,8 @@ function delString() {
 
 function delAll() {
     mathField.keystroke('Ctrl-A Backspace');
-    mathBlock.style.height = sizeconstant*2.5 + "px";
-    mathBlock.style.fontSize = sizeconstant + "px";
+    mathBlock.style.height = clientHeight + "px";
+    mathBlock.style.fontSize = clientHeight/3 + "px";
     mathField.focus();
     post();
 }
