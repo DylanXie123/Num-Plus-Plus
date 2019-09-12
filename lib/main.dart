@@ -26,23 +26,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-WebViewController webViewController;
+class WebMathController {
+  WebViewController webViewController;
 
-void addExpression(String msg) {
-  webViewController.evaluateJavascript("addCmd('$msg')");
-  print("addCmd('$msg')");
-}
+  void addExpression(String msg) {
+    webViewController.evaluateJavascript("addCmd('$msg')");
+    print("addCmd('$msg')");
+  }
 
-void delExpression() {
-  webViewController.evaluateJavascript("delString()");
-}
+  void delExpression() {
+    webViewController.evaluateJavascript("delString()");
+  }
 
-void delAllExpression() {
-  webViewController.evaluateJavascript("delAll()");
-}
+  void delAllExpression() {
+    webViewController.evaluateJavascript("delAll()");
+  }
 
-void addKey(String key) {
-  webViewController.evaluateJavascript("simulateKey('$key')");
+  void addKey(String key) {
+    webViewController.evaluateJavascript("simulateKey('$key')");
+  }
+
 }
 
 class HomePage extends StatefulWidget {
@@ -57,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   String latexExpression = '';
   String mathExpression = '';
   String resultText = '';
+  final webMathController = WebMathController();
   Map keyboard = {
     '1' : Text('1'),
     '2' : Text('2'),
@@ -112,8 +116,8 @@ class _HomePageState extends State<HomePage> {
             height: 50.0,
             child: WebView(
               onWebViewCreated: (controller) {
-                webViewController = controller;
-                webViewController.loadUrl("$baseUrl");
+                webMathController.webViewController = controller;
+                webMathController.webViewController.loadUrl("$baseUrl");
               },
               onPageFinished: (url) {},
               javascriptMode: JavascriptMode.unrestricted,
@@ -146,28 +150,28 @@ class _HomePageState extends State<HomePage> {
                       continue trigonometric;
                     trigonometric:
                     case '\\arcsin':
-                      addExpression(cmd);
-                      addExpression('(');
+                      webMathController.addExpression(cmd);
+                      webMathController.addExpression('(');
                       break;
                     case '\\log':
-                      addExpression(cmd);
-                      addExpression('_');
+                      webMathController.addExpression(cmd);
+                      webMathController.addExpression('_');
                       break;
                     case 'Right':
                       continue movecursor;
                     movecursor:
                     case 'Left':
-                      addKey(cmd);
+                      webMathController.addKey(cmd);
                       break;
                     case 'AC':
-                      delAllExpression();
+                      webMathController.delAllExpression();
                       setState(() {
                         mathExpression = '';
                         resultText = '';
                       });
                       break;
                     case 'BackSpace':
-                      delExpression();
+                      webMathController.delExpression();
                       break;
                     case '=':
                       setState(() {
@@ -191,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                       });
                       break;
                     default: 
-                      addExpression(cmd);
+                      webMathController.addExpression(cmd);
                       break;
                   }
                 },
