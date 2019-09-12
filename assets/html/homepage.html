@@ -24,7 +24,7 @@
 <script>
 var MQ = MathQuill.getInterface(2);
 var mathFieldSpan = document.getElementById('math-field');
-const clientHeight = mathFieldSpan.clientHeight;
+const clientHeight = mathFieldSpan.clientHeight*0.9;
 
 // TODO: maybe use auto~ command to make sin a whole
 var mathField = MQ.MathField(mathFieldSpan, {
