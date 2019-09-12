@@ -59,8 +59,14 @@ class _HomePageState extends State<HomePage> {
   String resultText = '';
   Map keyboard = {
     '1' : Text('1'),
+    '2' : Text('2'),
     '3' : Text('3'),
+    '4' : Text('4'),
+    '5' : Text('5'),
+    '6' : Text('6'),
     '7' : Text('7'),
+    '8' : Text('8'),
+    '9' : Text('9'),
     '0' : Text('0'),
     '+' : Text('+'),
     '-' : Text('-'),
