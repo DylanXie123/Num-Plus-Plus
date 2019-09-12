@@ -38,12 +38,12 @@ var mathBlock = document.getElementsByClassName("mq-root-block")[0];
 mathBlock.style.overflow = "scroll";
 
 mathBlock.style.height = clientHeight + "px";
-mathBlock.style.fontSize = clientHeight/3 + "px";
+mathBlock.style.fontSize = clientHeight + "px";
 
 function addCmd(message) {
     mathField.cmd(message);
     mathBlock.style.height = clientHeight + "px";
-    mathBlock.style.fontSize = clientHeight/3 + "px";
+    mathBlock.style.fontSize = clientHeight + "px";
     while (mathBlock.scrollHeight > clientHeight) {
         var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
         mathBlock.style.fontSize = textsize+"px";
@@ -55,7 +55,7 @@ function addCmd(message) {
 function delString() {
     mathField.keystroke('Backspace');
     mathBlock.style.height = clientHeight + "px";
-    mathBlock.style.fontSize = clientHeight/3 + "px";
+    mathBlock.style.fontSize = clientHeight + "px";
     while (mathBlock.scrollHeight > clientHeight) {
         var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
         mathBlock.style.fontSize = textsize+"px";

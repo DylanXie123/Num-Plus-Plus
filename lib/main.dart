@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: <Widget>[
           Container(
-            height: 150.0,
+            height: 50.0,
             child: WebView(
               onWebViewCreated: (controller) {
                 webViewController = controller;
