@@ -84,8 +84,13 @@ class _HomePageState extends State<HomePage> {
     '\\\\times' : Text('×'),
     '\\sqrt' : Text('sqrt'),
     '\\sin' : Text('sin'),
+    // '\\cos' : Text('cos'),
+    // '\\tan' : Text('tan'),
     '\\arcsin' : Text('asin'),
+    // '\\arccos' : Text('acos'),
+    // '\\arctan' : Text('atan'),
     '\\log' : Text('log'),
+    '\\ln' : Text('ln'),
     '\\|' : Text('abs'),
     'x' : Text('x'),
     'Left' : Icon(Icons.arrow_back),
@@ -148,6 +153,14 @@ class _HomePageState extends State<HomePage> {
                   switch (cmd) {
                     case '\\sin':
                       continue trigonometric;
+                    case '\\cos':
+                      continue trigonometric;
+                    case '\\tan':
+                      continue trigonometric;
+                    case '\\arctan':
+                      continue trigonometric;
+                    case '\\arccos':
+                      continue trigonometric;
                     trigonometric:
                     case '\\arcsin':
                       webMathController.addExpression(cmd);
@@ -178,9 +191,6 @@ class _HomePageState extends State<HomePage> {
                         LatexParser lp = LatexParser();
                         lp.parse(latexExpression);
                         mathExpression = lp.result.toString();
-                        if (lp.result.isSuccess) {
-                          print(lp.result.value is String);
-                        }
                         if (mathExpression.contains('x')) {
                           MyFunction f = MyFunction(lp.result.value);
                           resultText = f.calc(1).toString();
