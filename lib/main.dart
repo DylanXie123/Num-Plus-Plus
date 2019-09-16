@@ -56,10 +56,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Server _server;
   String baseUrl;
-
   String latexExpression = '';
   String mathExpression = '';
   String resultText = '';
+  bool isClearable = false;
   final webMathController = WebMathController();
   Map keyboard = {
     '1' : Text('1'),
@@ -149,6 +149,14 @@ class _HomePageState extends State<HomePage> {
               itemCount: keyboard.length,
               itemBuilder: (context, index) => MyButton(
                 onPressed: () {
+                  if (isClearable) {
+                    webMathController.delAllExpression();
+                    setState(() {
+                      mathExpression = '';
+                      resultText = '';
+                    });
+                    isClearable = false;
+                  }
                   var cmd = keyboard.keys.elementAt(index);
                   switch (cmd) {
                     case '\\sin':
@@ -187,6 +195,7 @@ class _HomePageState extends State<HomePage> {
                       webMathController.delExpression();
                       break;
                     case '=':
+                      isClearable = true;
                       setState(() {
                         LatexParser lp = LatexParser();
                         lp.parse(latexExpression);
