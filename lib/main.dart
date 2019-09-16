@@ -116,6 +116,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Flutter Demo'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Container(
             height: 50.0,
@@ -136,6 +137,14 @@ class _HomePageState extends State<HomePage> {
                   }
                 ),
               ]),
+            ),
+          ),
+          Text(
+            resultText,
+            style: TextStyle(
+              color: Colors.blue,
+              fontFamily: 'RobotoMono',
+              fontSize: 24,
             ),
           ),
           Text('Latex: ' + latexExpression),
