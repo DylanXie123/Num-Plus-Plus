@@ -1,16 +1,22 @@
+<!-- 
+
+    Html Structure 
+
+<span class="mq-editable-field mq-math-mode" id="math-field">
+    <span class="mq-textarea"></span>
+    <span class="mq-root-block mq-empty" mathquill-block-id="1"></span>
+</span>
+ -->
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>MathQuill Demo</title>
 <link rel="stylesheet" href="./mathquill.css"/>
 <style type="text/css">
-#math-field {
-    position: absolute;
-    left:1%; top:2%;
-    width:98%; height:96%;
-    text-align: right;
-    background-color: yellow;
-    color: red;
+* {
+    margin: 0;
+    padding: 0;
 }
 </style>
 <script src="./jquery-3.4.1.min.js"></script>
@@ -24,9 +30,7 @@
 <script>
 var MQ = MathQuill.getInterface(2);
 var mathFieldSpan = document.getElementById('math-field');
-const clientHeight = mathFieldSpan.clientHeight*0.9;
 
-// TODO: maybe use auto~ command to make sin a whole
 var mathField = MQ.MathField(mathFieldSpan, {
     spaceBehavesLikeTab: true,
     substituteTextarea: function() {
@@ -35,10 +39,14 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-mathBlock.style.overflow = "scroll";
+// window.screen.height contains some border pixels
+// maybe *0.95
+const clientHeight = (window.screen.height-3>0?window.screen.height-3:0);
 
 mathBlock.style.height = clientHeight + "px";
 mathBlock.style.fontSize = clientHeight + "px";
+mathBlock.style.overflowX = "scroll";
+mathBlock.style.backgroundColor = "yellow";
 
 function addCmd(message) {
     mathField.cmd(message);
