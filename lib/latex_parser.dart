@@ -79,6 +79,7 @@ class LatexParser {
     // left-associative group
     builder.group()
       ..left(string('\\log'), (a, op, b) => '$a log $b')
+      ..left(string('\\nrt'), (a, op, b) => '$a nrt $b')
       ..left(string('\\times'), (a, op, b) => '$a * $b')
       ..left(string('\\frac'), (a, op, b) => '$a / $b')
       ..left(string('\\div'), (a, op, b) => '$a / $b')
@@ -128,6 +129,11 @@ class LatexParser {
         i += 5;
         continue;
       }
+      if (latexmath.startsWith('\\sqrt[',i)) {
+        _parenthesisInfo[i] = '\\sqrt[';
+        i += 5;
+        continue;
+      }
       switch (latexmath[i]) {
         case '{':
           _parenthesisInfo[i] = '{';
@@ -135,22 +141,29 @@ class LatexParser {
         case '}':
           _parenthesisInfo[i] = '}';
           break;
+        case '[':
+          _parenthesisInfo[i] = '[';
+          break;
+        case ']':
+          _parenthesisInfo[i] = ']';
+          break;
       }
     }
     print(_parenthesisInfo);
 
     // remove unnecessary parenthesis
     for (var i = 0; i < _parenthesisInfo.values.length; i++) {
-      if(_parenthesisInfo.values.elementAt(i).contains('{')) {
+      if(_parenthesisInfo.values.elementAt(i).contains('{') ||
+      _parenthesisInfo.values.elementAt(i).contains('[')) {
         _temp[_parenthesisInfo.keys.elementAt(i)] = _parenthesisInfo.values.elementAt(i);
         continue;
       } else {
-        if (_temp.values.elementAt(_temp.values.length-1) == '{') {
-          _temp.remove(_temp.keys.elementAt(_temp.keys.length-1));
+        if (_temp.values.elementAt(_temp.length-1) == '{') {
+          _temp.remove(_temp.keys.elementAt(_temp.length-1));
         } else {
-          _parenthesisLoc.add(_temp.keys.elementAt(_temp.keys.length-1));
+          _parenthesisLoc.add(_temp.keys.elementAt(_temp.length-1));
           _parenthesisLoc.add(_parenthesisInfo.keys.elementAt(i));
-          _temp.remove(_temp.keys.elementAt(_temp.keys.length-1));
+          _temp.remove(_temp.keys.elementAt(_temp.length-1));
         }
       }
     }
@@ -159,12 +172,18 @@ class LatexParser {
     // refactor the string
     for (var i = 0; i < _parenthesisLoc.length; i+=2) {
       String msg = '';
-      if (_parenthesisInfo[_parenthesisLoc[i]] == '\\frac{') {
-        msg = '\\frac';
-      } else {
-        msg = '\\log ';
+      switch (_parenthesisInfo[_parenthesisLoc[i]]) {
+        case '\\frac{':
+          msg = '\\frac';
+          break;
+        case '\\log_{':
+          msg = '\\log ';
+          break;
+        case '\\sqrt[':
+          msg = '\\nrt ';
+          break;
       }
-      latexmath =  latexmath.substring(0,_parenthesisLoc[i]) + latexmath.substring(_parenthesisLoc[i]+5,_parenthesisLoc[i+1]+1) + msg + latexmath.substring(_parenthesisLoc[i+1]+1);
+      latexmath =  latexmath.substring(0,_parenthesisLoc[i]) + '{' + latexmath.substring(_parenthesisLoc[i]+6,_parenthesisLoc[i+1]) + '}' + msg + latexmath.substring(_parenthesisLoc[i+1]+1);
     }
     print('bi2un: ' + latexmath.replaceAll(' ', ''));
     return latexmath.replaceAll(' ', '');

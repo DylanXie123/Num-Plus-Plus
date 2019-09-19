@@ -31,7 +31,6 @@ class WebMathController {
 
   void addExpression(String msg) {
     webViewController.evaluateJavascript("addCmd('$msg')");
-    print("addCmd('$msg')");
   }
 
   void delExpression() {
@@ -192,10 +191,14 @@ class _HomePageState extends State<HomePage> {
                       webMathController.addExpression(cmd);
                       webMathController.addExpression('_');
                       break;
-                    case 'Right':
+                    case 'Up':
+                      continue movecursor;
+                    case 'Down':
+                      continue movecursor;
+                    case 'Left':
                       continue movecursor;
                     movecursor:
-                    case 'Left':
+                    case 'Right':
                       webMathController.addKey(cmd);
                       break;
                     case 'AC':
