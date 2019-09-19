@@ -74,27 +74,30 @@ class _HomePageState extends State<HomePage> {
     '0' : Text('0'),
     '+' : Text('+'),
     '-' : Text('-'),
+    '\\\\times' : Text('×'),
     '/' : Text('÷'),
     '^' : Text('^'),
     '.' : Text('.'),
     '(' : Text('('),
     ')' : Text(')'),
+    '%' : Text('%'),
     'e' : Text('e'),
     '\\pi' : Text('pi'),
-    '\\\\times' : Text('×'),
     '\\sqrt' : Text('sqrt'),
     '\\sin' : Text('sin'),
-    // '\\cos' : Text('cos'),
-    // '\\tan' : Text('tan'),
+    '\\cos' : Text('cos'),
+    '\\tan' : Text('tan'),
     '\\arcsin' : Text('asin'),
-    // '\\arccos' : Text('acos'),
-    // '\\arctan' : Text('atan'),
+    '\\arccos' : Text('acos'),
+    '\\arctan' : Text('atan'),
     '\\log' : Text('log'),
     '\\ln' : Text('ln'),
     '\\|' : Text('abs'),
     'x' : Text('x'),
     'Left' : Icon(Icons.arrow_back),
     'Right' : Icon(Icons.arrow_forward),
+    'Up' : Icon(Icons.arrow_upward),
+    'Down' : Icon(Icons.arrow_downward),
     'AC' : Icon(Icons.delete),
     'BackSpace' : Icon(Icons.backspace),
     '=' : Text('='),
@@ -174,12 +177,12 @@ class _HomePageState extends State<HomePage> {
                       continue trigonometric;
                     case '\\tan':
                       continue trigonometric;
-                    case '\\arctan':
+                    case '\\arcsin':
                       continue trigonometric;
                     case '\\arccos':
                       continue trigonometric;
                     trigonometric:
-                    case '\\arcsin':
+                    case '\\arctan':
                       webMathController.addExpression(cmd);
                       webMathController.addExpression('(');
                       break;

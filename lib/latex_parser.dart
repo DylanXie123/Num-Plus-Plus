@@ -64,11 +64,16 @@ class LatexParser {
       ..prefix(string('\\sqrt'), (op, a) => 'sqrt$a')
       ..prefix(string('\\ln'), (op, a) => 'ln$a')
       ..prefix(string('\\sin'), (op, a) => 'sin$a')
-      ..prefix(string('\\arcsin'), (op, a) => 'arcsin$a');
+      ..prefix(string('\\cos'), (op, a) => 'cos$a')
+      ..prefix(string('\\tan'), (op, a) => 'tan$a')
+      ..prefix(string('\\arcsin'), (op, a) => 'arcsin$a')
+      ..prefix(string('\\arccos'), (op, a) => 'arccos$a')
+      ..prefix(string('\\arctan'), (op, a) => 'arctan$a');
     
     //postfix group
     builder.group()
       ..postfix(number()|constant()|variable(), (a, b) => '$a * $b')
+      ..postfix(string('\\%'), (a, op) => '$a/100')
       ..postfix(char('!'), (a, op) => factorial(a).toString());
 
     // left-associative group
@@ -84,9 +89,13 @@ class LatexParser {
       ..left(string('\\left(').and(), (a, op, b) => '$a * $b')
       ..left(string('\\left|').and(), (a, op, b) => '$a * $b')
       ..left(string('\\log_').seq(digit()|constant()|variable()), (a, op, b) => '$a * ${op[1]} log $b')
-      ..left(string('\\sin'), (a, op, b) => '$a * sin$b')
       ..left(string('\\ln'), (a, op, b) => '$a * ln$b')
+      ..left(string('\\sin'), (a, op, b) => '$a * sin$b')
+      ..left(string('\\cos'), (a, op, b) => '$a * cos$b')
+      ..left(string('\\tan'), (a, op, b) => '$a * tan$b')
       ..left(string('\\arcsin'), (a, op, b) => '$a * arcsin$b')
+      ..left(string('\\arccos'), (a, op, b) => '$a * arccos$b')
+      ..left(string('\\arctan'), (a, op, b) => '$a * arctan$b')
       ..left(string('\\sqrt'), (a, op, b) => '$a * sqrt$b');
 
     // right-associative group
