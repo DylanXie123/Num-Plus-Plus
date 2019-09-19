@@ -81,6 +81,7 @@ class LatexParser {
       ..left(string('\\log'), (a, op, b) => '$a log $b')
       ..left(string('\\times'), (a, op, b) => '$a * $b')
       ..left(string('\\frac'), (a, op, b) => '$a / $b')
+      ..left(string('\\div'), (a, op, b) => '$a / $b')
       ..left(char('+'), (a, op, b) => '$a + $b')
       ..left(char('-'), (a, op, b) => '$a - $b');
     
