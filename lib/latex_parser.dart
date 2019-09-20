@@ -79,7 +79,7 @@ class LatexParser {
     // left-associative group
     builder.group()
       ..left(string('\\log'), (a, op, b) => '$a log $b')
-      ..left(string('\\nrt'), (a, op, b) => '$a nrt $b')
+      ..left(string('\\nrt'), (a, op, b) => '$b ^ (1/$a)')
       ..left(string('\\times'), (a, op, b) => '$a * $b')
       ..left(string('\\frac'), (a, op, b) => '$a / $b')
       ..left(string('\\div'), (a, op, b) => '$a / $b')

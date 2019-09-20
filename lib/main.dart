@@ -215,8 +215,9 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         LatexParser lp = LatexParser();
                         lp.parse(latexExpression);
+                        print(lp.result);
                         if (lp.result.isSuccess) {
-                          isClearable = true;
+                          // isClearable = true;
                           mathExpression = lp.result.toString();
                           if (mathExpression.contains('x')) {
                             MyFunction f = MyFunction(lp.result.value);
