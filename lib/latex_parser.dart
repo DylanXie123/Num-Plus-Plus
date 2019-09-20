@@ -113,66 +113,49 @@ class LatexParser {
   }
 
   String binary2unary (String latexmath) {
-    Map _parenthesisInfo = Map();
-    Map _temp = Map();
-    List _parenthesisLoc = [];
+    Map pInfo = Map();
+    Map pLoc = Map();
 
     // get parenthesisInfo in Map form
     for (var i = 0; i < latexmath.length; i++) {
-      if(latexmath.startsWith('\\frac{', i)) {
-        _parenthesisInfo[i] = '\\frac{';
-        i += 5;
-        continue;
-      }
-      if (latexmath.startsWith('\\log_{', i)) {
-        _parenthesisInfo[i] = '\\log_{';
-        i += 5;
-        continue;
-      }
-      if (latexmath.startsWith('\\sqrt[',i)) {
-        _parenthesisInfo[i] = '\\sqrt[';
-        i += 5;
-        continue;
-      }
-      switch (latexmath[i]) {
-        case '{':
-          _parenthesisInfo[i] = '{';
-          break;
-        case '}':
-          _parenthesisInfo[i] = '}';
-          break;
-        case '[':
-          _parenthesisInfo[i] = '[';
-          break;
-        case ']':
-          _parenthesisInfo[i] = ']';
-          break;
-      }
-    }
-    print(_parenthesisInfo);
-
-    // remove unnecessary parenthesis
-    for (var i = 0; i < _parenthesisInfo.values.length; i++) {
-      if(_parenthesisInfo.values.elementAt(i).contains('{') ||
-      _parenthesisInfo.values.elementAt(i).contains('[')) {
-        _temp[_parenthesisInfo.keys.elementAt(i)] = _parenthesisInfo.values.elementAt(i);
-        continue;
-      } else {
-        if (_temp.values.elementAt(_temp.length-1) == '{') {
-          _temp.remove(_temp.keys.elementAt(_temp.length-1));
-        } else {
-          _parenthesisLoc.add(_temp.keys.elementAt(_temp.length-1));
-          _parenthesisLoc.add(_parenthesisInfo.keys.elementAt(i));
-          _temp.remove(_temp.keys.elementAt(_temp.length-1));
+      if (i<latexmath.length-5) {
+        String t = latexmath.substring(i,i+6);
+        switch (t) {
+          case '\\frac{':
+            continue fbracket;
+          case '\\log_{':
+            continue fbracket;
+          fbracket:
+          case '\\sqrt[':
+            pInfo[i] = t;
+            i += 5;
+            continue;
         }
       }
+      
+      switch (latexmath[i]) {
+        case '{':
+          pInfo[i] = '{';
+          break;
+        case ']':
+          continue rbracket;
+        rbracket:
+        case '}':
+          if (pInfo.values.elementAt(pInfo.length-1) != '{') {
+            pLoc[pInfo.keys.elementAt(pInfo.length-1)] = pInfo.values.elementAt(pInfo.length-1);
+            pLoc[i] = '}';
+          }
+          pInfo.remove(pInfo.keys.elementAt(pInfo.length-1));
+          break;
+      }
     }
-    print(_parenthesisLoc);
+    print(pLoc);
 
     // refactor the string
-    for (var i = 0; i < _parenthesisLoc.length; i+=2) {
+    List plist = pLoc.keys.toList();
+    for (var i = 0; i < pLoc.length; i+=2) {
       String msg = '';
-      switch (_parenthesisInfo[_parenthesisLoc[i]]) {
+      switch (pLoc.values.elementAt(i)) {
         case '\\frac{':
           msg = '\\frac';
           break;
@@ -183,7 +166,7 @@ class LatexParser {
           msg = '\\nrt ';
           break;
       }
-      latexmath =  latexmath.substring(0,_parenthesisLoc[i]) + '{' + latexmath.substring(_parenthesisLoc[i]+6,_parenthesisLoc[i+1]) + '}' + msg + latexmath.substring(_parenthesisLoc[i+1]+1);
+      latexmath =  latexmath.substring(0,plist[i]) + '{' + latexmath.substring(plist[i]+6,plist[i+1]) + '}' + msg + latexmath.substring(plist[i+1]+1);
     }
     print('bi2un: ' + latexmath.replaceAll(' ', ''));
     return latexmath.replaceAll(' ', '');
