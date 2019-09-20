@@ -212,21 +212,23 @@ class _HomePageState extends State<HomePage> {
                       webMathController.delExpression();
                       break;
                     case '=':
-                      isClearable = true;
                       setState(() {
                         LatexParser lp = LatexParser();
                         lp.parse(latexExpression);
-                        mathExpression = lp.result.toString();
-                        if (mathExpression.contains('x')) {
-                          MyFunction f = MyFunction(lp.result.value);
-                          resultText = f.calc(1).toString();
-                        } else {
-                          Parser p = new Parser();
-                          Expression exp = p.parse(lp.result.value);
-                          ContextModel cm = new ContextModel();
-                          double eval = exp.evaluate(EvaluationType.REAL, cm);
-                          resultText = intCheck(eval).toString();
-                          print(eval);
+                        if (lp.result.isSuccess) {
+                          isClearable = true;
+                          mathExpression = lp.result.toString();
+                          if (mathExpression.contains('x')) {
+                            MyFunction f = MyFunction(lp.result.value);
+                            resultText = f.calc(1).toString();
+                          } else {
+                            Parser p = new Parser();
+                            Expression exp = p.parse(lp.result.value);
+                            ContextModel cm = new ContextModel();
+                            double eval = exp.evaluate(EvaluationType.REAL, cm);
+                            resultText = intCheck(eval).toString();
+                            print(eval);
+                          }
                         }
                       });
                       break;
