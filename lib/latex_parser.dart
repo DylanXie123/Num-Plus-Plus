@@ -1,37 +1,12 @@
 import 'package:petitparser/petitparser.dart';
 import 'dart:math' as math;
 
+import 'number_process.dart';
+
 class LatexParser {
   Result id1;
   
   LatexParser();
-
-  int factorial(String a) {
-    int v = int.tryParse(a);
-    if (v < 0) {
-      throw "Can't do factorial! Input is smaller than 0";
-    }
-    num result = 1;
-    while (v > 1) {
-      result *= v;
-      v--;
-      if (result < 0) {
-        throw "Out of range";
-      }
-    }
-    return result;
-  }
-
-  // (experimental)
-  List<num> divide(num a, num b) {
-    if (intCheck(a) is int && intCheck(b) is int) {
-      int t = a.toInt();
-      int divisor = t.gcd(b);
-      return [intCheck(a/divisor),intCheck(b/divisor)];
-    } else {
-      return [a/b];
-    }
-  }
 
   void parse(String latexmath) {
 
@@ -173,12 +148,4 @@ class LatexParser {
   }
 
   get result => id1;
-}
-
-num intCheck(num a) {
-  if (a.ceil() == a.floor()) {
-    return a.toInt();
-  } else {
-    return a;
-  }
 }

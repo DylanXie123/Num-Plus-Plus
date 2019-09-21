@@ -6,6 +6,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'server.dart';
 import 'mybutton.dart';
 import 'latex_parser.dart';
+import 'number_process.dart';
 import 'function.dart';
 
 void main() {
@@ -227,6 +228,11 @@ class _HomePageState extends State<HomePage> {
                             Expression exp = p.parse(lp.result.value);
                             ContextModel cm = new ContextModel();
                             double eval = exp.evaluate(EvaluationType.REAL, cm);
+                            try {
+                              print('frac result: ' + deci2frac(eval).toString());
+                            } catch (e) {
+                              print(e);
+                            }
                             resultText = intCheck(eval).toString();
                             print(eval);
                           }
