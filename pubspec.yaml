@@ -28,6 +28,7 @@ dependencies:
   mime: ^0.9.6+3
   petitparser: ^2.4.0
   function_tree: ^0.2.6
+  provider: ^3.1.0
 
 dev_dependencies:
   flutter_test:

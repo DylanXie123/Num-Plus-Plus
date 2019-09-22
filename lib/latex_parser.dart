@@ -124,7 +124,6 @@ class LatexParser {
           break;
       }
     }
-    print(pLoc);
 
     // refactor the string
     List plist = pLoc.keys.toList();

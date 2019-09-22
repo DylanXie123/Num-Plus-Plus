@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
+import 'package:math_expressions/math_expressions.dart';
+import 'latex_parser.dart';
 
 class Server {
   // class from inAppBrowser
@@ -74,3 +78,78 @@ class Server {
   }
 }
 
+class MathController {
+  WebViewController webViewController;
+
+  void addExpression(String msg) {
+    webViewController.evaluateJavascript("addCmd('$msg')");
+  }
+
+  void delExpression() {
+    webViewController.evaluateJavascript("delString()");
+  }
+
+  void delAllExpression() {
+    webViewController.evaluateJavascript("delAll()");
+  }
+
+  void addKey(String key) {
+    webViewController.evaluateJavascript("simulateKey('$key')");
+  }
+
+}
+
+class LatexModel with ChangeNotifier {
+  String _latexExp = '';
+  String result = '';
+
+  set latexExp(String latex) {
+    _latexExp = latex;
+    notifyListeners();
+  }
+
+  void calc() {
+    try {
+      print('Latex: ' + _latexExp);
+      LatexParser lp = LatexParser();
+      lp.parse(_latexExp);
+      Expression exp = Parser().parse(lp.result.value);
+      result = exp.evaluate(EvaluationType.REAL, ContextModel()).toString();
+    } catch (e) {
+      print('Error In calc: ' + e.toString());
+    }
+    notifyListeners();
+  }
+}
+
+class MathBox extends StatelessWidget {
+
+  final MathController mathController;
+  final LatexModel latexModel;
+  final _server = Server();
+  final double height;
+
+  MathBox({@required this.mathController,@required this.latexModel, this.height = 50.0,}) {
+    _server.start();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      child: WebView(
+        onWebViewCreated: (controller) {
+          mathController.webViewController = controller;
+          mathController.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
+        },
+        javascriptMode: JavascriptMode.unrestricted,
+        javascriptChannels: Set.from([
+          JavascriptChannel(
+            name: 'latexString',
+            onMessageReceived: (JavascriptMessage message) { latexModel.latexExp = message.message;}
+          ),
+        ]),
+      ),
+    );
+  }
+}
