@@ -105,6 +105,7 @@ class LatexModel with ChangeNotifier {
 
   set latexExp(String latex) {
     _latexExp = latex;
+    calc();
     notifyListeners();
   }
 
@@ -115,10 +116,11 @@ class LatexModel with ChangeNotifier {
       lp.parse(_latexExp);
       Expression exp = Parser().parse(lp.result.value);
       result = exp.evaluate(EvaluationType.REAL, ContextModel()).toString();
+      print('Calc Result: ' + result);
     } catch (e) {
+      result = '';
       print('Error In calc: ' + e.toString());
     }
-    notifyListeners();
   }
 }
 

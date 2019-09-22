@@ -83,7 +83,8 @@ Map keyboard = {
   'BackSpace' : Icon(Icons.backspace),
   '=' : Text('='),
 };
-
+// TODO: Add isClearable feature
+// TODO: Adjust keyboard layout
 class MathKeyBoard extends StatelessWidget {
 
   final MathController mathController;
@@ -137,6 +138,7 @@ class MathKeyBoard extends StatelessWidget {
               mathController.delExpression();
               break;
             case '=':
+              // TODO: Implement animation 
               break;
             default: 
               mathController.addExpression(cmd);

@@ -60,12 +60,12 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text('='),
-        onPressed: () {
-          latexModel.calc();
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text('='),
+      //   onPressed: () {
+      //     latexModel.calc();
+      //   },
+      // ),
     );
   }
 
