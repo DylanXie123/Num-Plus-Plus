@@ -1,6 +1,5 @@
 import 'package:calculator/src/latexmodel.dart';
 import 'package:flutter/material.dart';
-import 'mathbox.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;
@@ -44,10 +43,9 @@ class MyButton extends StatelessWidget {
 // TODO: Adjust keyboard layout
 class MathKeyBoard extends StatelessWidget {
 
-  final MathController mathController;
   final LatexModel latexModel;
 
-  const MathKeyBoard({Key key, @required this.mathController, @required this.latexModel}) : super(key: key);
+  const MathKeyBoard({Key key, @required this.latexModel}) : super(key: key);
   
   static const Map basic = {
     '1' : Text('1'),
@@ -115,21 +113,21 @@ class MathKeyBoard extends StatelessWidget {
             var cmd = key.keys.elementAt(i);
             switch (type) {
               case 1: // basic type
-                mathController.addExpression(cmd);
+                latexModel.addExpression(cmd);
                 break;
               case 2:
-                mathController.addExpression(cmd, isOperator: true);
+                latexModel.addExpression(cmd, isOperator: true);
                 break;
               case 3:
-                mathController.addExpression(cmd);
-                mathController.addExpression('(');
+                latexModel.addExpression(cmd);
+                latexModel.addExpression('(');
                 break;
               case 4:
-                mathController.addExpression(cmd);
-                mathController.addExpression('_');
+                latexModel.addExpression(cmd);
+                latexModel.addExpression('_');
                 break;
               case 5:
-                mathController.addKey(cmd);
+                latexModel.addKey(cmd);
                 break;
             }
           },
@@ -146,19 +144,19 @@ class MathKeyBoard extends StatelessWidget {
       child: Text('='),
       onPressed: () {
         latexModel.keep();
-        mathController.isClearable = true;
+        latexModel.isClearable = true;
       },
     );
     final backspace = MyButton(
       child: Icon(Icons.backspace),
       onPressed: () {
-        mathController.delExpression();
+        latexModel.delExpression();
       },
     );
     final ac = MyButton(
       child: Icon(Icons.delete),
       onPressed: () {
-        mathController.delAllExpression();
+        latexModel.delAllExpression();
       },
     );
 

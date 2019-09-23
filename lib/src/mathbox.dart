@@ -78,44 +78,13 @@ class Server {
   }
 }
 
-class MathController {
-  WebViewController webViewController;
-  bool isClearable = false;
-  // TODO: Implement isClearable function here
-
-  void addExpression(String msg, {bool isOperator = false}) {
-    if (isClearable) {
-      delAllExpression();
-      if (isOperator) {
-        print('Test');
-        // TODO: need access to LatexModel
-      }
-    }
-    webViewController.evaluateJavascript("addCmd('$msg')");
-  }
-
-  void delExpression() {
-    webViewController.evaluateJavascript("delString()");
-  }
-
-  void delAllExpression() {
-    webViewController.evaluateJavascript("delAll()");
-  }
-
-  void addKey(String key) {
-    webViewController.evaluateJavascript("simulateKey('$key')");
-  }
-
-}
-
 class MathBox extends StatelessWidget {
 
-  final MathController mathController;
   final LatexModel latexModel;
   final _server = Server();
   final double height;
 
-  MathBox({@required this.mathController,@required this.latexModel, this.height = 50.0,}) {
+  MathBox({@required this.latexModel, this.height = 50.0,}) {
     _server.start();
   }
   
@@ -125,8 +94,8 @@ class MathBox extends StatelessWidget {
       height: height,
       child: WebView(
         onWebViewCreated: (controller) {
-          mathController.webViewController = controller;
-          mathController.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
+          latexModel.webViewController = controller;
+          latexModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
         },
         javascriptMode: JavascriptMode.unrestricted,
         javascriptChannels: Set.from([

@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
 
-  final mathController = MathController();
   final latexModel = LatexModel();
 
   @override
@@ -42,7 +41,6 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             MathBox(
-              mathController: mathController,
               latexModel: latexModel,
             ),
             Consumer<LatexModel>(
@@ -68,7 +66,6 @@ class HomePage extends StatelessWidget {
             ),
             Expanded(
               child: MathKeyBoard(
-                mathController: mathController,
                 latexModel: latexModel,
               ),
             ),
