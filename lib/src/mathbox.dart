@@ -80,6 +80,8 @@ class Server {
 
 class MathController {
   WebViewController webViewController;
+  bool isClearable = false;
+  // TODO: Implement isClearable function here
 
   void addExpression(String msg) {
     webViewController.evaluateJavascript("addCmd('$msg')");

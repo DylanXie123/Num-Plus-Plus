@@ -6,11 +6,19 @@ import 'latex_parser.dart';
 class LatexModel with ChangeNotifier {
   String _latexExp = '';
   String result = '';
+  List<String> history = [''];
 
   set latexExp(String latex) {
     _latexExp = latex;
     calc();
     notifyListeners();
+  }
+
+  void keep() {
+    history.add(result);
+    result = '';
+    notifyListeners();
+    print(history);
   }
 
   void calc() {

@@ -46,17 +46,31 @@ class HomePage extends StatelessWidget {
               latexModel: latexModel,
             ),
             Consumer<LatexModel>(
-              builder: (context, result, _) => Text(
-                result.result,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 48,
-                ),
+              builder: (context, result, _) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    result.history.last,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 24,
+                    ),
+                  ),
+                  Text(
+                    result.result,
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 48,
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
-              child: MathKeyBoard(mathController: mathController,),
+              child: MathKeyBoard(
+                mathController: mathController,
+                latexModel: latexModel,
+              ),
             ),
           ],
         ),

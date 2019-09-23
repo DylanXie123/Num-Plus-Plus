@@ -1,3 +1,4 @@
+import 'package:calculator/src/latexmodel.dart';
 import 'package:flutter/material.dart';
 import 'mathbox.dart';
 
@@ -83,13 +84,14 @@ Map keyboard = {
   'BackSpace' : Icon(Icons.backspace),
   '=' : Text('='),
 };
-// TODO: Add isClearable feature
+
 // TODO: Adjust keyboard layout
 class MathKeyBoard extends StatelessWidget {
 
   final MathController mathController;
+  final LatexModel latexModel;
 
-  const MathKeyBoard({Key key, @required this.mathController}) : super(key: key);
+  const MathKeyBoard({Key key, @required this.mathController, @required this.latexModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +140,7 @@ class MathKeyBoard extends StatelessWidget {
               mathController.delExpression();
               break;
             case '=':
+              latexModel.keep();
               // TODO: Implement animation 
               break;
             default: 
