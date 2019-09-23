@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import 'mathbox.dart';
-import 'mybutton.dart';
+import 'src/mathbox.dart';
+import 'src/mybutton.dart';
+import 'src/latexmodel.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -60,12 +61,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Text('='),
-      //   onPressed: () {
-      //     latexModel.calc();
-      //   },
-      // ),
     );
   }
 
