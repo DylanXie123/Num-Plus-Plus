@@ -41,50 +41,6 @@ class MyButton extends StatelessWidget {
   }
 }
 
-Map keyboard = {
-  '1' : Text('1'),
-  '2' : Text('2'),
-  '3' : Text('3'),
-  '4' : Text('4'),
-  '5' : Text('5'),
-  '6' : Text('6'),
-  '7' : Text('7'),
-  '8' : Text('8'),
-  '9' : Text('9'),
-  '0' : Text('0'),
-  '+' : Text('+'),
-  '-' : Text('-'),
-  '\\\\times' : Text('×'),
-  '\\div' : Text('÷'),
-  '/' : Text('frac'),
-  '^' : Text('^'),
-  '.' : Text('.'),
-  '(' : Text('('),
-  ')' : Text(')'),
-  '%' : Text('%'),
-  'e' : Text('e'),
-  '\\pi' : Text('pi'),
-  '\\sqrt' : Text('sqrt'),
-  '\\\\nthroot' : Text('nroot'),
-  '\\sin' : Text('sin'),
-  '\\cos' : Text('cos'),
-  '\\tan' : Text('tan'),
-  '\\arcsin' : Text('asin'),
-  '\\arccos' : Text('acos'),
-  '\\arctan' : Text('atan'),
-  '\\log' : Text('log'),
-  '\\ln' : Text('ln'),
-  '\\|' : Text('abs'),
-  'x' : Text('x'),
-  'Left' : Icon(Icons.arrow_back),
-  'Right' : Icon(Icons.arrow_forward),
-  'Up' : Icon(Icons.arrow_upward),
-  'Down' : Icon(Icons.arrow_downward),
-  'AC' : Icon(Icons.delete),
-  'BackSpace' : Icon(Icons.backspace),
-  '=' : Text('='),
-};
-
 // TODO: Adjust keyboard layout
 class MathKeyBoard extends StatelessWidget {
 
@@ -92,64 +48,138 @@ class MathKeyBoard extends StatelessWidget {
   final LatexModel latexModel;
 
   const MathKeyBoard({Key key, @required this.mathController, @required this.latexModel}) : super(key: key);
+  
+  static const Map basic = {
+    '1' : Text('1'),
+    '2' : Text('2'),
+    '3' : Text('3'),
+    '4' : Text('4'),
+    '5' : Text('5'),
+    '6' : Text('6'),
+    '7' : Text('7'),
+    '8' : Text('8'),
+    '9' : Text('9'),
+    '0' : Text('0'),
+    '^' : Text('^'),
+    '.' : Text('.'),
+    '(' : Text('('),
+    ')' : Text(')'),
+    '%' : Text('%'),
+    'e' : Text('e'),
+    '\\pi' : Text('pi'),
+    'x' : Text('x'),
+  };
+
+  static const Map mathoperator = {
+    '+' : Text('+'),
+    '-' : Text('-'),
+    '\\\\times' : Text('×'),
+    '\\div' : Text('÷'),
+    '/' : Text('frac'),
+  };
+
+  static const Map functionA = {
+    '\\sin' : Text('sin'),
+    '\\cos' : Text('cos'),
+    '\\tan' : Text('tan'),
+    '\\arcsin' : Text('asn'),
+    '\\arccos' : Text('acs'),
+    '\\arctan' : Text('atn'),
+  };
+
+  static const Map functionB = {
+    '\\log' : Text('log'),
+    '\\ln' : Text('ln'),
+  };
+
+  static const Map function = {
+    '\\sqrt' : Text('sqrt'),
+    '\\\\nthroot' : Text('nrt'),
+    '\\|' : Text('abs'),
+  };
+
+  static const Map cursor = {
+    'Left' : Icon(Icons.arrow_back),
+    'Right' : Icon(Icons.arrow_forward),
+    'Up' : Icon(Icons.arrow_upward),
+    'Down' : Icon(Icons.arrow_downward),
+  };
+
+  List<Widget> _buildButtonGroup(Map key, int type) {
+    List<Widget> button = [];
+    for (var i = 0; i < key.length; i++) {
+      button.add(
+        MyButton(
+          child: key.values.elementAt(i),
+          onPressed: () {
+            var cmd = key.keys.elementAt(i);
+            switch (type) {
+              case 1: // basic type
+                mathController.addExpression(cmd);
+                break;
+              case 2:
+                mathController.addExpression(cmd, isOperator: true);
+                break;
+              case 3:
+                mathController.addExpression(cmd);
+                mathController.addExpression('(');
+                break;
+              case 4:
+                mathController.addExpression(cmd);
+                mathController.addExpression('_');
+                break;
+              case 5:
+                mathController.addKey(cmd);
+                break;
+            }
+          },
+        ),
+      );
+    }
+    return button;
+  }
+
+  List<Widget> _buildButton() {
+    List<Widget> button = [];
+    
+    final equal = MyButton(
+      child: Text('='),
+      onPressed: () {
+        latexModel.keep();
+        mathController.isClearable = true;
+      },
+    );
+    final backspace = MyButton(
+      child: Icon(Icons.backspace),
+      onPressed: () {
+        mathController.delExpression();
+      },
+    );
+    final ac = MyButton(
+      child: Icon(Icons.delete),
+      onPressed: () {
+        mathController.delAllExpression();
+      },
+    );
+
+    button.addAll(_buildButtonGroup(basic, 1));
+    button.addAll(_buildButtonGroup(mathoperator, 2));
+    button.addAll(_buildButtonGroup(functionA, 3));
+    button.addAll(_buildButtonGroup(functionB, 4));
+    button.addAll(_buildButtonGroup(function, 1));
+    button.addAll(_buildButtonGroup(cursor, 5));
+    button.add(equal);
+    button.add(backspace);
+    button.add(ac);
+    return button;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 5,
-      ),
-      itemCount: keyboard.length,
-      itemBuilder: (context, index) => MyButton(
-        onPressed: () {
-          var cmd = keyboard.keys.elementAt(index);
-          switch (cmd) {
-            case '\\sin':
-              continue trigonometric;
-            case '\\cos':
-              continue trigonometric;
-            case '\\tan':
-              continue trigonometric;
-            case '\\arcsin':
-              continue trigonometric;
-            case '\\arccos':
-              continue trigonometric;
-            trigonometric:
-            case '\\arctan':
-              mathController.addExpression(cmd);
-              mathController.addExpression('(');
-              break;
-            case '\\log':
-              mathController.addExpression(cmd);
-              mathController.addExpression('_');
-              break;
-            case 'Up':
-              continue movecursor;
-            case 'Down':
-              continue movecursor;
-            case 'Left':
-              continue movecursor;
-            movecursor:
-            case 'Right':
-              mathController.addKey(cmd);
-              break;
-            case 'AC':
-              mathController.delAllExpression();
-              break;
-            case 'BackSpace':
-              mathController.delExpression();
-              break;
-            case '=':
-              latexModel.keep();
-              // TODO: Implement animation 
-              break;
-            default: 
-              mathController.addExpression(cmd);
-              break;
-          }
-        },
-        child: keyboard.values.elementAt(index),
-      ),
+    return GridView.count(
+      crossAxisCount: 5,
+      children: _buildButton(),
     );
   }
+
 }

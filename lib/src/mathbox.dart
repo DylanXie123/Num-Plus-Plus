@@ -83,7 +83,14 @@ class MathController {
   bool isClearable = false;
   // TODO: Implement isClearable function here
 
-  void addExpression(String msg) {
+  void addExpression(String msg, {bool isOperator = false}) {
+    if (isClearable) {
+      delAllExpression();
+      if (isOperator) {
+        print('Test');
+        // TODO: need access to LatexModel
+      }
+    }
     webViewController.evaluateJavascript("addCmd('$msg')");
   }
 
