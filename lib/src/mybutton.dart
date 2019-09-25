@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class MyButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
+  final VoidCallback onLongPress;
   final double _width = 40.0; //40.0 is better
 
   const MyButton({
     @required this.child,
-    @required this.onPressed,
+    @required this.onPressed, 
+    this.onLongPress,
   });
 
   @override
@@ -28,6 +30,7 @@ class MyButton extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           highlightColor: Colors.transparent,
           onTap: onPressed,
+          onLongPress: onLongPress,
           child: Container(
             height: _width * 2,
             width: _width * 2,
@@ -134,6 +137,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Icon(Icons.backspace),
       onPressed: () {latexModel.delExpression();},
+      onLongPress: () {latexModel.delAllExpression();},
     ));
 
     button.add(MyButton(
