@@ -46,35 +46,6 @@ class MathKeyBoard extends StatelessWidget {
   final LatexModel latexModel;
 
   const MathKeyBoard({Key key, @required this.latexModel}) : super(key: key);
-  
-  static const Map basic = {
-    '1' : Text('1'),
-    '2' : Text('2'),
-    '3' : Text('3'),
-    '4' : Text('4'),
-    '5' : Text('5'),
-    '6' : Text('6'),
-    '7' : Text('7'),
-    '8' : Text('8'),
-    '9' : Text('9'),
-    '0' : Text('0'),
-    '^' : Text('^'),
-    '.' : Text('.'),
-    '(' : Text('('),
-    ')' : Text(')'),
-    '%' : Text('%'),
-    'e' : Text('e'),
-    '\\pi' : Text('pi'),
-    'x' : Text('x'),
-  };
-
-  static const Map mathoperator = {
-    '+' : Text('+'),
-    '-' : Text('-'),
-    '\\\\times' : Text('×'),
-    '\\div' : Text('÷'),
-    '/' : Text('frac'),
-  };
 
   static const Map functionA = {
     '\\sin' : Text('sin'),
@@ -137,46 +108,149 @@ class MathKeyBoard extends StatelessWidget {
     return button;
   }
 
-  List<Widget> _buildButton() {
+  List<Widget> _buildLowButton() {
     List<Widget> button = [];
-    
-    final equal = MyButton(
+
+    button.add(MyButton(
+      child: Text('7'),
+      onPressed: () {latexModel.addExpression('7');},
+    ));
+
+    button.add(MyButton(
+      child: Text('8'),
+      onPressed: () {latexModel.addExpression('8');},
+    ));
+
+    button.add(MyButton(
+      child: Text('9'),
+      onPressed: () {latexModel.addExpression('9');},
+    ));
+
+    button.add(MyButton(
+      child: Text('x/y'),
+      onPressed: () {latexModel.addExpression('/', isOperator: true);},
+    ));
+
+    button.add(MyButton(
+      child: Icon(Icons.backspace),
+      onPressed: () {latexModel.delExpression();},
+    ));
+
+    button.add(MyButton(
+      child: Text('4'),
+      onPressed: () {latexModel.addExpression('4');},
+    ));
+
+    button.add(MyButton(
+      child: Text('5'),
+      onPressed: () {latexModel.addExpression('5');},
+    ));
+
+    button.add(MyButton(
+      child: Text('6'),
+      onPressed: () {latexModel.addExpression('6');},
+    ));
+
+    button.add(MyButton(
+      child: Text('+'),
+      onPressed: () {latexModel.addExpression('+', isOperator: true);},
+    ));
+
+    button.add(MyButton(
+      child: Text('-'),
+      onPressed: () {latexModel.addExpression('-', isOperator: true);},
+    ));
+
+    button.add(MyButton(
+      child: Text('1'),
+      onPressed: () {latexModel.addExpression('1');},
+    ));
+
+    button.add(MyButton(
+      child: Text('2'),
+      onPressed: () {latexModel.addExpression('2');},
+    ));
+
+    button.add(MyButton(
+      child: Text('3'),
+      onPressed: () {latexModel.addExpression('3');},
+    ));
+
+    button.add(MyButton(
+      child: Text('×'),
+      onPressed: () {latexModel.addExpression('\\\\times', isOperator: true);},
+    ));
+
+    button.add(MyButton(
+      child: Text('÷'),
+      onPressed: () {latexModel.addExpression('\\div', isOperator: true);},
+    ));
+
+    button.add(MyButton(
+      child: Text('0'),
+      onPressed: () {latexModel.addExpression('0');},
+    ));
+
+    button.add(MyButton(
+      child: Text('.'),
+      onPressed: () {latexModel.addExpression('.');},
+    ));
+
+    button.add(MyButton(
       child: Text('='),
       onPressed: () {
         latexModel.keep();
         latexModel.isClearable = true;
       },
-    );
-    final backspace = MyButton(
-      child: Icon(Icons.backspace),
-      onPressed: () {
-        latexModel.delExpression();
-      },
-    );
-    final ac = MyButton(
-      child: Icon(Icons.delete),
-      onPressed: () {
-        latexModel.delAllExpression();
-      },
-    );
+    ));
 
-    button.addAll(_buildButtonGroup(basic, 1));
-    button.addAll(_buildButtonGroup(mathoperator, 2));
+    button.add(MyButton(
+      child: Text('π'),
+      onPressed: () {latexModel.addExpression('\\pi');},
+    ));
+
+    button.add(MyButton(
+      child: Text('e'),
+      onPressed: () {latexModel.addExpression('e');},
+    ));
+
+    return button;
+  }
+
+  List<Widget> _buildUpButton() {
+    List<Widget> button = [];
+
     button.addAll(_buildButtonGroup(functionA, 3));
     button.addAll(_buildButtonGroup(functionB, 4));
     button.addAll(_buildButtonGroup(function, 1));
-    button.addAll(_buildButtonGroup(cursor, 5));
-    button.add(equal);
-    button.add(backspace);
-    button.add(ac);
     return button;
   }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 5,
-      children: _buildButton(),
+    return Column(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Material(
+            elevation: 10.0,
+            color: Colors.green[200],
+            child: GridView.count(
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 7,
+              children: _buildUpButton(),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: GridView.count(
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 5,
+            children: _buildLowButton(),
+          ),
+        ),
+      ],
     );
   }
 

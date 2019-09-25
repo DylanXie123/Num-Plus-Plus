@@ -84,7 +84,7 @@ class MathBox extends StatelessWidget {
   final _server = Server();
   final double height;
 
-  MathBox({@required this.latexModel, this.height = 50.0,}) {
+  MathBox({@required this.latexModel, this.height = 100.0,}) {
     _server.start();
   }
   
