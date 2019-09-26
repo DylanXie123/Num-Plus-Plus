@@ -11,7 +11,7 @@ class LatexModel with ChangeNotifier {
 
   WebViewController webViewController;
   bool isClearable = false;
-
+  // TODO: Add animation in AC
   set latexExp(String latex) {
     _latexExp = latex;
     calc();

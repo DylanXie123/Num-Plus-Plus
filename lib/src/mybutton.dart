@@ -19,7 +19,8 @@ class MyButton extends StatelessWidget {
       style: TextStyle(
         fontSize: _width / 1.3,
         color: Colors.black,
-        fontFamily: 'RobotoMono',
+        fontFamily: 'Symbola',
+        fontWeight: FontWeight.w600,
       ),
       child: Container(
         height: _width * 2,
@@ -67,11 +68,16 @@ class MathKeyBoard extends StatelessWidget {
   static const Map function = {
     '\\sqrt' : Text('√'),
     '\\\\nthroot' : Text('nrt'),
-    '\\|' : Text('|□|'),
+    '\\|' : Text('| |'),
     '\\int' : Text('∫'),
     '!' : Text('!'),
     'x' : Text('x'),
     '^' : Text('x^y'),
+    '%' : Text('%'),
+    '(' : Text('('),
+    ')' : Text(')'),
+    '\\² ' : Text('x²'),
+    '\\³ ' : Text('x³'),
   };
 
   static const Map cursor = {
