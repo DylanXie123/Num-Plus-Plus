@@ -1,5 +1,6 @@
-import 'package:calculator/src/latexmodel.dart';
 import 'package:flutter/material.dart';
+
+import 'mathmodel.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;
@@ -41,9 +42,9 @@ class MyButton extends StatelessWidget {
 
 class MathKeyBoard extends StatelessWidget {
 
-  final LatexModel latexModel;
+  final MathModel mathModel;
 
-  const MathKeyBoard({Key key, @required this.latexModel}) : super(key: key);
+  const MathKeyBoard({Key key, @required this.mathModel}) : super(key: key);
 
   static const Map pfunction = {
     '\\sin' : Text('Sin'),
@@ -76,8 +77,8 @@ class MathKeyBoard extends StatelessWidget {
           child: key.values.elementAt(i),
           onPressed: () {
             var cmd = key.keys.elementAt(i);
-            latexModel.addExpression(cmd);
-            if (par) {latexModel.addExpression('(');}
+            mathModel.addExpression(cmd);
+            if (par) {mathModel.addExpression('(');}
           },
         ),
       );
@@ -90,110 +91,110 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Text('7'),
-      onPressed: () {latexModel.addExpression('7');},
+      onPressed: () {mathModel.addExpression('7');},
     ));
 
     button.add(MyButton(
       child: Text('8'),
-      onPressed: () {latexModel.addExpression('8');},
+      onPressed: () {mathModel.addExpression('8');},
     ));
 
     button.add(MyButton(
       child: Text('9'),
-      onPressed: () {latexModel.addExpression('9');},
+      onPressed: () {mathModel.addExpression('9');},
     ));
 
     button.add(MyButton(
       child: Text('x/y'),
-      onPressed: () {latexModel.addExpression('/', isOperator: true);},
+      onPressed: () {mathModel.addExpression('/', isOperator: true);},
     ));
 
     button.add(MyButton(
       child: Icon(Icons.backspace),
-      onPressed: () {latexModel.delExpression();},
+      onPressed: () {mathModel.delExpression();},
       onLongPress: () async {
-        await latexModel.animationController.forward();
-        latexModel.delAllExpression();
-        latexModel.animationController.reset();
+        await mathModel.animationController.forward();
+        mathModel.delAllExpression();
+        mathModel.animationController.reset();
       },
     ));
 
     button.add(MyButton(
       child: Text('4'),
-      onPressed: () {latexModel.addExpression('4');},
+      onPressed: () {mathModel.addExpression('4');},
     ));
 
     button.add(MyButton(
       child: Text('5'),
-      onPressed: () {latexModel.addExpression('5');},
+      onPressed: () {mathModel.addExpression('5');},
     ));
 
     button.add(MyButton(
       child: Text('6'),
-      onPressed: () {latexModel.addExpression('6');},
+      onPressed: () {mathModel.addExpression('6');},
     ));
 
     button.add(MyButton(
       child: Text('+'),
-      onPressed: () {latexModel.addExpression('+', isOperator: true);},
+      onPressed: () {mathModel.addExpression('+', isOperator: true);},
     ));
 
     button.add(MyButton(
       child: Text('-'),
-      onPressed: () {latexModel.addExpression('-', isOperator: true);},
+      onPressed: () {mathModel.addExpression('-', isOperator: true);},
     ));
 
     button.add(MyButton(
       child: Text('1'),
-      onPressed: () {latexModel.addExpression('1');},
+      onPressed: () {mathModel.addExpression('1');},
     ));
 
     button.add(MyButton(
       child: Text('2'),
-      onPressed: () {latexModel.addExpression('2');},
+      onPressed: () {mathModel.addExpression('2');},
     ));
 
     button.add(MyButton(
       child: Text('3'),
-      onPressed: () {latexModel.addExpression('3');},
+      onPressed: () {mathModel.addExpression('3');},
     ));
 
     button.add(MyButton(
       child: Text('×'),
-      onPressed: () {latexModel.addExpression('\\\\times', isOperator: true);},
+      onPressed: () {mathModel.addExpression('\\\\times', isOperator: true);},
     ));
 
     button.add(MyButton(
       child: Text('÷'),
-      onPressed: () {latexModel.addExpression('\\div', isOperator: true);},
+      onPressed: () {mathModel.addExpression('\\div', isOperator: true);},
     ));
 
     button.add(MyButton(
       child: Text('0'),
-      onPressed: () {latexModel.addExpression('0');},
+      onPressed: () {mathModel.addExpression('0');},
     ));
 
     button.add(MyButton(
       child: Text('.'),
-      onPressed: () {latexModel.addExpression('.');},
+      onPressed: () {mathModel.addExpression('.');},
     ));
 
     button.add(MyButton(
       child: Text('='),
       onPressed: () {
-        latexModel.keep();
-        latexModel.isClearable = true;
+        mathModel.keep();
+        mathModel.isClearable = true;
       },
     ));
 
     button.add(MyButton(
       child: Text('π'),
-      onPressed: () {latexModel.addExpression('\\pi');},
+      onPressed: () {mathModel.addExpression('\\pi');},
     ));
 
     button.add(MyButton(
       child: Text('e'),
-      onPressed: () {latexModel.addExpression('e');},
+      onPressed: () {mathModel.addExpression('e');},
     ));
 
     return button;
@@ -208,36 +209,36 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('log'),
       onPressed: () {
-        latexModel.addExpression('log');
-        latexModel.addExpression('_');
-        latexModel.addKey('Right');
-        latexModel.addExpression('(');
-        latexModel.addKey('Left');
+        mathModel.addExpression('log');
+        mathModel.addExpression('_');
+        mathModel.addKey('Right');
+        mathModel.addExpression('(');
+        mathModel.addKey('Left Left');
       },
     ));
 
     button.add(MyButton(
       child: Text('x²'),
       onPressed: () {
-        latexModel.addExpression('(');
-        latexModel.addExpression(')');
-        latexModel.addExpression('^');
-        latexModel.addExpression('2');
-        latexModel.addKey('Left Left Left');
+        mathModel.addExpression('(');
+        mathModel.addExpression(')');
+        mathModel.addExpression('^');
+        mathModel.addExpression('2');
+        mathModel.addKey('Left Left Left');
       },
     ));
 
     button.add(MyButton(
       child: Icon(Icons.arrow_back),
       onPressed: () {
-        latexModel.addKey('Left');
+        mathModel.addKey('Left');
       },
     ));
 
     button.add(MyButton(
       child: Icon(Icons.arrow_forward),
       onPressed: () {
-        latexModel.addKey('Right');
+        mathModel.addKey('Right');
       },
     ));
 

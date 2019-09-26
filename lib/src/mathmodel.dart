@@ -4,7 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'latex_parser.dart';
 
-class LatexModel with ChangeNotifier {
+class MathModel with ChangeNotifier {
   String _latexExp = '';
   String result = '';
   List<String> history = [''];
@@ -38,6 +38,9 @@ class LatexModel with ChangeNotifier {
       Expression exp = Parser().parse(lp.result.value);
       num val = exp.evaluate(EvaluationType.REAL, ContextModel());
       val = intCheck(val);
+      if (val.abs() < 1e-10) {
+        val = 0;
+      }
       result = val.toString();
       // TODO: live calc to transfer decimal to fraction
       print('Calc Result: ' + result);

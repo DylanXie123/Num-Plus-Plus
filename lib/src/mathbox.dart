@@ -6,7 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
 
-import 'latexmodel.dart';
+import 'mathmodel.dart';
 
 class Server {
   // class from inAppBrowser
@@ -80,10 +80,10 @@ class Server {
 
 class MathBox extends StatelessWidget {
 
-  final LatexModel latexModel;
+  final MathModel mathModel;
   final _server = Server();
 
-  MathBox({@required this.latexModel,}) {
+  MathBox({@required this.mathModel,}) {
     _server.start();
   }
   
@@ -93,18 +93,18 @@ class MathBox extends StatelessWidget {
       children: <Widget>[
         WebView(
           onWebViewCreated: (controller) {
-            latexModel.webViewController = controller;
-            latexModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
+            mathModel.webViewController = controller;
+            mathModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
           },
           javascriptMode: JavascriptMode.unrestricted,
           javascriptChannels: Set.from([
             JavascriptChannel(
               name: 'latexString',
-              onMessageReceived: (JavascriptMessage message) { latexModel.latexExp = message.message;}
+              onMessageReceived: (JavascriptMessage message) { mathModel.latexExp = message.message;}
             ),
           ]),
         ),
-        ClearAnimation(animation: latexModel.animation,),
+        ClearAnimation(animation: mathModel.animation,),
       ],
     );
   }

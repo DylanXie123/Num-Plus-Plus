@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'src/mathbox.dart';
 import 'src/mybutton.dart';
-import 'src/latexmodel.dart';
+import 'src/mathmodel.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -30,18 +30,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  final latexModel = LatexModel();
+  final mathModel = MathModel();
 
   @override
   void initState() {
     super.initState();
-    latexModel.animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
-    latexModel.animation = Tween<double>(begin: 0, end: 1000).animate(latexModel.animationController);
+    mathModel.animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
+    mathModel.animation = Tween<double>(begin: 0, end: 1000).animate(mathModel.animationController);
   }
 
   @override
   void dispose() {
-    latexModel.animationController.dispose();
+    mathModel.animationController.dispose();
     super.dispose();
   }
 
@@ -50,25 +50,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     print('Rebuit');
     return Scaffold(
       body: ChangeNotifierProvider.value(
-        value: latexModel,
+        value: mathModel,
         child: SafeArea(
           child: Column(
             children: <Widget>[
               Expanded(
                 flex: 1,
                 child: MathBox(
-                  latexModel: latexModel,
+                  mathModel: mathModel,
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Consumer<LatexModel>(
+                  Consumer<MathModel>(
                     builder: (context, result, _) => Text(result.history.last),
                   ),
                   // VerticalDivider(width: 15.0, thickness: 15.0,color: Colors.red,),
                   // TODO: Make result display part an individual widget(to let user choose eval behaviour)
-                  Consumer<LatexModel>(
+                  Consumer<MathModel>(
                     builder: (context, result, _) => Text(result.result),
                   ),
                 ],
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Expanded(
                 flex: 4,
                 child: MathKeyBoard(
-                  latexModel: latexModel,
+                  mathModel: mathModel,
                 ),
               ),
             ],

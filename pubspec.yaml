@@ -63,7 +63,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
  
   fonts:
-    - family: Minion-Pro #
+    - family: Minion-Pro
       fonts:
         - asset: assets/fonts/Minion-Pro-Semibold_30656.ttf
 
