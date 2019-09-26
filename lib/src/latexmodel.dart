@@ -21,6 +21,8 @@ class LatexModel with ChangeNotifier {
     notifyListeners();
   }
 
+  get latexString => _latexExp;
+
   void keep() {
     history.add(result);
     result = '';

@@ -19,25 +19,20 @@ class MyButton extends StatelessWidget {
       style: TextStyle(
         fontSize: _width / 1.3,
         color: Colors.black,
-        fontFamily: 'Symbola',
-        fontWeight: FontWeight.w600,
+        fontFamily: 'Minion-Pro',
       ),
-      child: Container(
-        height: _width * 2,
-        width: _width * 2,
-        alignment: Alignment.center,
-        child: InkResponse(
-          radius: _width * 1.2,
-          splashFactory: InkRipple.splashFactory,
-          highlightColor: Colors.transparent,
-          onTap: onPressed,
-          onLongPress: onLongPress,
-          child: Container(
-            height: _width * 2,
-            width: _width * 2,
-            alignment: Alignment.center,
-            child: child,
-          ),
+      child: InkResponse(
+        radius: _width * 1.2,
+        splashFactory: InkRipple.splashFactory,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.green[50],
+        onTap: onPressed,
+        onLongPress: onLongPress,
+        child: Container(
+          height: _width * 2,
+          width: _width * 2,
+          alignment: Alignment.center,
+          child: child,
         ),
       ),
     );
@@ -51,13 +46,13 @@ class MathKeyBoard extends StatelessWidget {
   const MathKeyBoard({Key key, @required this.latexModel}) : super(key: key);
 
   static const Map pfunction = {
-    '\\sin' : Text('sin'),
-    '\\cos' : Text('cos'),
-    '\\\\tan' : Text('tan'),
-    '\\arcsin' : Text('asn'),
-    '\\arccos' : Text('acs'),
-    '\\arctan' : Text('atn'),
-    '\\ln' : Text('ln'),
+    '\\sin' : Text('Sin'),
+    '\\cos' : Text('Cos'),
+    '\\\\tan' : Text('Tan'),
+    '\\arcsin' : Text('asin'),
+    '\\arccos' : Text('acos'),
+    '\\arctan' : Text('atan'),
+    '\\ln' : Text('Ln'),
   };
 
   static const Map function = {
@@ -116,7 +111,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Icon(Icons.backspace),
       onPressed: () {latexModel.delExpression();},
-      onLongPress: () async{
+      onLongPress: () async {
         await latexModel.animationController.forward();
         latexModel.delAllExpression();
         latexModel.animationController.reset();
