@@ -11,7 +11,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>MathQuill Demo</title>
 <link rel="stylesheet" href="./mathquill.css"/>
 <style type="text/css">
 * {
@@ -39,43 +38,35 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-// window.screen.height contains some border pixels
-// maybe *0.95
-const clientHeight = (window.screen.height-3>0?window.screen.height-3:0);
+const clientHeight = window.screen.height * 0.9;
 
 mathBlock.style.height = clientHeight + "px";
-mathBlock.style.fontSize = clientHeight + "px";
+mathBlock.style.fontSize = clientHeight/3 + "px";
 mathBlock.style.overflowX = "scroll";
-mathBlock.style.backgroundColor = "yellow";
+// mathBlock.style.backgroundColor = "yellow";
+// document.body.style.backgroundColor = "red";
 
 function addCmd(message) {
     mathField.cmd(message);
-    mathBlock.style.height = clientHeight + "px";
-    mathBlock.style.fontSize = clientHeight + "px";
-    while (mathBlock.scrollHeight > clientHeight) {
-        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
-        mathBlock.style.fontSize = textsize+"px";
-    }
+    // TODO: Adjust block size
+    // mathBlock.style.height = clientHeight + "px";
+    // mathBlock.style.fontSize = clientHeight/3 + "px";
+    // while (mathBlock.scrollHeight > clientHeight) {
+    //     var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
+    //     mathBlock.style.fontSize = textsize+"px";
+    // }
     mathField.focus();
     post();
 }
 
 function delString() {
     mathField.keystroke('Backspace');
-    mathBlock.style.height = clientHeight + "px";
-    mathBlock.style.fontSize = clientHeight + "px";
-    while (mathBlock.scrollHeight > clientHeight) {
-        var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
-        mathBlock.style.fontSize = textsize+"px";
-    }
     mathField.focus();
     post();
 }
 
 function delAll() {
     mathField.keystroke('Ctrl-A Backspace');
-    mathBlock.style.height = clientHeight + "px";
-    mathBlock.style.fontSize = clientHeight + "px";
     mathField.focus();
     post();
 }
