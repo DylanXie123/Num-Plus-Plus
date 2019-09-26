@@ -37,39 +37,35 @@ class HomePage extends StatelessWidget {
       ),
       body: ChangeNotifierProvider.value(
         value: latexModel,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            MathBox(
-              latexModel: latexModel,
-            ),
-            Consumer<LatexModel>(
-              builder: (context, result, _) => Row(
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: MathBox(
+                  latexModel: latexModel,
+                ),
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(
-                    result.history.last,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 24,
-                    ),
+                  Consumer<LatexModel>(
+                    builder: (context, result, _) => Text(result.history.last),
                   ),
-                  Text(
-                    result.result,
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 48,
-                    ),
+                  // VerticalDivider(width: 15.0, thickness: 15.0,color: Colors.red,),
+                  Consumer<LatexModel>(
+                    builder: (context, result, _) => Text(result.result),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: MathKeyBoard(
-                latexModel: latexModel,
+              Expanded(
+                flex: 4,
+                child: MathKeyBoard(
+                  latexModel: latexModel,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

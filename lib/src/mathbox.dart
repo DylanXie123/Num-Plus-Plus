@@ -82,16 +82,14 @@ class MathBox extends StatelessWidget {
 
   final LatexModel latexModel;
   final _server = Server();
-  final double height;
 
-  MathBox({@required this.latexModel, this.height = 100.0,}) {
+  MathBox({@required this.latexModel,}) {
     _server.start();
   }
   
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       child: WebView(
         onWebViewCreated: (controller) {
           latexModel.webViewController = controller;

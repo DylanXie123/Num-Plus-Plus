@@ -38,23 +38,16 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-const clientHeight = window.screen.height * 0.9;
+const clientHeight = window.screen.height - 3;
+const clientWidth = window.screen.width - 3;
 
 mathBlock.style.height = clientHeight + "px";
+mathBlock.style.width = clientWidth + "px";
 mathBlock.style.fontSize = clientHeight/3 + "px";
-mathBlock.style.overflowX = "scroll";
-// mathBlock.style.backgroundColor = "yellow";
-// document.body.style.backgroundColor = "red";
+mathBlock.style.overflow = "scroll";
 
 function addCmd(message) {
     mathField.cmd(message);
-    // TODO: Adjust block size
-    // mathBlock.style.height = clientHeight + "px";
-    // mathBlock.style.fontSize = clientHeight/3 + "px";
-    // while (mathBlock.scrollHeight > clientHeight) {
-    //     var textsize = parseInt(window.getComputedStyle(mathBlock).fontSize) - 5;
-    //     mathBlock.style.fontSize = textsize+"px";
-    // }
     mathField.focus();
     post();
 }

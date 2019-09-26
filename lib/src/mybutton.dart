@@ -65,9 +65,13 @@ class MathKeyBoard extends StatelessWidget {
   };
 
   static const Map function = {
-    '\\sqrt' : Text('sqrt'),
+    '\\sqrt' : Text('√'),
     '\\\\nthroot' : Text('nrt'),
-    '\\|' : Text('abs'),
+    '\\|' : Text('|□|'),
+    '\\int' : Text('∫'),
+    '!' : Text('!'),
+    'x' : Text('x'),
+    '^' : Text('x^y'),
   };
 
   static const Map cursor = {
@@ -236,22 +240,30 @@ class MathKeyBoard extends StatelessWidget {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: Material(
-            elevation: 10.0,
-            color: Colors.green[200],
-            child: GridView.count(
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 7,
-              children: _buildUpButton(),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5.0),
+            child: Material(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
+              elevation: 8.0,
+              color: Colors.green[200],
+              child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 7,
+                children: _buildUpButton(),
+              ),
             ),
           ),
         ),
         Expanded(
           flex: 2,
-          child: GridView.count(
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 5,
-            children: _buildLowButton(),
+          child: Material(
+            color: Colors.yellow[200],
+            elevation: 15.0,
+            child: GridView.count(
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 5,
+              children: _buildLowButton(),
+            ),
           ),
         ),
       ],
