@@ -50,17 +50,13 @@ class MathKeyBoard extends StatelessWidget {
 
   const MathKeyBoard({Key key, @required this.latexModel}) : super(key: key);
 
-  static const Map functionA = {
+  static const Map pfunction = {
     '\\sin' : Text('sin'),
     '\\cos' : Text('cos'),
-    '\\tan' : Text('tan'),
+    '\\\\tan' : Text('tan'),
     '\\arcsin' : Text('asn'),
     '\\arccos' : Text('acs'),
     '\\arctan' : Text('atn'),
-  };
-
-  static const Map functionB = {
-    '\\log' : Text('log'),
     '\\ln' : Text('ln'),
   };
 
@@ -75,18 +71,9 @@ class MathKeyBoard extends StatelessWidget {
     '%' : Text('%'),
     '(' : Text('('),
     ')' : Text(')'),
-    '\\² ' : Text('x²'),
-    '\\³ ' : Text('x³'),
   };
 
-  static const Map cursor = {
-    'Left' : Icon(Icons.arrow_back),
-    'Right' : Icon(Icons.arrow_forward),
-    'Up' : Icon(Icons.arrow_upward),
-    'Down' : Icon(Icons.arrow_downward),
-  };
-
-  List<Widget> _buildButtonGroup(Map key, int type) {
+  List<Widget> _buildButtonGroup(Map key, {bool par = false}) {
     List<Widget> button = [];
     for (var i = 0; i < key.length; i++) {
       button.add(
@@ -94,25 +81,8 @@ class MathKeyBoard extends StatelessWidget {
           child: key.values.elementAt(i),
           onPressed: () {
             var cmd = key.keys.elementAt(i);
-            switch (type) {
-              case 1: // basic type
-                latexModel.addExpression(cmd);
-                break;
-              case 2:
-                latexModel.addExpression(cmd, isOperator: true);
-                break;
-              case 3:
-                latexModel.addExpression(cmd);
-                latexModel.addExpression('(');
-                break;
-              case 4:
-                latexModel.addExpression(cmd);
-                latexModel.addExpression('_');
-                break;
-              case 5:
-                latexModel.addKey(cmd);
-                break;
-            }
+            latexModel.addExpression(cmd);
+            if (par) {latexModel.addExpression('(');}
           },
         ),
       );
@@ -237,9 +207,45 @@ class MathKeyBoard extends StatelessWidget {
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
 
-    button.addAll(_buildButtonGroup(functionA, 3));
-    button.addAll(_buildButtonGroup(functionB, 4));
-    button.addAll(_buildButtonGroup(function, 1));
+    button.addAll(_buildButtonGroup(pfunction, par: true));
+    button.addAll(_buildButtonGroup(function));
+    
+    button.add(MyButton(
+      child: Text('log'),
+      onPressed: () {
+        latexModel.addExpression('log');
+        latexModel.addExpression('_');
+        latexModel.addKey('Right');
+        latexModel.addExpression('(');
+        latexModel.addKey('Left');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('x²'),
+      onPressed: () {
+        latexModel.addExpression('(');
+        latexModel.addExpression(')');
+        latexModel.addExpression('^');
+        latexModel.addExpression('2');
+        latexModel.addKey('Left Left Left');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(Icons.arrow_back),
+      onPressed: () {
+        latexModel.addKey('Left');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(Icons.arrow_forward),
+      onPressed: () {
+        latexModel.addKey('Right');
+      },
+    ));
+
     return button;
   }
 
