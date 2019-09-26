@@ -44,7 +44,6 @@ class MyButton extends StatelessWidget {
   }
 }
 
-// TODO: Adjust keyboard layout
 class MathKeyBoard extends StatelessWidget {
 
   final LatexModel latexModel;
@@ -147,7 +146,11 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Icon(Icons.backspace),
       onPressed: () {latexModel.delExpression();},
-      onLongPress: () {latexModel.delAllExpression();},
+      onLongPress: () async{
+        await latexModel.animationController.forward();
+        latexModel.delAllExpression();
+        latexModel.animationController.reset();
+      },
     ));
 
     button.add(MyButton(

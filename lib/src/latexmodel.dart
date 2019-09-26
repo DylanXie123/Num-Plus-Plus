@@ -11,7 +11,10 @@ class LatexModel with ChangeNotifier {
 
   WebViewController webViewController;
   bool isClearable = false;
-  // TODO: Add animation in AC
+
+  AnimationController animationController;
+  Animation animation;
+
   set latexExp(String latex) {
     _latexExp = latex;
     calc();
@@ -44,7 +47,7 @@ class LatexModel with ChangeNotifier {
 
   void addExpression(String msg, {bool isOperator = false}) {
     if (isClearable) {
-      delAllExpression();
+      animationController.reset();
       isClearable = false;
       if (isOperator) {
         String ans = history.last;

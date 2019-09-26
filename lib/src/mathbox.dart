@@ -89,20 +89,57 @@ class MathBox extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: WebView(
-        onWebViewCreated: (controller) {
-          latexModel.webViewController = controller;
-          latexModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
-        },
-        javascriptMode: JavascriptMode.unrestricted,
-        javascriptChannels: Set.from([
-          JavascriptChannel(
-            name: 'latexString',
-            onMessageReceived: (JavascriptMessage message) { latexModel.latexExp = message.message;}
-          ),
-        ]),
+    return Stack(
+      children: <Widget>[
+        WebView(
+          onWebViewCreated: (controller) {
+            latexModel.webViewController = controller;
+            latexModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
+          },
+          javascriptMode: JavascriptMode.unrestricted,
+          javascriptChannels: Set.from([
+            JavascriptChannel(
+              name: 'latexString',
+              onMessageReceived: (JavascriptMessage message) { latexModel.latexExp = message.message;}
+            ),
+          ]),
+        ),
+        ClearAnimation(animation: latexModel.animation,),
+      ],
+    );
+  }
+}
+
+class ClearAnimation extends StatefulWidget {
+  final Animation animation;
+
+  const ClearAnimation({Key key, @required this.animation}) : super(key: key);
+
+  @override
+  _ClearAnimationState createState() => _ClearAnimationState();
+}
+
+class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStateMixin {
+
+  Widget _buildAnimation(BuildContext context, Widget child) {
+    return Positioned(
+      bottom: -widget.animation.value/2,
+      right: 50-widget.animation.value/2,
+      child: ClipOval(
+        child: Container(
+          height: widget.animation.value,
+          width: widget.animation.value,
+          color: Colors.blue[100],
+        ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      builder: _buildAnimation,
+      animation: widget.animation,
     );
   }
 }

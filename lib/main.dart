@@ -24,9 +24,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final latexModel = LatexModel();
+
+  @override
+  void initState() {
+    super.initState();
+    latexModel.animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
+    latexModel.animation = Tween<double>(begin: 0, end: 1000).animate(latexModel.animationController);
+  }
+
+  @override
+  void dispose() {
+    latexModel.animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +87,5 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
 }
 
