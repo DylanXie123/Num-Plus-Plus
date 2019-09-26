@@ -49,9 +49,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     print('Rebuit');
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Demo'),
-      ),
       body: ChangeNotifierProvider.value(
         value: latexModel,
         child: SafeArea(
@@ -70,6 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     builder: (context, result, _) => Text(result.history.last),
                   ),
                   // VerticalDivider(width: 15.0, thickness: 15.0,color: Colors.red,),
+                  // TODO: Make result display part an individual widget(to let user choose eval behaviour)
                   Consumer<LatexModel>(
                     builder: (context, result, _) => Text(result.result),
                   ),
