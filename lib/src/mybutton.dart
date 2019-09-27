@@ -261,7 +261,7 @@ class MathKeyBoard extends StatelessWidget {
               elevation: 8.0,
               color: Colors.green[200],
               child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
+                physics: ScrollPhysics(),
                 crossAxisCount: 7,
                 children: _buildUpButton(),
               ),
@@ -274,7 +274,7 @@ class MathKeyBoard extends StatelessWidget {
             color: Colors.yellow[200],
             elevation: 15.0,
             child: GridView.count(
-              physics: NeverScrollableScrollPhysics(),
+              physics: ScrollPhysics(),
               crossAxisCount: 5,
               children: _buildLowButton(),
             ),

@@ -36,7 +36,7 @@ class MathModel with ChangeNotifier {
       lp.parse(_latexExp);
       Expression exp = Parser().parse(lp.result.value);
       num val = exp.evaluate(EvaluationType.REAL, ContextModel());
-      val = (val * 1e10).round() / 1e10;
+      val = num.parse(val.toStringAsFixed(10));
       // set calc precision to 10
       val = intCheck(val);
       if (val.abs() < 1e-10) {
