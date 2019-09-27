@@ -22,8 +22,9 @@ class MathModel with ChangeNotifier {
   }
 
   void keep() {
-    history.add(result);
-    result = '';
+    if (result.isNotEmpty) {
+      history.add(result);
+    }
     notifyListeners();
     print(history);
   }
@@ -35,6 +36,8 @@ class MathModel with ChangeNotifier {
       lp.parse(_latexExp);
       Expression exp = Parser().parse(lp.result.value);
       num val = exp.evaluate(EvaluationType.REAL, ContextModel());
+      val = (val * 1e10).round() / 1e10;
+      // set calc precision to 10
       val = intCheck(val);
       if (val.abs() < 1e-10) {
         val = 0;
@@ -50,7 +53,7 @@ class MathModel with ChangeNotifier {
 
   void addExpression(String msg, {bool isOperator = false}) {
     if (isClearable) {
-      animationController.reset();
+      delAllExpression();
       isClearable = false;
       if (isOperator) {
         String ans = history.last;
