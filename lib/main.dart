@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import 'src/mathbox.dart';
+import 'src/result.dart';
 import 'src/mybutton.dart';
 import 'src/mathmodel.dart';
 
 void main() {
-  debugPaintSizeEnabled = false;
   runApp(MyApp());
 }
 
@@ -60,19 +59,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   mathModel: mathModel,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Consumer<MathModel>(
-                    builder: (context, result, _) => Text(result.history.last),
-                  ),
-                  // VerticalDivider(width: 15.0, thickness: 15.0,color: Colors.red,),
-                  // TODO: Make result display part an individual widget(to let user choose eval behaviour)
-                  Consumer<MathModel>(
-                    builder: (context, result, _) => Text(result.result),
-                  ),
-                ],
-              ),
+              Result(),
               Expanded(
                 flex: 4,
                 child: MathKeyBoard(
