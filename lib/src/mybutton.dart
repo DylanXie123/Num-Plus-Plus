@@ -111,7 +111,10 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Icon(Icons.backspace),
-      onPressed: () {mathModel.delExpression();},
+      onPressed: () {
+        mathModel.isClearable = false;
+        mathModel.delExpression();
+      },
       onLongPress: () async {
         mathModel.delAllExpression();
         await mathModel.animationController.forward();
@@ -220,17 +223,16 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('x²'),
       onPressed: () {
-        mathModel.addExpression('(');
-        mathModel.addExpression(')');
         mathModel.addExpression('^');
         mathModel.addExpression('2');
-        mathModel.addKey('Left Left Left');
+        mathModel.addKey('Left Left');
       },
     ));
 
     button.add(MyButton(
       child: Icon(Icons.arrow_back),
       onPressed: () {
+        mathModel.isClearable = false;
         mathModel.addKey('Left');
       },
     ));
@@ -238,6 +240,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Icon(Icons.arrow_forward),
       onPressed: () {
+        mathModel.isClearable = false;
         mathModel.addKey('Right');
       },
     ));
