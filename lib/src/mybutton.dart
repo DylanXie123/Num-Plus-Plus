@@ -113,8 +113,8 @@ class MathKeyBoard extends StatelessWidget {
       child: Icon(Icons.backspace),
       onPressed: () {mathModel.delExpression();},
       onLongPress: () async {
-        await mathModel.animationController.forward();
         mathModel.delAllExpression();
+        await mathModel.animationController.forward();
         mathModel.animationController.reset();
       },
     ));
