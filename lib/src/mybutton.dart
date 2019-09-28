@@ -7,20 +7,23 @@ class MyButton extends StatelessWidget {
   final VoidCallback onPressed;
   final VoidCallback onLongPress;
   final double _width = 40.0; //40.0 is better
+  final double fontSize;
 
   const MyButton({
     @required this.child,
     @required this.onPressed, 
     this.onLongPress,
+    this.fontSize = 35,
   });
 
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: TextStyle(
-        fontSize: _width / 1.3,
+        fontSize: fontSize,
         color: Colors.black,
         fontFamily: 'Minion-Pro',
+        // fontFamilyFallback: ['RobotoMono'], // don't work ??
       ),
       child: InkResponse(
         radius: _width * 1.2,
@@ -46,35 +49,88 @@ class MathKeyBoard extends StatelessWidget {
 
   const MathKeyBoard({Key key, @required this.mathModel}) : super(key: key);
 
+  // a stupid way to insert another font text
+  // TODO: update in the future
+  static const TextSpan upminus = TextSpan(
+    text: '⁻',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+    ),
+  );
+
+  static const TextSpan upx = TextSpan(
+    text: 'ˣ',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+    ),
+  );
+
+  static const TextSpan upy = TextSpan(
+    text: '⁻',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+    ),
+  );
+
   static const Map pfunction = {
-    '\\sin' : Text('Sin'),
-    '\\cos' : Text('Cos'),
-    '\\\\tan' : Text('Tan'),
-    '\\arcsin' : Text('asin'),
-    '\\arccos' : Text('acos'),
-    '\\arctan' : Text('atan'),
-    '\\ln' : Text('Ln'),
+    '\\sin' : Text('sin'),
+    '\\cos' : Text('cos'),
+    '\\\\tan' : Text('tan'),
+    '\\arcsin' : Text.rich(
+      TextSpan(
+        text: 'sin',
+        children: <TextSpan>[
+          upminus,
+          TextSpan(
+            text: '¹'
+          ),
+        ],
+      ),
+    ),
+    '\\arccos' : Text.rich(
+      TextSpan(
+        text: 'cos',
+        children: <TextSpan>[
+          upminus,
+          TextSpan(
+            text: '¹'
+          ),
+        ],
+      ),
+    ),
+    '\\arctan' : Text.rich(
+      TextSpan(
+        text: 'tan',
+        children: <TextSpan>[
+          upminus,
+          TextSpan(
+            text: '¹'
+          ),
+        ],
+      ),
+    ),
+    '\\ln' : Text('ln'),
   };
 
   static const Map function = {
-    '\\sqrt' : Text('√'),
-    '\\\\nthroot' : Text('nrt'),
-    '\\|' : Text('| |'),
+    '\\sqrt' : Text('√￣'),
+    '\\\\nthroot' : Text('▝√￣'),
+    '\\|' : Text('|  |'),
     '\\int' : Text('∫'),
     '!' : Text('!'),
     'x' : Text('x'),
-    '^' : Text('x^y'),
     '%' : Text('%'),
     '(' : Text('('),
     ')' : Text(')'),
   };
 
-  List<Widget> _buildButtonGroup(Map key, {bool par = false}) {
+  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontsize = 35.0}) {
     List<Widget> button = [];
     for (var i = 0; i < key.length; i++) {
       button.add(
         MyButton(
           child: key.values.elementAt(i),
+          fontSize: fontsize,
           onPressed: () {
             var cmd = key.keys.elementAt(i);
             mathModel.addExpression(cmd);
@@ -205,12 +261,14 @@ class MathKeyBoard extends StatelessWidget {
 
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
+    const fontSize = 20.0;
 
-    button.addAll(_buildButtonGroup(pfunction, par: true));
-    button.addAll(_buildButtonGroup(function));
-    
+    button.addAll(_buildButtonGroup(pfunction, par: true, fontsize: fontSize));
+    button.addAll(_buildButtonGroup(function, fontsize: fontSize));
+
     button.add(MyButton(
       child: Text('log'),
+      fontSize: fontSize,
       onPressed: () {
         mathModel.addExpression('log');
         mathModel.addExpression('_');
@@ -221,7 +279,18 @@ class MathKeyBoard extends StatelessWidget {
     ));
 
     button.add(MyButton(
+      child: Text('x▘'),
+      fontSize: fontSize,
+      onPressed: () {
+        mathModel.addExpression(')');
+        mathModel.addExpression('^');
+        mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
       child: Text('x²'),
+      fontSize: fontSize,
       onPressed: () {
         mathModel.addExpression('^');
         mathModel.addExpression('2');
