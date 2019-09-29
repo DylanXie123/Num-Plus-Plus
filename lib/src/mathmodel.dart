@@ -13,7 +13,6 @@ class MathModel with ChangeNotifier {
   bool isClearable = false;
 
   AnimationController animationController;
-  Animation animation;
 
   set latexExp(String latex) {
     _latexExp = latex;

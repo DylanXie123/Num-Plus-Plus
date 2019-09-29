@@ -104,31 +104,48 @@ class MathBox extends StatelessWidget {
             ),
           ]),
         ),
-        ClearAnimation(animation: mathModel.animation,),
+        ClearAnimation(mathModel: mathModel,),
       ],
     );
   }
 }
 
 class ClearAnimation extends StatefulWidget {
-  final Animation animation;
+  final MathModel mathModel;
 
-  const ClearAnimation({Key key, @required this.animation}) : super(key: key);
-
+  const ClearAnimation({Key key, @required this.mathModel, }) : super(key: key);
+  
   @override
   _ClearAnimationState createState() => _ClearAnimationState();
 }
 
 class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStateMixin {
 
+  AnimationController animationController;
+  Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
+    animation = Tween<double>(begin: 0, end: 1000).animate(animationController);
+    widget.mathModel.animationController = animationController;
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Positioned(
-      bottom: -widget.animation.value/2,
-      right: 50-widget.animation.value/2,
+      bottom: -animation.value/2,
+      right: 50-animation.value/2,
       child: ClipOval(
         child: Container(
-          height: widget.animation.value,
-          width: widget.animation.value,
+          height: animation.value,
+          width: animation.value,
           color: Colors.blue[100],
         ),
       ),
@@ -139,7 +156,7 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       builder: _buildAnimation,
-      animation: widget.animation,
+      animation: animation,
     );
   }
 }

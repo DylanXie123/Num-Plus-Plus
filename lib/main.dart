@@ -23,31 +23,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class HomePage extends StatelessWidget {
   final mathModel = MathModel();
-
-  @override
-  void initState() {
-    super.initState();
-    mathModel.animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
-    mathModel.animation = Tween<double>(begin: 0, end: 1000).animate(mathModel.animationController);
-  }
-
-  @override
-  void dispose() {
-    mathModel.animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     print('Rebuit');
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings, color: Colors.blue,),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: ChangeNotifierProvider.value(
         value: mathModel,
         child: SafeArea(
