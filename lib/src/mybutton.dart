@@ -49,8 +49,8 @@ class MathKeyBoard extends StatelessWidget {
 
   const MathKeyBoard({Key key, @required this.mathModel}) : super(key: key);
 
-  // a stupid way to insert another font text
-  // TODO: update in the future
+  // TODO: a stupid way to insert another font text
+  // update in the future
   static const TextSpan upminus = TextSpan(
     text: '⁻',
     style: TextStyle(
@@ -169,10 +169,10 @@ class MathKeyBoard extends StatelessWidget {
       child: Icon(Icons.backspace),
       onPressed: () {
         mathModel.isClearable = false;
-        mathModel.delExpression();
+        mathModel.webViewController.evaluateJavascript("delString()");
       },
       onLongPress: () async {
-        mathModel.delAllExpression();
+        mathModel.webViewController.evaluateJavascript("delAll()");
         await mathModel.animationController?.forward();
         mathModel.animationController?.reset();
       },

@@ -90,6 +90,7 @@ class MathBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      overflow: Overflow.visible,
       children: <Widget>[
         WebView(
           onWebViewCreated: (controller) {
@@ -127,7 +128,7 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
+    animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     animation = Tween<double>(begin: 0, end: 1000).animate(animationController);
     widget.mathModel.animationController = animationController;
   }
@@ -140,8 +141,8 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
 
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Positioned(
-      bottom: -animation.value/2,
-      right: 50-animation.value/2,
+      top: 10-animation.value/2,
+      right: -animation.value/2,
       child: ClipOval(
         child: Container(
           height: animation.value,

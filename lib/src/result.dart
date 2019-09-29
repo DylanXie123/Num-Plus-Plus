@@ -9,12 +9,16 @@ class Result extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        Consumer<MathModel>(
-          builder: (context, result, _) => Text(result.history.last),
+        Container(
+          child: Consumer<MathModel>(
+            builder: (context, result, _) => Text(result.history.last),
+          ),
         ),
-        // VerticalDivider(thickness: 10.0, color: Colors.red,),
-        Consumer<MathModel>(
-          builder: (context, result, _) => Text(result.result),
+        VerticalDivider(),
+        Container(
+          child: Consumer<MathModel>(
+            builder: (context, result, _) => Text(result.result),
+          ),
         ),
       ],
     );
