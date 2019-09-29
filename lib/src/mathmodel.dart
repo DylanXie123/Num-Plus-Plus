@@ -33,7 +33,8 @@ class MathModel with ChangeNotifier {
       print('Latex: ' + _latexExp);
       LatexParser lp = LatexParser();
       lp.parse(_latexExp);
-      Expression exp = Parser().parse(lp.result.value);
+      print('Parsed: ' + lp.result.value);
+      Expression exp = Parser().parse(lp.result.value.replaceFirst('Ans', history.last.toString()));
       num val = exp.evaluate(EvaluationType.REAL, ContextModel());
       val = num.parse(val.toStringAsFixed(10));
       // set calc precision to 10
@@ -52,22 +53,13 @@ class MathModel with ChangeNotifier {
 
   void addExpression(String msg, {bool isOperator = false}) {
     if (isClearable) {
-      delAllExpression();
+      webViewController.evaluateJavascript("delAll()");
       isClearable = false;
       if (isOperator) {
-        String ans = history.last;
-        webViewController.evaluateJavascript("addCmd('$ans')");
+        webViewController.evaluateJavascript("addCmd('Ans')");
       }
     }
     webViewController.evaluateJavascript("addCmd('$msg')");
-  }
-
-  void delExpression() {
-    webViewController.evaluateJavascript("delString()");
-  }
-
-  void delAllExpression() {
-    webViewController.evaluateJavascript("delAll()");
   }
 
   void addKey(String key) {

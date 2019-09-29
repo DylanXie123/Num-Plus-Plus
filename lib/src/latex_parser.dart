@@ -32,10 +32,12 @@ class LatexParser {
     // Constant
     Parser pi() => string('\\pi').map((v) => math.pi.toString());
     Parser e() => char('e').map((v) => math.e.toString());
+    Parser ans() => string('Ans').map((v) => 'Ans');
 
     Parser constant() =>
       pi() |
-      e();
+      e() |
+      ans();
 
     // Variable (experimental)
     Parser variable() => char('x').flatten();
@@ -156,7 +158,7 @@ class LatexParser {
       }
       latexmath =  latexmath.substring(0,plist[i]) + '{' + latexmath.substring(plist[i]+6,plist[i+1]) + '}' + msg + latexmath.substring(plist[i+1]+1);
     }
-    print('bi2un: ' + latexmath.replaceAll(' ', ''));
+    // print('bi2un: ' + latexmath.replaceAll(' ', ''));
     return latexmath.replaceAll(' ', '');
   }
 
