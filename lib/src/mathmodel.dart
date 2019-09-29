@@ -11,6 +11,7 @@ class MathModel with ChangeNotifier {
 
   WebViewController webViewController;
   bool isClearable = false;
+  int precision = 10;
 
   AnimationController animationController;
 
@@ -36,8 +37,7 @@ class MathModel with ChangeNotifier {
       print('Parsed: ' + lp.result.value);
       Expression exp = Parser().parse(lp.result.value.replaceFirst('Ans', history.last.toString()));
       num val = exp.evaluate(EvaluationType.REAL, ContextModel());
-      val = num.parse(val.toStringAsFixed(10));
-      // set calc precision to 10
+      val = num.parse(val.toStringAsFixed(precision));
       val = intCheck(val);
       if (val.abs() < 1e-10) {
         val = 0;
