@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
             ),
             Result(),
             Expanded(
-              flex: 4,
+              flex: 6,
               child: MathKeyBoard(
                 mathModel: mathModel,
               ),

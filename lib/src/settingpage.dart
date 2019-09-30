@@ -16,6 +16,7 @@ class SettingPage extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             mathModel.precision = setting.precision.toInt();
+            mathModel.calcNumber();
             Navigator.pop(context);
           },
         ),

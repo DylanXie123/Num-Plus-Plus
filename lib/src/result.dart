@@ -6,21 +6,24 @@ import 'mathmodel.dart';
 class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Container(
-          child: Consumer<MathModel>(
-            builder: (context, result, _) => Text(result.history.last),
+    return Container(
+      height: 60.0,
+      child: Row(
+        children: <Widget>[
+          Consumer<MathModel>(
+            builder: (context, model, _) => model.isFunction ? 
+            RaisedButton(
+              child: Text('Calc'),
+              onPressed: () {
+                model.calcFunction();
+              },
+            ) : Container(color: Colors.red,),
           ),
-        ),
-        VerticalDivider(),
-        Container(
-          child: Consumer<MathModel>(
+          Consumer<MathModel>(
             builder: (context, result, _) => Text(result.result),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

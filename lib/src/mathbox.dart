@@ -101,9 +101,19 @@ class MathBox extends StatelessWidget {
           javascriptChannels: Set.from([
             JavascriptChannel(
               name: 'latexString',
-              onMessageReceived: (JavascriptMessage message) { mathModel.latexExp = message.message;}
+              onMessageReceived: (JavascriptMessage message) {
+                mathModel.latexExp = message.message;
+                if (message.message.contains('x')) {
+                  mathModel.toFunction();
+                } else {
+                  mathModel.isFunction = false;
+                  mathModel.calcNumber();
+                }
+              }
             ),
           ]),
+          // gestureRecognizers: ,
+          // TODO: Add gesture to change isClearable
         ),
         ClearAnimation(mathModel: mathModel,),
       ],

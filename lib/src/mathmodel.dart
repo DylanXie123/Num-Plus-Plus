@@ -3,21 +3,55 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'latex_parser.dart';
+import 'function.dart';
 
 class MathModel with ChangeNotifier {
-  String _latexExp = '';
+  String latexExp = '';
   String result = '';
   List<String> history = [''];
 
   WebViewController webViewController;
   bool isClearable = false;
+  bool isFunction = false;
   int precision = 10;
 
   AnimationController animationController;
 
-  set latexExp(String latex) {
-    _latexExp = latex;
-    calc();
+  void calcNumber() {
+    LatexParser lp = LatexParser();
+    lp.parse(latexExp);
+    if (lp.result.isSuccess) {
+      print('Parsed: ' + lp.result.value);
+      String mathString = lp.result.value.replaceFirst('Ans', history.last.toString());
+      try {
+        result = calc(mathString, precision).toString();
+      } catch (e) {
+        result = '';
+        print('Error in calc: '+ e.toString());
+      }
+    } else {
+      isFunction = false;
+      result = '';
+    }
+    notifyListeners();
+  }
+
+  void toFunction() {
+    isFunction = true;
+    result = '';
+    notifyListeners();
+  }
+
+  void calcFunction() { // temp method
+    LatexParser lp = LatexParser();
+    lp.parse(latexExp);
+    if (lp.result.isSuccess) {
+      print('Parsed: ' + lp.result.value);
+      var f = MyFunction(lp.result.value);
+      result = f.calc(1).toString();
+    } else {
+      result = '';
+    }
     notifyListeners();
   }
 
@@ -27,28 +61,6 @@ class MathModel with ChangeNotifier {
     }
     notifyListeners();
     print(history);
-  }
-
-  void calc() {
-    try {
-      print('Latex: ' + _latexExp);
-      LatexParser lp = LatexParser();
-      lp.parse(_latexExp);
-      print('Parsed: ' + lp.result.value);
-      Expression exp = Parser().parse(lp.result.value.replaceFirst('Ans', history.last.toString()));
-      num val = exp.evaluate(EvaluationType.REAL, ContextModel());
-      val = num.parse(val.toStringAsFixed(precision));
-      val = intCheck(val);
-      if (val.abs() < 1e-10) {
-        val = 0;
-      }
-      result = val.toString();
-      // TODO: live calc to transfer decimal to fraction
-      print('Calc Result: ' + result);
-    } catch (e) {
-      result = '';
-      print('Error In calc: ' + e.toString());
-    }
   }
 
   void addExpression(String msg, {bool isOperator = false}) {
@@ -68,6 +80,18 @@ class MathModel with ChangeNotifier {
 
 }
 
+num calc(String mathString, int precision) {  
+  Expression exp = Parser().parse(mathString);
+  num val = exp.evaluate(EvaluationType.REAL, ContextModel());
+  val = num.parse(val.toStringAsFixed(precision));
+  val = intCheck(val);
+  if (val.abs() < 1e-10) {
+    val = 0;
+  }
+  print('Calc Result: ' + val.toString());
+  return val;
+}
+
 num intCheck(num a) {
   if (a.ceil() == a.floor()) {
     return a.toInt();
@@ -76,6 +100,7 @@ num intCheck(num a) {
   }
 }
 
+// TODO: live calc to transfer decimal to fraction
 List<int> deci2frac(num a) {
   double esp = 1e-15;
   List<int> res = [];
