@@ -15,6 +15,7 @@ class MathModel with ChangeNotifier {
   bool isFunction = false;
   int precision = 10;
   bool degree = true; // false is rad
+  // TODO: Rewrire parser to support rad/degree
 
   AnimationController animationController;
 

@@ -65,15 +65,11 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 1,
               child: MathBox(),
             ),
             Result(),
-            Expanded(
-              flex: 6,
-              child: MathKeyBoard(
-                mathModel: mathModel,
-              ),
+            MathKeyBoard(
+              mathModel: mathModel,
             ),
           ],
         ),

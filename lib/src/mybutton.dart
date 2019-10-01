@@ -299,37 +299,46 @@ class MathKeyBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5.0),
-            child: Material(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
-              elevation: 8.0,
-              color: Colors.green[200],
-              child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 7,
-                children: _buildUpButton(),
+    var width;
+    if (MediaQuery.of(context).size.aspectRatio > 1) {
+      width = MediaQuery.of(context).size.height;
+    } else {
+      width = MediaQuery.of(context).size.width;
+    }
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: (width-10) / 7 * 3,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: Material(
+                borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
+                elevation: 8.0,
+                color: Colors.green[200],
+                child: GridView.count(
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 7,
+                  children: _buildUpButton(),
+                ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Material(
-            color: Colors.yellow[200],
-            elevation: 15.0,
-            child: GridView.count(
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 5,
-              children: _buildLowButton(),
+          Container(
+            height: width / 5 * 4,
+            child: Material(
+              color: Colors.yellow[200],
+              elevation: 15.0,
+              child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 5,
+                children: _buildLowButton(),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
