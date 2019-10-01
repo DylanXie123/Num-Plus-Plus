@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
+import 'package:provider/provider.dart';
 
 import 'mathmodel.dart';
 
@@ -80,15 +81,15 @@ class Server {
 
 class MathBox extends StatelessWidget {
 
-  final MathModel mathModel;
   final _server = Server();
 
-  MathBox({@required this.mathModel,}) {
+  MathBox() {
     _server.start();
   }
   
   @override
   Widget build(BuildContext context) {
+    final mathModel = Provider.of<MathModel>(context, listen: false);
     return Stack(
       overflow: Overflow.visible,
       children: <Widget>[
@@ -112,9 +113,15 @@ class MathBox extends StatelessWidget {
               }
             ),
           ]),
-          // gestureRecognizers: ,
-          // TODO: Add gesture to change isClearable
+          onPageFinished: (str) {
+            assert(mathModel.webViewController != null);
+          },
         ),
+        Consumer<MathModel>(
+          builder: (context, mathModel, _) => Container(
+            color: (mathModel.webViewController == null)? Colors.grey[50] : Colors.transparent,
+          ),
+        ), // cover initial white when creating webview
         ClearAnimation(mathModel: mathModel,),
       ],
     );

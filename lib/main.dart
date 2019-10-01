@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: MathModel(),),
-        ChangeNotifierProvider.value(value: SettingModel(),)
+        ChangeNotifierProvider.value(value: SettingModel(),),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -66,9 +66,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: MathBox(
-                mathModel: mathModel,
-              ),
+              child: MathBox(),
             ),
             Result(),
             Expanded(

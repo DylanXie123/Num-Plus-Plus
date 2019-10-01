@@ -107,33 +107,14 @@ class MathKeyBoard extends StatelessWidget {
 
   static const Map function = {
     '\\sqrt' : Text('√￣'),
-    '\\\\nthroot' : Text('▝√￣'),
     '\\|' : Text('|  |'),
-    '\\int' : Text('∫'),
     '!' : Text('!'),
     'x' : Text('x'),
     '%' : Text('%'),
     '(' : Text('('),
     ')' : Text(')'),
+    '\\\\nthroot' : Text('▝√￣'),
   };
-
-  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize}) {
-    List<Widget> button = [];
-    for (var i = 0; i < key.length; i++) {
-      button.add(
-        MyButton(
-          child: key.values.elementAt(i),
-          fontSize: fontSize,
-          onPressed: () {
-            var cmd = key.keys.elementAt(i);
-            mathModel.addExpression(cmd);
-            if (par) {mathModel.addExpression('(');}
-          },
-        ),
-      );
-    }
-    return button;
-  }
 
   List<Widget> _buildLowButton() {
     List<Widget> button = [];
@@ -228,6 +209,24 @@ class MathKeyBoard extends StatelessWidget {
     return button;
   }
 
+  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize}) {
+    List<Widget> button = [];
+    for (var i = 0; i < key.length; i++) {
+      button.add(
+        MyButton(
+          child: key.values.elementAt(i),
+          fontSize: fontSize,
+          onPressed: () {
+            var cmd = key.keys.elementAt(i);
+            mathModel.addExpression(cmd);
+            if (par) {mathModel.addExpression('(');}
+          },
+        ),
+      );
+    }
+    return button;
+  }
+
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
     const fontSize = 20.0;
@@ -280,6 +279,18 @@ class MathKeyBoard extends StatelessWidget {
       onPressed: () {
         mathModel.isClearable = false;
         mathModel.addKey('Right');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('Ans'),
+      fontSize: fontSize,
+      onPressed: () {
+        if (mathModel.history.last != '') {
+          mathModel.addExpression('Ans');
+        } else {
+          print('No History Yet');
+        }
       },
     ));
 

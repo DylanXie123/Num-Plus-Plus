@@ -14,6 +14,7 @@ class MathModel with ChangeNotifier {
   bool isClearable = false;
   bool isFunction = false;
   int precision = 10;
+  bool degree = true; // false is rad
 
   AnimationController animationController;
 
@@ -42,7 +43,7 @@ class MathModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void calcFunction() { // temp method
+  void nSolveFunction() {
     LatexParser lp = LatexParser();
     lp.parse(latexExp);
     if (lp.result.isSuccess) {
@@ -50,6 +51,7 @@ class MathModel with ChangeNotifier {
       var f = MyFunction(lp.result.value);
       result = f.calc(1).toString();
     } else {
+      print('Fail');
       result = '';
     }
     notifyListeners();
