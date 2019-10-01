@@ -109,7 +109,7 @@ class MathKeyBoard extends StatelessWidget {
     '\\sqrt' : Text('√￣'),
     '\\|' : Text('|  |'),
     '!' : Text('!'),
-    'x' : Text('x'),
+    // 'x' : Text('x'),
     '%' : Text('%'),
     '(' : Text('('),
     ')' : Text(')'),
@@ -252,7 +252,7 @@ class MathKeyBoard extends StatelessWidget {
       onPressed: () {
         mathModel.addExpression(')');
         mathModel.addExpression('^');
-        mathModel.addExpression('(');
+        // mathModel.addExpression('(');
       },
     ));
 
@@ -262,7 +262,16 @@ class MathKeyBoard extends StatelessWidget {
       onPressed: () {
         mathModel.addExpression('^');
         mathModel.addExpression('2');
-        mathModel.addKey('Left Left');
+        mathModel.addKey('Right');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('e▘'),
+      fontSize: fontSize,
+      onPressed: () {
+        mathModel.addExpression('e');
+        mathModel.addExpression('^');
       },
     ));
 

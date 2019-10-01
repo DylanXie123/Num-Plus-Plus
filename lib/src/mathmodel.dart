@@ -50,7 +50,8 @@ class MathModel with ChangeNotifier {
     if (lp.result.isSuccess) {
       print('Parsed: ' + lp.result.value);
       var f = MyFunction(lp.result.value);
-      result = f.calc(1).toString();
+      result = f.nsolve().toString();
+      print(result);
     } else {
       print('Fail');
       result = '';
