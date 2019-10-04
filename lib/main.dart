@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import 'src/mathbox.dart';
 import 'src/result.dart';
@@ -49,17 +50,15 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.grey,),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingPage()),
-              );
-            },
-          ),
-        ],
+        leading: IconButton(
+          icon: Icon(MaterialCommunityIcons.getIconData("settings-outline"), color: Colors.grey,),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingPage()),
+            );
+          },
+        ),
       ),
       body: SafeArea(
         child: Column(

@@ -7,12 +7,14 @@ class MyButton extends StatelessWidget {
   final VoidCallback onPressed;
   final VoidCallback onLongPress;
   final double fontSize;
+  final Color fontColor;
 
   const MyButton({
     @required this.child,
     @required this.onPressed, 
     this.onLongPress,
     this.fontSize = 35,
+    this.fontColor = Colors.black,
   });
 
   @override
@@ -20,7 +22,7 @@ class MyButton extends StatelessWidget {
     return DefaultTextStyle(
       style: TextStyle(
         fontSize: fontSize,
-        color: Colors.black,
+        color: fontColor,
         fontFamily: 'Minion-Pro',
         // fontFamilyFallback: ['RobotoMono'], // don't work ??
       ),
@@ -209,13 +211,14 @@ class MathKeyBoard extends StatelessWidget {
     return button;
   }
 
-  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize}) {
+  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize, Color fontColor}) {
     List<Widget> button = [];
     for (var i = 0; i < key.length; i++) {
       button.add(
         MyButton(
           child: key.values.elementAt(i),
           fontSize: fontSize,
+          fontColor: fontColor,
           onPressed: () {
             var cmd = key.keys.elementAt(i);
             mathModel.addExpression(cmd);
@@ -230,13 +233,15 @@ class MathKeyBoard extends StatelessWidget {
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
     const fontSize = 20.0;
+    var fontColor = Colors.grey[200];
 
-    button.addAll(_buildButtonGroup(pfunction, par: true, fontSize: fontSize));
-    button.addAll(_buildButtonGroup(function, fontSize: fontSize));
+    button.addAll(_buildButtonGroup(pfunction, par: true, fontSize: fontSize, fontColor: fontColor));
+    button.addAll(_buildButtonGroup(function, fontSize: fontSize, fontColor: fontColor));
 
     button.add(MyButton(
       child: Text('log'),
       fontSize: fontSize,
+      fontColor: fontColor,
       onPressed: () {
         mathModel.addExpression('log');
         mathModel.addExpression('_');
@@ -249,6 +254,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('x▘'),
       fontSize: fontSize,
+      fontColor: fontColor,
       onPressed: () {
         mathModel.addExpression(')');
         mathModel.addExpression('^');
@@ -259,6 +265,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('x²'),
       fontSize: fontSize,
+      fontColor: fontColor,
       onPressed: () {
         mathModel.addExpression('^');
         mathModel.addExpression('2');
@@ -269,6 +276,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('e▘'),
       fontSize: fontSize,
+      fontColor: fontColor,
       onPressed: () {
         mathModel.addExpression('e');
         mathModel.addExpression('^');
@@ -276,7 +284,7 @@ class MathKeyBoard extends StatelessWidget {
     ));
 
     button.add(MyButton(
-      child: Icon(Icons.arrow_back),
+      child: Icon(Icons.arrow_back, color: fontColor,),
       onPressed: () {
         mathModel.isClearable = false;
         mathModel.addKey('Left');
@@ -284,7 +292,7 @@ class MathKeyBoard extends StatelessWidget {
     ));
 
     button.add(MyButton(
-      child: Icon(Icons.arrow_forward),
+      child: Icon(Icons.arrow_forward, color: fontColor,),
       onPressed: () {
         mathModel.isClearable = false;
         mathModel.addKey('Right');
@@ -294,6 +302,7 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('Ans'),
       fontSize: fontSize,
+      fontColor: fontColor,
       onPressed: () {
         if (mathModel.history.last != '') {
           mathModel.addExpression('Ans');
@@ -325,7 +334,7 @@ class MathKeyBoard extends StatelessWidget {
               child: Material(
                 borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
                 elevation: 8.0,
-                color: Colors.green[200],
+                color: Colors.blueAccent[400],
                 child: GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 7,
@@ -337,7 +346,7 @@ class MathKeyBoard extends StatelessWidget {
           Container(
             height: width / 5 * 4,
             child: Material(
-              color: Colors.yellow[200],
+              color: Colors.grey[300],
               elevation: 15.0,
               child: GridView.count(
                 physics: NeverScrollableScrollPhysics(),
