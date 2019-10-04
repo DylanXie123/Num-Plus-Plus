@@ -80,7 +80,6 @@ class Server {
 }
 
 class MathBox extends StatelessWidget {
-
   final _server = Server();
 
   MathBox() {

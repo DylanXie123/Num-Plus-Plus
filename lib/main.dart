@@ -13,11 +13,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static final mathModel = MathModel();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: MathModel(),),
+        ChangeNotifierProvider.value(value: mathModel,),
         ChangeNotifierProvider.value(value: SettingModel(),),
       ],
       child: MaterialApp(
