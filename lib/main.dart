@@ -8,45 +8,50 @@ import 'src/mybutton.dart';
 import 'src/mathmodel.dart';
 import 'src/settingpage.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  final mathModel = MathModel();
+  final settings = SettingModel();
+  await settings.initVal();
+  mathModel.precision = settings.precision.toInt();
+  print('Init Mode: ' + settings.isProMode.toString());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: settings,),
+        ChangeNotifierProvider.value(value: mathModel,),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  static final mathModel = MathModel();
+  // static final mathModel = MathModel();
+  // static final settings = SettingModel();
+
+  // void init() async {
+  //   await settings.initVal();
+  //   print('Init Mode ' + settings.isProMode.toString());
+  //   mathModel.precision = settings.precision.toInt();
+  // }// TODO: Have problem to load initial setting
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: mathModel,),
-        ChangeNotifierProvider.value(value: SettingModel(),),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: HomePage(),
+    // init();
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    final setting = Provider.of<SettingModel>(context, listen: false);
     final mathModel = Provider.of<MathModel>(context, listen: false);
-
-    void init() async {
-      await setting.initVal();
-      mathModel.precision = setting.precision.toInt();
-    }
-
-    init();
-    
-    print('Rebuilt');
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

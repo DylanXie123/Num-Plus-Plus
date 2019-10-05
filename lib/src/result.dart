@@ -9,7 +9,6 @@ class Result extends StatelessWidget {
     return Container(
       height: 60.0,
       width: double.infinity,
-      // color: Colors.blue[50],
       alignment: Alignment.centerRight,
       child: Consumer<MathModel>(
         builder: (context, model, _) => Text(

@@ -38,15 +38,14 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-const clientHeight = window.screen.height - 3;
-const clientWidth = window.screen.width - 3;
-
-mathBlock.style.height = clientHeight + "px";
+var clientWidth = window.screen.availWidth - 3;
 mathBlock.style.width = clientWidth + "px";
-mathBlock.style.fontSize = clientHeight/3 + "px";
+mathBlock.style.fontSize = '24px';
 mathBlock.style.overflow = "scroll";
 mathBlock.style.textAlign = "right";
 document.body.style.backgroundColor = "#FAFAFA";
+// document.body.style.backgroundColor = "#FAFAFA";
+// mathBlock.style.backgroundColor = "yellow";
 
 function addCmd(message) {
     mathField.cmd(message);
