@@ -13,7 +13,6 @@ void main() async {
   final settings = SettingModel();
   await settings.initVal();
   mathModel.precision = settings.precision.toInt();
-  print('Init Mode: ' + settings.isProMode.toString());
   runApp(
     MultiProvider(
       providers: [
@@ -26,20 +25,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // static final mathModel = MathModel();
-  // static final settings = SettingModel();
-
-  // void init() async {
-  //   await settings.initVal();
-  //   print('Init Mode ' + settings.isProMode.toString());
-  //   mathModel.precision = settings.precision.toInt();
-  // }// TODO: Have problem to load initial setting
-
   @override
   Widget build(BuildContext context) {
-    // init();
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Calculator',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

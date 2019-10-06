@@ -189,7 +189,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   void initState() {
     super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 300),vsync: this);
-    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInCubic);
+    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);
     animation = Tween<double>(begin: (widget.width-10) / 7 * 3, end: 0).animate(curve);
     buttonAnimation = Tween<double>(begin: 15.0, end: 30.0).animate(curve);
     animationController.addListener((){
@@ -205,7 +205,6 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
-    print('Mode: '+setting.isProMode.toString());
     if (setting.isProMode == false) {
       animationController.forward();
     }
@@ -437,7 +436,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         if (widget.mathModel.history.last != '') {
           widget.mathModel.addExpression('Ans');
         } else {
-          print('No History Yet');
+          final snackBar = SnackBar(
+            content: Text('No History Yet'),
+            duration: Duration(milliseconds: 500,),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: (){},
+            ),
+          );
+          Scaffold.of(context).showSnackBar(snackBar);
         }
       },
     ));

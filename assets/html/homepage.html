@@ -38,13 +38,12 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-var clientWidth = window.screen.availWidth - 3;
+const clientWidth = window.screen.availWidth - 3;
 mathBlock.style.width = clientWidth + "px";
-mathBlock.style.fontSize = '24px';
+mathBlock.style.fontSize = '30px';
 mathBlock.style.overflow = "scroll";
 mathBlock.style.textAlign = "right";
 document.body.style.backgroundColor = "#FAFAFA";
-// document.body.style.backgroundColor = "#FAFAFA";
 // mathBlock.style.backgroundColor = "yellow";
 
 function addCmd(message) {
