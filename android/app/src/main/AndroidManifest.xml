@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.calculator">
+    package="com.dylan.num_plus_plus">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="calculator"
+        android:label="Num++"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity
@@ -31,4 +31,5 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

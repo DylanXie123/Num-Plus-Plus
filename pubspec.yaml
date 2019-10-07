@@ -1,5 +1,5 @@
-name: calculator
-description: A new Flutter project.
+name: num_plus_plus
+description: A scientific & intutive calculator written in Flutter.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43

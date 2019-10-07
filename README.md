@@ -1,16 +1,36 @@
-# calculator
+# Num++
 
-A new Flutter project.
+A scientific & intutive calculator written in Flutter.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+`Num++` let you type math expression intuitively and evaluate it automatically. It supports basically all kinds of math function you will need and it's beautifully designed.
 
-A few resources to get you started if this is your first Flutter project:
+## ScreenShot
+<div align="center">
+    <img src="https://s2.ax1x.com/2019/10/07/u2qrO1.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/07/u2qhSH.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/07/u2jE9S.png" height=300>
+</div>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Features
+- Completely offline calculator
+- Completely free and no Ads
+- Calculate result instantly
+- No redundant feature
+- Beautifully designed
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<!-- ## Structure -->
+## Plan
+- [ ] Show History
+- [ ] Solve Function
+- [ ] Plot Function
+- [ ] Matrix Calculation
+- [ ] Complex Calculation
+- [ ] Symbol Calculation(diff, int)
+
+## Special Thanks
+Thanks to those who contributes their work unconditionally to make this project done.
+- [math_expressions](https://pub.dev/packages/math_expressions)
+- [PetitParser](https://pub.dev/packages/petitparser)
+- [MathQuill](http://mathquill.com/)

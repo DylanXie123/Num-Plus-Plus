@@ -182,16 +182,16 @@ class ExpandKeyBoard extends StatefulWidget {
 
 class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStateMixin {
   AnimationController animationController;
-  Animation animation;
-  Animation buttonAnimation;
+  Animation keyboardAnimation;
+  Animation arrowAnimation;
 
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 300),vsync: this);
-    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);
-    animation = Tween<double>(begin: (widget.width-10) / 7 * 3, end: 0).animate(curve);
-    buttonAnimation = Tween<double>(begin: 15.0, end: 30.0).animate(curve);
+    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInBack);
+    keyboardAnimation = Tween<double>(begin: (widget.width-10) / 7 * 3, end: 0).animate(curve);
+    arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
     animationController.addListener((){
       setState(() {});
     });
@@ -219,7 +219,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         }
       },
       child: Container(
-        height: buttonAnimation.value + animation.value,
+        height: arrowAnimation.value + keyboardAnimation.value,
         margin: EdgeInsets.symmetric(horizontal: 5.0),
         child: Material(
           clipBehavior: Clip.antiAlias,
@@ -230,7 +230,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                height: buttonAnimation.value,
+                height: arrowAnimation.value,
                 width: double.infinity,
                 color: Colors.blueAccent[400],
                 child: FlatButton(
@@ -245,14 +245,13 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
                     }
                   },
                   child: Icon(
-                    (animation.value > 20.0)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
+                    (keyboardAnimation.value > 20.0)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
                     color: Colors.grey[200],
                   ),
                 ),
               ),
               Expanded(
                 child: GridView.count(
-                  shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 7,
                   children: _buildUpButton(),

@@ -17,6 +17,18 @@
     margin: 0;
     padding: 0;
 }
+body {
+  background-color: #fafafa;
+}
+.mq-root-block {
+  font-size: 30px;
+  overflow: scroll !important;
+  text-align: right;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	/* background-color: yellow; */
+}
 </style>
 <script src="./jquery-3.4.1.min.js"></script>
 <script src="./mathquill.min.js"></script>
@@ -36,15 +48,6 @@ var mathField = MQ.MathField(mathFieldSpan, {
         return document.createElement('span');
     },
 });
-
-var mathBlock = document.getElementsByClassName("mq-root-block")[0];
-const clientWidth = window.screen.availWidth - 3;
-mathBlock.style.width = clientWidth + "px";
-mathBlock.style.fontSize = '30px';
-mathBlock.style.overflow = "scroll";
-mathBlock.style.textAlign = "right";
-document.body.style.backgroundColor = "#FAFAFA";
-// mathBlock.style.backgroundColor = "yellow";
 
 function addCmd(message) {
     mathField.cmd(message);
