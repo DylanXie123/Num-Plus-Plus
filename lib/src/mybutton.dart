@@ -142,16 +142,11 @@ class MathKeyBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width;
-    if (MediaQuery.of(context).size.aspectRatio > 1) {
-      width = MediaQuery.of(context).size.height;
-    } else {
-      width = MediaQuery.of(context).size.width;
-    }
+    final width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ExpandKeyBoard(mathModel: mathModel, width: width,),
+        ExpandKeyBoard(mathModel: mathModel,),
         Container(
           height: width / 5 * 4,
           child: Material(
@@ -172,9 +167,8 @@ class MathKeyBoard extends StatelessWidget {
 
 class ExpandKeyBoard extends StatefulWidget {
   final MathModel mathModel;
-  final double width;
 
-  const ExpandKeyBoard({Key key, @required this.mathModel, @required this.width, }) : super(key: key);
+  const ExpandKeyBoard({Key key, @required this.mathModel,}) : super(key: key);
 
   @override
   _ExpandKeyBoardState createState() => _ExpandKeyBoardState();
@@ -182,6 +176,7 @@ class ExpandKeyBoard extends StatefulWidget {
 
 class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStateMixin {
   AnimationController animationController;
+  CurvedAnimation curve;
   Animation keyboardAnimation;
   Animation arrowAnimation;
 
@@ -189,10 +184,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   void initState() {
     super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 300),vsync: this);
-    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInBack);
-    keyboardAnimation = Tween<double>(begin: (widget.width-10) / 7 * 3, end: 0).animate(curve);
+    curve = CurvedAnimation(parent: animationController, curve: Curves.easeInBack);
     arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
     animationController.addListener((){
+      print('keyboard: ' + keyboardAnimation.value.toString());
+      print('arrow: ' + arrowAnimation.value.toString());
       setState(() {});
     });
   }
@@ -205,6 +201,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
+    final width = MediaQuery.of(context).size.width;
+    keyboardAnimation = Tween<double>(begin: (width-10) / 7 * 3, end: 0).animate(curve);
     if (setting.isProMode == false) {
       animationController.forward();
     }
