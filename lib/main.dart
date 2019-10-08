@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -27,6 +28,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+    );
     return MaterialApp(
       title: 'Num++',
       theme: ThemeData(
@@ -45,6 +51,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
+        brightness: Brightness.light,
         leading: IconButton(
           icon: Icon(MaterialCommunityIcons.getIconData("settings-outline"), color: Colors.grey,),
           onPressed: () {
