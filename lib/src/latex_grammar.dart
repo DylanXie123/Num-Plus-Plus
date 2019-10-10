@@ -34,7 +34,7 @@ class LatexGrammarDefinition extends GrammarDefinition {
   variable() => pattern('xy');
 
   factorial() => ref(prim) & char('!');
-  percent() => ref(prim) & char('%');
+  percent() => ref(prim) & string('\\%');
 
   sin() => string('\\sin\\left(') & ref(binary) & string('\\right)');
   cos() => string('\\cos\\left(') & ref(binary) & string('\\right)');

@@ -17,6 +17,7 @@ class SettingPage extends StatelessWidget {
           icon: Icon(Icons.arrow_back,),
           onPressed: () {
             mathModel.precision = setting.precision.toInt();
+            mathModel.isRadMode = setting.isRadMode;
             mathModel.calcNumber();
             Navigator.pop(context);
           },
@@ -37,12 +38,17 @@ class SettingPage extends StatelessWidget {
             ),
           ),
           Consumer<SettingModel>(
-            builder: (context, setmodel, _) => SwitchListTile(
-              title: Text('Advance Keyboard'),
-              value: setmodel.isProMode,
-              onChanged: (mode) {
-                setmodel.changeMode(mode);
-              },
+            builder: (context, setmodel, _) => ListTile(
+              title: ToggleButtons(
+                children: <Widget>[
+                  Text('RAD'),
+                  Text('DEG'),
+                ],
+                isSelected: [setmodel.isRadMode, !setmodel.isRadMode],
+                onPressed: (index) {
+                  setmodel.changeRadMode((index==0)?true:false);
+                },
+              ),
             ),
           ),
           Consumer<SettingModel>(
@@ -101,7 +107,7 @@ class SettingPage extends StatelessWidget {
 
 class SettingModel with ChangeNotifier {
   num precision;
-  bool isProMode;
+  bool isRadMode = true;
 
   Future changeSlider(double val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -110,17 +116,17 @@ class SettingModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future changeMode(bool mode) async {
+  Future changeRadMode(bool mode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isProMode = mode;
-    prefs.setBool('isProMode', isProMode);
+    isRadMode = mode;
+    prefs.setBool('isRadMode', isRadMode);
     notifyListeners();
   }
 
   Future initVal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    precision = (prefs.getDouble('precision') ?? 10);
-    isProMode = (prefs.getBool('isProMode') ?? true);
+    precision = prefs.getDouble('precision') ?? 10;
+    isRadMode = prefs.getBool('isRadMode') ?? true;
     notifyListeners();
   }
 

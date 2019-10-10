@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'latex_parser.dart';
+// import 'latex_parser.dart';
 import 'function.dart';
+import 'parser.dart';
 
 class MathModel with ChangeNotifier {
   String latexExp = '';
@@ -14,19 +15,19 @@ class MathModel with ChangeNotifier {
   bool isClearable = false;
   bool isFunction = false;
   int precision = 10;
-  bool degree = true; // false is rad
-  // TODO: Rewrire parser to support rad/degree
+  bool isRadMode = true;
 
   AnimationController animationController;
 
   void calcNumber() {
-    LatexParser lp = LatexParser();
-    lp.parse(latexExp);
-    if (lp.result.isSuccess) {
-      print('Parsed: ' + lp.result.value);
-      String mathString = lp.result.value.replaceFirst('Ans', history.last.toString());
+    LatexParser lp = LatexParser(isRadMode: isRadMode);
+    var mathexp = lp.parse(latexExp.replaceFirst('Ans', history.last.toString()));
+    print(latexExp);
+    if (mathexp.isSuccess) {
+      print('Parsed: ' + mathexp.value.toString());
+      // String mathString = result.value.replaceFirst('Ans', history.last.toString());
       try {
-        result = calc(mathString, precision).toString();
+        result = calc(mathexp.value, precision).toString();
       } catch (e) {
         result = '';
         print('Error in calc: '+ e.toString());
@@ -44,20 +45,20 @@ class MathModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void nSolveFunction() {
-    LatexParser lp = LatexParser();
-    lp.parse(latexExp);
-    if (lp.result.isSuccess) {
-      print('Parsed: ' + lp.result.value);
-      var f = MyFunction(lp.result.value);
-      result = f.nsolve().toString();
-      print(result);
-    } else {
-      print('Fail');
-      result = '';
-    }
-    notifyListeners();
-  }
+  // void nSolveFunction() {
+  //   LatexParser lp = LatexParser();
+  //   lp.parse(latexExp);
+  //   if (lp.result.isSuccess) {
+  //     print('Parsed: ' + lp.result.value);
+  //     var f = MyFunction(lp.result.value);
+  //     result = f.nsolve().toString();
+  //     print(result);
+  //   } else {
+  //     print('Fail');
+  //     result = '';
+  //   }
+  //   notifyListeners();
+  // }
 
   void keep() {
     if (result.isNotEmpty) {
@@ -84,9 +85,8 @@ class MathModel with ChangeNotifier {
 
 }
 
-num calc(String mathString, int precision) {  
-  Expression exp = Parser().parse(mathString);
-  num val = exp.evaluate(EvaluationType.REAL, ContextModel());
+num calc(Expression mathexp, int precision) {  
+  num val = mathexp.evaluate(EvaluationType.REAL, ContextModel());
   val = num.parse(val.toStringAsFixed(precision));
   val = intCheck(val);
   if (val.abs() < 1e-10) {

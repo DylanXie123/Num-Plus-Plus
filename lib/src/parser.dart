@@ -20,12 +20,12 @@ class LatexParserDefinition extends LatexGrammarDefinition{
   // may need custom function
   percent() => super.percent().map((n)=>n[0]/Number(100));
 
-  sin() => super.sin().map((n)=>Sin((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
-  cos() => super.cos().map((n)=>Cos((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
-  tan() => super.tan().map((n)=>Tan((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
-  asin() => super.tan().map((n)=>Asin((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
-  acos() => super.tan().map((n)=>Acos((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
-  atan() => super.tan().map((n)=>Atan((isRadMode)?n[1]:n[1]/Number(180)*Number(math.pi)));
+  sin() => super.sin().map((n)=>Sin((isRadMode)?n[1]:n[1]*Number(math.pi/180)));
+  cos() => super.cos().map((n)=>Cos((isRadMode)?n[1]:n[1]*Number(math.pi/180)));
+  tan() => super.tan().map((n)=>Tan((isRadMode)?n[1]:n[1]*Number(math.pi/180)));
+  asin() => super.asin().map((n)=>((isRadMode)?Number(1):Number(180/math.pi))*Asin(n[1]));
+  acos() => super.acos().map((n)=>((isRadMode)?Number(1):Number(180/math.pi))*Acos(n[1]));
+  atan() => super.atan().map((n)=>((isRadMode)?Number(1):Number(180/math.pi))*Atan(n[1]));
 
   abs() => super.abs().map((n)=>Abs(n[1]));
   ln() => super.ln().map((n)=>Ln(n[1]));

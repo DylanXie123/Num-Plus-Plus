@@ -14,6 +14,7 @@ void main() async {
   final settings = SettingModel();
   await settings.initVal();
   mathModel.precision = settings.precision.toInt();
+  mathModel.isRadMode = settings.isRadMode;
   runApp(
     MultiProvider(
       providers: [

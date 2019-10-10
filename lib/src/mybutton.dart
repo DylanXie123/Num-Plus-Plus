@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'mathmodel.dart';
-import 'settingpage.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;
@@ -187,8 +185,6 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     curve = CurvedAnimation(parent: animationController, curve: Curves.easeInBack);
     arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
     animationController.addListener((){
-      print('keyboard: ' + keyboardAnimation.value.toString());
-      print('arrow: ' + arrowAnimation.value.toString());
       setState(() {});
     });
   }
@@ -200,20 +196,14 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final setting = Provider.of<SettingModel>(context, listen: false);
     final width = MediaQuery.of(context).size.width;
     keyboardAnimation = Tween<double>(begin: (width-10) / 7 * 3, end: 0).animate(curve);
-    if (setting.isProMode == false) {
-      animationController.forward();
-    }
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         if (detail.delta.dy>0) {// move down
           animationController.forward();
-          setting.changeMode(false);
         } else {
           animationController.reverse();
-          setting.changeMode(true);
         }
       },
       child: Container(
@@ -236,10 +226,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
                   onPressed: () {
                     if (animationController.status == AnimationStatus.dismissed) {
                       animationController.forward();
-                      setting.changeMode(false);
                     } else {
                       animationController.reverse();
-                      setting.changeMode(true);
                     }
                   },
                   child: Icon(

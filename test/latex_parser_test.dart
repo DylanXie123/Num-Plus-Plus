@@ -19,13 +19,13 @@ void main() {
     final lp = LatexParser();
     // print(lp.parse('3!').value);
     // print(lp.parse('\\left(3+6\\right)!').value);
-    print(lp.parse('562%').value);
+    print(lp.parse('562\\%').value);
   });
 
   test('Function Test', () {
     final lp = LatexParser();
     print(lp.parse('\\sin\\left(.23\\right)').value);
-    print(lp.parse('\\cos\\left(53.6\\right)').value);
+    print(lp.parse('\\arcsin\\left(53.6\\right)').value);
     print(lp.parse('\\log_3\\left(34\\right)').value);
     print(lp.parse('\\log_{1+2}\\left(34\\right)').value);
     print(lp.parse('\\sqrt{78.6}').value);
