@@ -116,12 +116,12 @@ class MathBox extends StatelessWidget {
             assert(mathModel.webViewController != null);
           },
         ),
-        // Consumer<MathModel>(
-        //   builder: (context, mathModel, _) => Container(
-        //     color: Colors.grey[50],
-        //     height: (mathModel.webViewController == null)?double.infinity:0,
-        //   ),
-        // ), // cover initial white when creating webview
+        Consumer<MathModel>(
+          builder: (context, mathModel, _) => Container(
+            color: Colors.grey[50],
+            height: (mathModel.webViewController == null)?double.infinity:0,
+          ),
+        ), // cover initial white when creating webview
         ClearAnimation(mathModel: mathModel,),
       ],
     );

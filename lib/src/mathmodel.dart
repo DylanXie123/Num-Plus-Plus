@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-// import 'latex_parser.dart';
-import 'function.dart';
-import 'parser.dart';
+// import 'function.dart';
+import 'latex_parser.dart';
 
 class MathModel with ChangeNotifier {
   String latexExp = '';
@@ -25,7 +24,6 @@ class MathModel with ChangeNotifier {
     print(latexExp);
     if (mathexp.isSuccess) {
       print('Parsed: ' + mathexp.value.toString());
-      // String mathString = result.value.replaceFirst('Ans', history.last.toString());
       try {
         result = calc(mathexp.value, precision).toString();
       } catch (e) {

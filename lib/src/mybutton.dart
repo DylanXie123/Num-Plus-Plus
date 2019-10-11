@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import 'mathmodel.dart';
 
@@ -59,7 +60,7 @@ class MathKeyBoard extends StatelessWidget {
     ));
 
     button.add(MyButton(
-      child: Icon(Icons.backspace),
+      child: Icon(MaterialCommunityIcons.getIconData("backspace-outline")),
       onPressed: () {
         mathModel.isClearable = false;
         mathModel.webViewController.evaluateJavascript("delString()");
@@ -197,7 +198,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    keyboardAnimation = Tween<double>(begin: (width-10) / 7 * 3, end: 0).animate(curve);
+    keyboardAnimation = Tween<double>(begin: (width-10) / 8 * 3, end: 0).animate(curve);
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         if (detail.delta.dy>0) {// move down
@@ -239,7 +240,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
               Expanded(
                 child: GridView.count(
                   physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 7,
+                  crossAxisCount: 8,
                   children: _buildUpButton(),
                 ),
               ),
@@ -248,6 +249,25 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         ),
       ),
     );
+  }
+
+  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize, Color fontColor}) {
+    List<Widget> button = [];
+    for (var i = 0; i < key.length; i++) {
+      button.add(
+        MyButton(
+          child: key.values.elementAt(i),
+          fontSize: fontSize,
+          fontColor: fontColor,
+          onPressed: () {
+            var cmd = key.keys.elementAt(i);
+            widget.mathModel.addExpression(cmd);
+            if (par) {widget.mathModel.addExpression('(');}
+          },
+        ),
+      );
+    }
+    return button;
   }
 
   // TODO: a stupid way to insert another font text
@@ -317,36 +337,16 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     '\\sqrt' : Text('√￣'),
     '\\|' : Text('|  |'),
     '!' : Text('!'),
-    // 'x' : Text('x'),
+    'x' : Text('x'),
     '%' : Text('%'),
     '(' : Text('('),
     ')' : Text(')'),
     '\\\\nthroot' : Text('▝√￣'),
   };
 
-  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize, Color fontColor}) {
-    List<Widget> button = [];
-    for (var i = 0; i < key.length; i++) {
-      button.add(
-        MyButton(
-          child: key.values.elementAt(i),
-          fontSize: fontSize,
-          fontColor: fontColor,
-          onPressed: () {
-            var cmd = key.keys.elementAt(i);
-            widget.mathModel.addExpression(cmd);
-            if (par) {widget.mathModel.addExpression('(');}
-          },
-        ),
-      );
-    }
-    return button;
-  }
-
-  
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
-    const fontSize = 20.0;
+    const fontSize = 18.0; // may need to be bigger
     var fontColor = Colors.grey[200];
 
     button.addAll(_buildButtonGroup(pfunction, par: true, fontSize: fontSize, fontColor: fontColor));
@@ -372,7 +372,6 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       onPressed: () {
         widget.mathModel.addExpression(')');
         widget.mathModel.addExpression('^');
-        // widget.mathModel.addExpression('(');
       },
     ));
 
@@ -394,6 +393,28 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       onPressed: () {
         widget.mathModel.addExpression('e');
         widget.mathModel.addExpression('^');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('lg'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('log');
+        widget.mathModel.addExpression('_');
+        widget.mathModel.addExpression('10');
+        widget.mathModel.addKey('Right');
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('E'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('E');
       },
     ));
 

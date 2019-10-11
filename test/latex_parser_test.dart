@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:num_plus_plus/src/parser.dart';
+import 'package:num_plus_plus/src/latex_parser.dart';
 
 void main() {
   test('Primative Unit Test', () {
@@ -17,8 +17,8 @@ void main() {
 
   test('Postfix Test', () {
     final lp = LatexParser();
-    // print(lp.parse('3!').value);
-    // print(lp.parse('\\left(3+6\\right)!').value);
+    print(lp.parse('3!').value);
+    print(lp.parse('\\left(3+6\\right)!').value);
     print(lp.parse('562\\%').value);
   });
 

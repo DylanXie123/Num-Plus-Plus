@@ -13,11 +13,23 @@ class LatexParserDefinition extends LatexGrammarDefinition{
   e() => super.e().map((n)=>Number(math.e));
   variable() => super.variable().map((v)=>Variable(v));
 
-  // factorial() => super.factorial().map((n) {
-  //   print(n[0]);
-  //   return n;
-  // });
-  // may need custom function
+  factorial() => super.factorial().map((n) {
+    try {
+      num t = n[0].evaluate(EvaluationType.REAL, ContextModel());
+      if (t.ceil() == t.floor() && t>=0) {
+        int a = t.toInt();
+        int result = 1;
+        while(a > 0) {
+          result *= a;
+          a--;
+        }
+        return Number(result);
+      } else {
+        throw 'Unable to do factorial';
+      }
+    } catch (e) {}
+    return null;
+  });
   percent() => super.percent().map((n)=>n[0]/Number(100));
 
   sin() => super.sin().map((n)=>Sin((isRadMode)?n[1]:n[1]*Number(math.pi/180)));
