@@ -25,7 +25,6 @@ class MyButton extends StatelessWidget {
         fontSize: fontSize,
         color: fontColor,
         fontFamily: 'Minion-Pro',
-        // fontFamilyFallback: ['RobotoMono'], // don't work ??
       ),
       child: InkResponse(
         splashFactory: InkRipple.splashFactory,
@@ -251,106 +250,166 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     );
   }
 
-  List<Widget> _buildButtonGroup(Map key, {bool par = false, double fontSize, Color fontColor}) {
-    List<Widget> button = [];
-    for (var i = 0; i < key.length; i++) {
-      button.add(
-        MyButton(
-          child: key.values.elementAt(i),
-          fontSize: fontSize,
-          fontColor: fontColor,
-          onPressed: () {
-            var cmd = key.keys.elementAt(i);
-            widget.mathModel.addExpression(cmd);
-            if (par) {widget.mathModel.addExpression('(');}
-          },
-        ),
-      );
-    }
-    return button;
-  }
-
-  // TODO: a stupid way to insert another font text
-  // update in the future
-  static const TextSpan upminus = TextSpan(
-    text: '⁻',
-    style: TextStyle(
-      fontFamily: 'Roboto',
-    ),
-  );
-
-  static const TextSpan upx = TextSpan(
-    text: 'ˣ',
-    style: TextStyle(
-      fontFamily: 'Roboto',
-    ),
-  );
-
-  static const TextSpan upy = TextSpan(
-    text: '⁻',
-    style: TextStyle(
-      fontFamily: 'Roboto',
-    ),
-  );
-
-  static const Map pfunction = {
-    '\\sin' : Text('sin'),
-    '\\cos' : Text('cos'),
-    '\\\\tan' : Text('tan'),
-    '\\arcsin' : Text.rich(
-      TextSpan(
-        text: 'sin',
-        children: <TextSpan>[
-          upminus,
-          TextSpan(
-            text: '¹'
-          ),
-        ],
-      ),
-    ),
-    '\\arccos' : Text.rich(
-      TextSpan(
-        text: 'cos',
-        children: <TextSpan>[
-          upminus,
-          TextSpan(
-            text: '¹'
-          ),
-        ],
-      ),
-    ),
-    '\\arctan' : Text.rich(
-      TextSpan(
-        text: 'tan',
-        children: <TextSpan>[
-          upminus,
-          TextSpan(
-            text: '¹'
-          ),
-        ],
-      ),
-    ),
-    '\\ln' : Text('ln'),
-  };
-
-  static const Map function = {
-    '\\sqrt' : Text('√￣'),
-    '\\|' : Text('|  |'),
-    '!' : Text('!'),
-    'x' : Text('x'),
-    '%' : Text('%'),
-    '(' : Text('('),
-    ')' : Text(')'),
-    '\\\\nthroot' : Text('▝√￣'),
-  };
-
   List<Widget> _buildUpButton() {
     List<Widget> button = [];
-    const fontSize = 18.0; // may need to be bigger
+    const fontSize = 20.0;
+    const iconSize = 30.0;
     var fontColor = Colors.grey[200];
 
-    button.addAll(_buildButtonGroup(pfunction, par: true, fontSize: fontSize, fontColor: fontColor));
-    button.addAll(_buildButtonGroup(function, fontSize: fontSize, fontColor: fontColor));
+    button.add(MyButton(
+      child: Text('sin'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('\\sin');
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('cos'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('\\cos');
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('tan'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('\\tan');
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('ln'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('\\ln');
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe908, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression('\\sqrt');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe900, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression('\\|');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe901, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize*1.3,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression(')');
+        widget.mathModel.addExpression('^');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe902, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize*1.3,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression(')');
+        widget.mathModel.addExpression('^');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe903, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize*1.3,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression(')');
+        widget.mathModel.addExpression('^');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('!'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('!');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('x'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('x');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('%'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('%');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('('),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('(');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text(')'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression(')');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Icon(
+        IconData(0xe905, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
+      onPressed: () {
+        widget.mathModel.addExpression(')');
+        widget.mathModel.addExpression('^');
+      },
+    ));
 
     button.add(MyButton(
       child: Text('log'),
@@ -366,9 +425,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     ));
 
     button.add(MyButton(
-      child: Text('x▘'),
-      fontSize: fontSize,
-      fontColor: fontColor,
+      child: Icon(
+        IconData(0xe905, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
       onPressed: () {
         widget.mathModel.addExpression(')');
         widget.mathModel.addExpression('^');
@@ -376,9 +437,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     ));
 
     button.add(MyButton(
-      child: Text('x²'),
-      fontSize: fontSize,
-      fontColor: fontColor,
+      child: Icon(
+        IconData(0xe907, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
       onPressed: () {
         widget.mathModel.addExpression('^');
         widget.mathModel.addExpression('2');
@@ -387,9 +450,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     ));
 
     button.add(MyButton(
-      child: Text('e▘'),
-      fontSize: fontSize,
-      fontColor: fontColor,
+      child: Icon(
+        IconData(0xe904, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
       onPressed: () {
         widget.mathModel.addExpression('e');
         widget.mathModel.addExpression('^');
