@@ -3,7 +3,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // import 'function.dart';
-import 'latex_parser.dart';
+import 'latex.dart';
 
 class MathModel with ChangeNotifier {
   String latexExp = '';
@@ -19,21 +19,21 @@ class MathModel with ChangeNotifier {
   AnimationController animationController;
 
   void calcNumber() {
-    LatexParser lp = LatexParser(isRadMode: isRadMode);
-    var mathexp = lp.parse(latexExp.replaceFirst('Ans', history.last.toString()));
-    print(latexExp);
-    if (mathexp.isSuccess) {
-      print('Parsed: ' + mathexp.value.toString());
+    print('exp: ' + latexExp.toString());
+    if (latexExp.isEmpty) {
+      result = '';
+    } else {
       try {
-        result = calc(mathexp.value, precision).toString();
+        LaTexParser lp = LaTexParser(latexExp.replaceFirst('Ans', history.last.toString()), isRadMode: isRadMode);
+        Expression mathexp = lp.parse();
+        print('Parsed: ' + mathexp.toString());
+        result = calc(mathexp, precision).toString();
       } catch (e) {
         result = '';
-        print('Error in calc: '+ e.toString());
+        print('Error: '+ e.toString());
       }
-    } else {
-      isFunction = false;
-      result = '';
     }
+    
     notifyListeners();
   }
 
