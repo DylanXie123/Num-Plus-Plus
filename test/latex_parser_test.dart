@@ -4,9 +4,9 @@ import 'package:num_plus_plus/src/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    final lp = LaTexParser('\\sqrt{4}\\times\\sin3');
+    final lp = LaTexParser('{2+6}\\sin{3}');
     // print(lp.stream);
-    print(lp.outputstack);
+    // print(lp.outputstack);
     print(lp.parse());
   });
 

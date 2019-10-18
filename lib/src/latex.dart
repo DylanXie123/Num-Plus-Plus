@@ -69,29 +69,60 @@ class LaTexParser  {
     final tokenize = (basic | function | lp | rp | oper | other).star().end();
 
     stream = tokenize.parse(inputString).value;
+
+    for (var i = 0; i < stream.length; i++) {
+      /// wrong syntax: fr fo lr lo
+      /// need times: bb bf bl rb rf
+      if (i<stream.length-1 && stream[i][1]=='b') {
+        switch (stream[i+1][1]) {
+          case 'b':
+          case 'f':
+          case 'l':
+            stream.insert(i+1, ['\\times', ['o', 3, 'l']]);
+            i++;
+            break;
+          default:
+            break;
+        }
+        continue;
+      }
+      if (i<stream.length-1 && stream[i][1]=='r') {
+        switch (stream[i+1][1]) {
+          case 'b':
+          case 'f':
+            stream.insert(i+1, ['\\times', ['o', 3, 'l']]);
+            i++;
+            break;
+          default:
+            break;
+        }
+        continue;
+      }
+      if (i>0 && (stream[i][1]=='r' || stream[i][1] is List)) {
+        switch (stream[i-1][1]) {
+          case 'l':
+          case 'f':
+            throw 'Unable to parse';
+          default:
+            break;
+        }
+        continue;
+      }
+    }
   }
 
   void shuntingyard() {
     for (var i = 0; i < stream.length; i++) {
       switch (stream[i][1]) {
         case 'b':
-          if (i>0 && stream[i-1][1]=='b') {
-            operstack.add(['\\times', ['o', 3, 'l']]);
-          }
           outputstack.add(stream[i][0]);
           break;
         case 'f':
-          if (i>0 && stream[i-1][1]=='b') {
-            operstack.add(['\\times', ['o', 3, 'l']]);
-          }
           operstack.add(stream[i]);
           break;
         case 'l':
           if (stream[i][0]=='\\left|') {
             operstack.add(['\\abs', 'f']);
-          }
-          if (i>0 && stream[i-1][1]=='b') {
-            operstack.add(['\\times', ['o', 3, 'l']]);
           }
           operstack.add(stream[i]);
           break;
@@ -138,8 +169,6 @@ class LaTexParser  {
           operstack.add(stream[i]);
       }
     }
-    print(outputstack);
-    print(operstack);
     while (operstack.length>0) {
       outputstack.add(operstack.last[0]);
       operstack.removeLast();
@@ -159,12 +188,8 @@ class LaTexParser  {
           break;
         case '-':
           right = result.removeLast();
-          try {
-            left = result.removeLast();
-            result.add(left-right);
-          } catch (e) {
-            result.add(Number(0.0)-right);
-          }
+          left = result.removeLast();
+          result.add(left-right);
           break;
         case '\\times':
           right = result.removeLast();
