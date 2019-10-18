@@ -75,13 +75,13 @@ class LaTexParser  {
     for (var i = 0; i < stream.length; i++) {
       switch (stream[i][1]) {
         case 'b':
-          if (i>0 && stream[i-1][1].contains(RegExp(r'b|r'))) {
+          if (i>0 && stream[i-1][1]=='b') {
             operstack.add(['\\times', ['o', 3, 'l']]);
           }
           outputstack.add(stream[i][0]);
           break;
         case 'f':
-          if (i>0 && stream[i-1][1].contains(RegExp(r'b|r'))) {
+          if (i>0 && stream[i-1][1]=='b') {
             operstack.add(['\\times', ['o', 3, 'l']]);
           }
           operstack.add(stream[i]);
@@ -138,6 +138,8 @@ class LaTexParser  {
           operstack.add(stream[i]);
       }
     }
+    print(outputstack);
+    print(operstack);
     while (operstack.length>0) {
       outputstack.add(operstack.last[0]);
       operstack.removeLast();
