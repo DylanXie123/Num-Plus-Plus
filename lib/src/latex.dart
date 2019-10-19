@@ -42,7 +42,7 @@ class LaTexParser  {
     final sqrt = (string('\\sqrt') & char('{').and()).map((v)=>['\\sqrt', 'f']);
     final nrt = (string('\\sqrt') & char('[').and()).map((v)=>['\\nrt', 'f']);
     final function = 
-      ((string('\\sin') | string('\\cos') | string('\\tan') | string('\\arcsin') | string('\\arccos') | string('\\arctan') | string('\\ln') | string('\\log')).map((v)=>[v, 'f'])) | sqrt | nrt;
+      ((string('\\sin') | string('\\cos') | string('\\tan') | string('\\arcsin') | string('\\arccos') | string('\\arctan') | string('\\frac') | string('\\ln') | string('\\log')).map((v)=>[v, 'f'])) | sqrt | nrt;
     
     final lp = (string('\\left(') | char('{') | string('\\left|') | char('[')).map((v)=>[v, 'l']);
 
@@ -54,7 +54,7 @@ class LaTexParser  {
 
     final times = string('\\times').map((v)=>[v, ['o', 3, 'l']]);
 
-    final divide = (string('\\frac') | string('\\div')).map((v)=>[v, ['o', 3, 'l']]);
+    final divide = string('\\div').map((v)=>[v, ['o', 3, 'l']]);
 
     final expo = char('^').map((v)=>[v, ['o', 4, 'r']]);
 
@@ -295,8 +295,12 @@ class LaTexParser  {
           result.add(Number(outputstack[i]));
       }
     }
-    assert(result.length==1);
-    return result[0];
+    if (result.length==1) {
+      return result[0];  
+    } else {
+      throw 'Parse Errow';
+    }
+    
   }
   
 }

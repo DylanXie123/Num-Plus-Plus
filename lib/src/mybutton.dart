@@ -122,9 +122,7 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Text('='),
-      onPressed: () {
-        mathModel.keep();
-      },
+      onPressed: mathModel.pressEqual,
     ));
 
     button.add(MyButton(

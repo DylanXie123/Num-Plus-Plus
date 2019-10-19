@@ -9,7 +9,6 @@ class MathModel with ChangeNotifier {
   String latexExp = '';
   String result = '';
   List<String> history = [];
-  Color resultColor = Colors.black54;
 
   WebViewController webViewController;
   bool isClearable = false;
@@ -18,6 +17,7 @@ class MathModel with ChangeNotifier {
   bool isRadMode = true;
 
   AnimationController clearAnimationController;
+  AnimationController equalAnimationController;
 
   void calcNumber() {
     print('exp: ' + latexExp.toString());
@@ -29,7 +29,7 @@ class MathModel with ChangeNotifier {
         if (history.isEmpty) {
           lp = LaTexParser(latexExp, isRadMode: isRadMode);
         } else {
-          lp = LaTexParser(latexExp.replaceFirst('Ans', history.last.toString()), isRadMode: isRadMode);
+          lp = LaTexParser(latexExp.replaceFirst('Ans', '{'+history.last.toString()+'}'), isRadMode: isRadMode);
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
@@ -63,12 +63,12 @@ class MathModel with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void keep() {
+  void pressEqual() {
     if (result.isNotEmpty) {
       history.add(result);
+      isClearable = true;
     }
-    isClearable = true;
-    resultColor = Colors.black;
+    equalAnimationController.forward();
     notifyListeners();
     print(history);
   }
@@ -81,7 +81,7 @@ class MathModel with ChangeNotifier {
         webViewController.evaluateJavascript("addCmd('Ans')");
       }
     }
-    resultColor = Colors.black54;
+    equalAnimationController.reset();
     webViewController.evaluateJavascript("addCmd('$msg')");
   }
 

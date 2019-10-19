@@ -3,11 +3,37 @@ import 'package:provider/provider.dart';
 
 import 'mathmodel.dart';
 
-class Result extends StatelessWidget {
+class Result extends StatefulWidget {
+  @override
+  _ResultState createState() => _ResultState();
+}
+
+class _ResultState extends State<Result> with TickerProviderStateMixin {
+
+  AnimationController animationController;
+  Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
+    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);
+    animation = Tween<double>(begin: 30.0, end: 60.0).animate(curve)
+      ..addListener(() {setState(() {});});
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mathModel = Provider.of<MathModel>(context, listen: false);
+    mathModel.equalAnimationController = animationController;
     return Container(
-      height: 30.0,
+      height: animation.value,
       width: double.infinity,
       alignment: Alignment.centerRight,
       child: Consumer<MathModel>(
@@ -15,8 +41,7 @@ class Result extends StatelessWidget {
           (model.result=='')?'':'= '+model.result,
           style: TextStyle(
             fontFamily: 'Minion-Pro',
-            fontSize: 25.0,
-            color: model.resultColor,
+            fontSize: animation.value - 5,
           ),
         ),
       ),
