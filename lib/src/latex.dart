@@ -41,8 +41,11 @@ class LaTexParser  {
 
     final sqrt = (string('\\sqrt') & char('{').and()).map((v)=>['\\sqrt', 'f']);
     final nrt = (string('\\sqrt') & char('[').and()).map((v)=>['\\nrt', 'f']);
+    final simplefunction = 
+      ((string('\\sin') | string('\\cos') | string('\\tan') | string('\\arcsin') | string('\\arccos') | string('\\arctan') | string('\\ln')) & string('\\left(').and()).pick(0).map((v)=>[v, 'f']);
+    final otherfunction = (string('\\frac') | string('\\log')).map((v)=>[v, 'f']);
     final function = 
-      ((string('\\sin') | string('\\cos') | string('\\tan') | string('\\arcsin') | string('\\arccos') | string('\\arctan') | string('\\frac') | string('\\ln') | string('\\log')).map((v)=>[v, 'f'])) | sqrt | nrt;
+      simplefunction | otherfunction | sqrt | nrt ;
     
     final lp = (string('\\left(') | char('{') | string('\\left|') | char('[')).map((v)=>[v, 'l']);
 
@@ -73,6 +76,16 @@ class LaTexParser  {
     for (var i = 0; i < stream.length; i++) {
       /// wrong syntax: fr fo lr lo
       /// need times: bb bf bl rb rf
+      /// negative number: -(bfl) / l-(bfl)
+      if (stream[0][0]=='-' && stream[1][1].contains(RegExp(r'[bfl]'))) {
+        stream.insert(0, [0, 'b']);
+        continue;
+      }
+      if (i>0 && i<stream.length-1 && stream[i-1][1]=='l' && stream[i][0]=='-' && stream[i+1][1].contains(RegExp(r'[bfl]'))) {
+        stream.insert(i, [0, 'b']);
+        i++;
+        continue;
+      }
       if (i<stream.length-1 && stream[i][1]=='b') {
         switch (stream[i+1][1]) {
           case 'b':
@@ -99,6 +112,9 @@ class LaTexParser  {
         continue;
       }
       if (i>0 && (stream[i][1]=='r' || stream[i][1] is List)) {
+        if (stream[i-1][1] is List) {
+          throw 'Unable to parse';
+        }
         switch (stream[i-1][1]) {
           case 'l':
           case 'f':

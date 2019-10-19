@@ -4,8 +4,8 @@ import 'package:num_plus_plus/src/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    final lp = LaTexParser('2\\frac{3}{5}');
-    // print(lp.stream);
+    final lp = LaTexParser('-5+6.3');
+    print(lp.stream);
     // print(lp.outputstack);
     print(lp.parse());
   });
