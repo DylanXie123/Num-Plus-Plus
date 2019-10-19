@@ -54,7 +54,10 @@ class MathKeyBoard extends StatelessWidget {
     }
 
     button.add(MyButton(
-      child: Text('x/y'),
+      child: Icon(// frac
+        IconData(0xe909, fontFamily: 'Keyboard'),
+        size: 60.0,
+      ),
       onPressed: () {mathModel.addExpression('/', isOperator: true);},
     ));
 
@@ -67,8 +70,8 @@ class MathKeyBoard extends StatelessWidget {
       onLongPress: () async {
         if (mathModel.latexExp != '') {
           mathModel.webViewController.evaluateJavascript("delAll()");
-          await mathModel.animationController?.forward();
-          mathModel.animationController?.reset();
+          await mathModel.clearAnimationController?.forward();
+          mathModel.clearAnimationController?.reset();
         } 
       },
     ));
@@ -121,7 +124,6 @@ class MathKeyBoard extends StatelessWidget {
       child: Text('='),
       onPressed: () {
         mathModel.keep();
-        mathModel.isClearable = true;
       },
     ));
 
@@ -473,7 +475,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        if (widget.mathModel.history.last != '') {
+        if (widget.mathModel.history.isNotEmpty) {
           widget.mathModel.addExpression('Ans');
         } else {
           final snackBar = SnackBar(

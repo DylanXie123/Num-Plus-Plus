@@ -148,7 +148,7 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
     animation = Tween<double>(begin: 0, end: 1000).animate(curve);
-    widget.mathModel.animationController = animationController;
+    widget.mathModel.clearAnimationController = animationController;
   }
 
   @override

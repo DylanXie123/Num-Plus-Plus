@@ -7,15 +7,16 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60.0,
+      height: 30.0,
       width: double.infinity,
       alignment: Alignment.centerRight,
       child: Consumer<MathModel>(
         builder: (context, model, _) => Text(
-          (model.result=='')?'':'= ' + model.result,
+          (model.result=='')?'':'= '+model.result,
           style: TextStyle(
             fontFamily: 'Minion-Pro',
-            fontSize: 24,
+            fontSize: 25.0,
+            color: model.resultColor,
           ),
         ),
       ),
