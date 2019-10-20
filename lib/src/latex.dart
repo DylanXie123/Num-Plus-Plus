@@ -32,12 +32,12 @@ class LaTexParser  {
       ((integer | char('.').and()) &
       (char('.') & integer).pick(1).optional() &
       (char('E') & pattern('+-').optional() & integer).optional()).flatten().map(num.parse);
-    final underline = (char('_') & digit().map(int.parse)).pick(1);
+    
     final pi = string('\\pi').map((a)=>math.pi);
     final e = char('e').map((a)=>math.e);
     // final variable = pattern('xy');
 
-    final basic = (number | underline | pi | e).map((v)=>[v, 'b']);
+    final basic = (number | pi | e).map((v)=>[v, 'b']);
 
     final sqrt = (string('\\sqrt') & char('{').and()).map((v)=>['\\sqrt', 'f']);
     final nrt = (string('\\sqrt') & char('[').and()).map((v)=>['\\nrt', 'f']);
@@ -66,8 +66,12 @@ class LaTexParser  {
     final percent = string('\\%').map((v)=>[v, ['o', 5, 'l']]);
 
     final oper = plus | minus | times | divide | expo | factorial | percent;
+    
+    final subnumber = (char('_') & digit().map(int.parse)).pick(1);
+    
+    final underline = char('_');
 
-    final other = char('_').map((v)=>[v, 'u']);
+    final other = (subnumber | underline).map((v)=>[v, 'u']);
 
     final tokenize = (basic | function | lp | rp | oper | other).star().end();
 
@@ -112,7 +116,7 @@ class LaTexParser  {
         continue;
       }
       if (i>0 && (stream[i][1]=='r' || stream[i][1] is List)) {
-        if (stream[i-1][1] is List) {
+        if (stream[i-1][1] is List && stream[i-1][1][1]!=5) {
           throw 'Unable to parse';
         }
         switch (stream[i-1][1]) {
@@ -158,6 +162,9 @@ class LaTexParser  {
           }
           break;
         case 'u':
+          if (stream[i][0] is num) {
+            outputstack.add(stream[i][0]);
+          }
           break;
         default:
           while (true) {
@@ -294,7 +301,7 @@ class LaTexParser  {
         case '!':
           try {
             num t = result.removeLast().evaluate(EvaluationType.REAL, ContextModel());
-            if (t.ceil() == t.floor() && t>=0) {
+            if (t.ceil() == t.floor() && t>=0 && t<20) {
               int a = t.toInt();
               int y = 1;
               while(a > 0) {

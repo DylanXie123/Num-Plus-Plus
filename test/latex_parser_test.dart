@@ -4,19 +4,19 @@ import 'package:num_plus_plus/src/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    final lp = LaTexParser('-5+6.3');
+    final lp = LaTexParser('8!+2');
     print(lp.stream);
     // print(lp.outputstack);
     print(lp.parse());
   });
 
   test('General Expression Benchmark', () {
-    final lp = LaTexParser('\\sin\\left(45-\\frac{\\frac{\\log_3\\left(45+\\frac{\\sin\\left(2\\right)}{\\sqrt{2}}\\right)}{\\left|45-\\frac{.23}{8E4}\\right|}}{4\\pi}\\right)+e');
+    final lp = LaTexParser('\\sin\\left(45-\\frac{\\log_3\\left(45+\\frac{\\sin\\left(2\\right)}{\\sqrt{2}}\\right)}{4\\pi}\\right)+e^{-1}');
     Expression exp = lp.parse();
     ContextModel cm = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, cm);
     print(eval);
-    expect(eval.toStringAsFixed(6), '2.715996');
+    expect(eval.toStringAsFixed(7), '1.0428622');
   });
 
 }

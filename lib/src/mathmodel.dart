@@ -93,7 +93,7 @@ class MathModel with ChangeNotifier {
 
 num calc(Expression mathexp, int precision) {  
   num val = mathexp.evaluate(EvaluationType.REAL, ContextModel());
-  if (val.abs()>922337203685477580) {
+  if (val.abs()>16331239353195369) {
     return val.sign*(1.0/0.0);
   }
   val = num.parse(val.toStringAsFixed(precision));

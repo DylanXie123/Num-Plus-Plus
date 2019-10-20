@@ -90,6 +90,13 @@ class SettingPage extends StatelessWidget {
               _launchURL('mailto:dylanxie123@outlook.com?subject=Flutter%20Calculator');
             },
           ),
+          ListTile(
+            leading: Icon(AntDesign.getIconData("alipay-circle"),),
+            title: Text('Donation'),
+            onTap: () {
+              _launchURL('alipayqr://platformapi/startapp?saId=10000007&qrcode=h0ttps://qr.alipay.com/tsx06831xbzn79nimg64e6a');
+            },
+          ),
         ],
       ),
     );

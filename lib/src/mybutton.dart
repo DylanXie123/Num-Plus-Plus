@@ -282,7 +282,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        widget.mathModel.addExpression('\\tan');
+        widget.mathModel.addExpression('\\\\tan');
         widget.mathModel.addExpression('(');
       },
     ));

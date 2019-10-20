@@ -4,13 +4,13 @@ A scientific & intutive calculator written in Flutter.
 
 ## Overview
 
-`Num++` let you type math expression intuitively and evaluate it automatically. It supports basically all kinds of math function you will need. I'm an amateur coder, so feel free to give me any kinds of suggestions or open an issue. 🥰
+`Num++` let you type math expression intuitively and evaluate it automatically. It supports basically all kinds of math function you will need.
 
 ## ScreenShot
 <div align="center">
-    <img src="https://s2.ax1x.com/2019/10/12/uXVj9e.png" height=300>
-    <img src="https://s2.ax1x.com/2019/10/12/uXZ14U.png" height=300>
-    <img src="https://s2.ax1x.com/2019/10/12/uXZlNT.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/19/KnMXPH.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/19/KnMjGd.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/19/KnMLIe.png" height=300>
 </div>
 
 ## Features
@@ -21,6 +21,7 @@ A scientific & intutive calculator written in Flutter.
 
 <!-- ## Structure -->
 ## Plan
+I will try to implement these features in future release. Besides, feel free to open an issue.
 - [ ] Show History
 - [ ] Solve Function
 - [ ] Plot Function
