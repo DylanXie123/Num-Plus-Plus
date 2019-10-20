@@ -419,11 +419,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     ));
 
     button.add(MyButton(
-      child: Text('%'),
+      child: Icon(// *10^n
+        IconData(0xe90a, fontFamily: 'Keyboard'),
+        color: fontColor,
+        size: iconSize,
+      ),
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        widget.mathModel.addExpression('%');
+        widget.mathModel.addExpression('E');
       },
     ));
 

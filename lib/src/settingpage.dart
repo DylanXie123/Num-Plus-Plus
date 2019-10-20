@@ -94,7 +94,7 @@ class SettingPage extends StatelessWidget {
             leading: Icon(AntDesign.getIconData("alipay-circle"),),
             title: Text('Donation'),
             onTap: () {
-              _launchURL('alipayqr://platformapi/startapp?saId=10000007&qrcode=h0ttps://qr.alipay.com/tsx06831xbzn79nimg64e6a');
+              _launchURL('alipayqr://platformapi/startapp?saId=10000007&qrcode=https://qr.alipay.com/tsx06831xbzn79nimg64e6a');
             },
           ),
         ],

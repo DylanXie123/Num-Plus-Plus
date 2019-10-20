@@ -77,19 +77,26 @@ class LaTexParser  {
 
     stream = tokenize.parse(inputString).value;
 
+    if (stream[0][0]=='-' && stream[1][1].contains(RegExp(r'[bfl]'))) {
+      stream.insert(0, [0, 'b']);
+    }
+    if (stream[0][0]=='!') {
+      throw 'Unable to parse';
+    }
+
     for (var i = 0; i < stream.length; i++) {
-      /// wrong syntax: fr fo lr lo
+      /// wrong syntax: fr fo lr lo oo (b/r postfix or wrong)
       /// need times: bb bf bl rb rf
       /// negative number: -(bfl) / l-(bfl)
-      if (stream[0][0]=='-' && stream[1][1].contains(RegExp(r'[bfl]'))) {
-        stream.insert(0, [0, 'b']);
-        continue;
-      }
+      
+      // negative number
       if (i>0 && i<stream.length-1 && stream[i-1][1]=='l' && stream[i][0]=='-' && stream[i+1][1].contains(RegExp(r'[bfl]'))) {
         stream.insert(i, [0, 'b']);
         i++;
         continue;
       }
+
+      // add ×
       if (i<stream.length-1 && stream[i][1]=='b') {
         switch (stream[i+1][1]) {
           case 'b':
@@ -115,6 +122,8 @@ class LaTexParser  {
         }
         continue;
       }
+
+      // check wrong syntax
       if (i>0 && (stream[i][1]=='r' || stream[i][1] is List)) {
         if (stream[i-1][1] is List && stream[i-1][1][1]!=5) {
           throw 'Unable to parse';
@@ -294,9 +303,6 @@ class LaTexParser  {
           break;
         case '\\abs':
           result.add(Abs(result.removeLast()));
-          break;
-        case '\\%':
-          result.add(result.removeLast()/Number(100.0));
           break;
         case '!':
           try {

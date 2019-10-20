@@ -8,9 +8,9 @@ A scientific & intutive calculator written in Flutter.
 
 ## ScreenShot
 <div align="center">
-    <img src="https://s2.ax1x.com/2019/10/19/KnMXPH.png" height=300>
-    <img src="https://s2.ax1x.com/2019/10/19/KnMjGd.png" height=300>
-    <img src="https://s2.ax1x.com/2019/10/19/KnMLIe.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/20/KKUwuD.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/20/KKUUgK.png" height=300>
+    <img src="https://s2.ax1x.com/2019/10/20/KKUajO.png" height=300>
 </div>
 
 ## Features

@@ -4,7 +4,7 @@ import 'package:num_plus_plus/src/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    final lp = LaTexParser('8!+2');
+    final lp = LaTexParser('8!+2E2');
     print(lp.stream);
     // print(lp.outputstack);
     print(lp.parse());
