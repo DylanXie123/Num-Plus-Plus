@@ -37,13 +37,21 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       width: double.infinity,
       alignment: Alignment.centerRight,
       child: Consumer<MathModel>(
-        builder: (context, model, _) => Text(
-          (model.result=='')?'':'= '+model.result,
-          style: TextStyle(
-            fontFamily: 'Minion-Pro',
-            fontSize: animation.value - 5,
-          ),
-        ),
+        builder: (context, model, _) {
+          final _textController = TextEditingController();
+          _textController.text = (model.result.last=='')?'':'= ' + model.result.last;
+          return TextField(
+            controller: _textController,
+            readOnly: true,
+            textAlign: TextAlign.right,
+            autofocus: true,
+            style: TextStyle(
+              fontFamily: 'Minion-Pro',
+              fontSize: animation.value - 5,
+            ),
+            decoration: null,
+          );
+        }
       ),
     );
   }

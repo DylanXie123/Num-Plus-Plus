@@ -86,7 +86,7 @@ class LaTexParser  {
 
     for (var i = 0; i < stream.length; i++) {
       /// wrong syntax: fr fo lr lo oo (b/r postfix or wrong)
-      /// need times: bb bf bl rb rf
+      /// need times: bb bf bl rb rf !f !l
       /// negative number: -(bfl) / l-(bfl)
       
       // negative number
@@ -113,6 +113,18 @@ class LaTexParser  {
       if (i<stream.length-1 && stream[i][1]=='r') {
         switch (stream[i+1][1]) {
           case 'b':
+          case 'f':
+            stream.insert(i+1, ['\\times', ['o', 3, 'l']]);
+            i++;
+            break;
+          default:
+            break;
+        }
+        continue;
+      }
+      if (i<stream.length-1 && stream[i][0]=='!') {
+        switch (stream[i+1][1]) {
+          case 'l':
           case 'f':
             stream.insert(i+1, ['\\times', ['o', 3, 'l']]);
             i++;

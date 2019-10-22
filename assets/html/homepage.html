@@ -51,25 +51,26 @@ var mathField = MQ.MathField(mathFieldSpan, {
 
 function addCmd(message) {
     mathField.cmd(message);
-    mathField.focus();
+    post();
+}
+
+function addString(message) {
+    mathField.write(message);
     post();
 }
 
 function delString() {
     mathField.keystroke('Backspace');
-    mathField.focus();
     post();
 }
 
 function delAll() {
     mathField.keystroke('Ctrl-A Backspace');
-    mathField.focus();
     post();
 }
 
 function simulateKey(key) {
     mathField.keystroke(key);
-    mathField.focus();
     post();
 }
 

@@ -80,14 +80,14 @@ class SettingPage extends StatelessWidget {
             leading: Icon(MaterialCommunityIcons.getIconData("github-circle")),
             title: Text('Github'),
             onTap: () {
-              _launchURL('https://github.com/DXie123/calculator/');
+              _launchURL('https://github.com/DXie123/Num-Plus-Plus');
             },
           ),
           ListTile(
             leading: Icon(MaterialCommunityIcons.getIconData("email-edit-outline"),),
             title: Text('Email'),
             onTap: () {
-              _launchURL('mailto:dylanxie123@outlook.com?subject=Flutter%20Calculator');
+              _launchURL('mailto:dylanxie123@outlook.com?subject=Num++');
             },
           ),
           ListTile(

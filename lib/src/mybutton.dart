@@ -64,11 +64,11 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Icon(MaterialCommunityIcons.getIconData("backspace-outline")),
       onPressed: () {
-        mathModel.isClearable = false;
+        mathModel.toNotClearable();
         mathModel.webViewController.evaluateJavascript("delString()");
       },
       onLongPress: () async {
-        if (mathModel.latexExp != '') {
+        if (mathModel.latexExp.last != '') {
           mathModel.webViewController.evaluateJavascript("delAll()");
           await mathModel.clearAnimationController?.forward();
           mathModel.clearAnimationController?.reset();
@@ -459,7 +459,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     button.add(MyButton(
       child: Icon(Icons.arrow_back, color: fontColor,),
       onPressed: () {
-        widget.mathModel.isClearable = false;
+        widget.mathModel.toNotClearable();
         widget.mathModel.addKey('Left');
       },
     ));
@@ -467,7 +467,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     button.add(MyButton(
       child: Icon(Icons.arrow_forward, color: fontColor,),
       onPressed: () {
-        widget.mathModel.isClearable = false;
+        widget.mathModel.toNotClearable();
         widget.mathModel.addKey('Right');
       },
     ));
@@ -477,7 +477,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        if (widget.mathModel.history.isNotEmpty) {
+        if (widget.mathModel.result.length > 1) {
           widget.mathModel.addExpression('Ans');
         } else {
           final snackBar = SnackBar(

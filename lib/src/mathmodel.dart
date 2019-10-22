@@ -6,82 +6,86 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'latex.dart';
 
 class MathModel with ChangeNotifier {
-  String latexExp = '';
-  String result = '';
-  List<String> history = [];
-
-  WebViewController webViewController;
-  bool isClearable = false;
-  bool isFunction = false;
+  List<String> latexExp = [''];
+  List<String> result = [''];
+  int resultIndex = 0;
   int precision = 10;
   bool isRadMode = true;
-
+  bool _isClearable = false;
+  
+  WebViewController webViewController;
   AnimationController clearAnimationController;
   AnimationController equalAnimationController;
 
   void calcNumber() {
     print('exp: ' + latexExp.toString());
-    if (latexExp.isEmpty) {
-      result = '';
+    if (latexExp.last.isEmpty) {
+      result.last = '';
     } else {
       try {
         LaTexParser lp;
-        if (history.isEmpty) {
-          lp = LaTexParser(latexExp, isRadMode: isRadMode);
+        if (result.length <= 1) {
+          lp = LaTexParser(latexExp.last, isRadMode: isRadMode);
         } else {
-          lp = LaTexParser(latexExp.replaceFirst('Ans', '{'+history.last.toString()+'}'), isRadMode: isRadMode);
+          lp = LaTexParser(latexExp.last.replaceAll('Ans', '{'+result[result.length-2].toString()+'}'), isRadMode: isRadMode);
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
-        result = calc(mathexp, precision).toString();
+        result.last = calc(mathexp, precision).toString();
       } catch (e) {
-        result = '';
+        result.last = '';
         print('Error: '+ e.toString());
       }
     }
     notifyListeners();
   }
 
-  void toFunction() {
-    isFunction = true;
-    result = '';
-    notifyListeners();
+  void pressEqual() {
+    if (result.last.isNotEmpty) {
+      result.add(result.last);
+      latexExp.add('r'+latexExp.last);
+      _isClearable = true;
+      resultIndex = result.length - 1;
+      equalAnimationController.forward();
+      notifyListeners();
+    }
+    print(result);
   }
 
-  // void nSolveFunction() {
-  //   LatexParser lp = LatexParser();
-  //   lp.parse(latexExp);
-  //   if (lp.result.isSuccess) {
-  //     print('Parsed: ' + lp.result.value);
-  //     var f = MyFunction(lp.result.value);
-  //     result = f.nsolve().toString();
-  //     print(result);
-  //   } else {
-  //     print('Fail');
-  //     result = '';
-  //   }
-  //   notifyListeners();
-  // }
-
-  void pressEqual() {
-    if (result.isNotEmpty) {
-      history.add(result);
-      isClearable = true;
+  void checkHistory({toPrevious = true}) {
+    if (toPrevious) {
+      if (resultIndex>0) {
+        resultIndex--;
+      } else {
+        throw 'Out of Range';
+      }
+    } else {
+      if (resultIndex<result.length-1) {
+        resultIndex++;
+      } else {
+        throw 'Out of Range';
+      }
     }
-    equalAnimationController.forward();
-    notifyListeners();
+    webViewController.evaluateJavascript("delAll()");
+    String history = "r'${latexExp[resultIndex]}'";
     print(history);
+    webViewController.evaluateJavascript("addString($history)");
+    result.last = result[resultIndex];
+  }
+
+  void toNotClearable() {
+    _isClearable = false;
+    equalAnimationController.reset();
   }
 
   void addExpression(String msg, {bool isOperator = false}) {
-    if (isClearable) {
+    if (_isClearable) {
       webViewController.evaluateJavascript("delAll()");
-      isClearable = false;
+      toNotClearable();
       if (isOperator) {
         webViewController.evaluateJavascript("addCmd('Ans')");
       }
     }
-    equalAnimationController.reset();
     webViewController.evaluateJavascript("addCmd('$msg')");
   }
 
