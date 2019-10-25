@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mathmodel.dart';
+import 'settingpage.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;
@@ -197,14 +200,20 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final setting = Provider.of<SettingModel>(context, listen: false);
     const crossAxisCount = 7;
     keyboardAnimation = Tween<double>(begin: (width-10) / crossAxisCount * 3, end: 0).animate(curve);
+    if (setting.hideKeyboard == true) {
+      animationController.forward();
+    }
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         if (detail.delta.dy>0) {// move down
           animationController.forward();
+          setting.changeKeyboardMode(true);
         } else {
           animationController.reverse();
+          setting.changeKeyboardMode(false);
         }
       },
       child: Container(
@@ -227,8 +236,10 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
                   onPressed: () {
                     if (animationController.status == AnimationStatus.dismissed) {
                       animationController.forward();
+                      setting.changeKeyboardMode(true);
                     } else {
                       animationController.reverse();
+                      setting.changeKeyboardMode(false);
                     }
                   },
                   child: Icon(
@@ -462,6 +473,21 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         widget.mathModel.toNotClearable();
         widget.mathModel.addKey('Left');
       },
+      onLongPress: () {
+        try {
+          widget.mathModel.checkHistory(toPrevious: true);
+        } catch (e) {
+          final snackBar = SnackBar(
+            content: Text('No History Yet'),
+            duration: Duration(milliseconds: 500,),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: (){},
+            ),
+          );
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
+      },
     ));
 
     button.add(MyButton(
@@ -469,6 +495,21 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       onPressed: () {
         widget.mathModel.toNotClearable();
         widget.mathModel.addKey('Right');
+      },
+      onLongPress: () {
+        try {
+          widget.mathModel.checkHistory(toPrevious: false);
+        } catch (e) {
+          final snackBar = SnackBar(
+            content: Text('No History Yet'),
+            duration: Duration(milliseconds: 500,),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: (){},
+            ),
+          );
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
       },
     ));
 

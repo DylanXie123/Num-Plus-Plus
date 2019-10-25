@@ -43,7 +43,7 @@ class MathModel with ChangeNotifier {
   void pressEqual() {
     if (result.last.isNotEmpty) {
       result.add(result.last);
-      latexExp.add('r'+latexExp.last);
+      latexExp.add(latexExp.last);
       _isClearable = true;
       resultIndex = result.length - 1;
       equalAnimationController.forward();
@@ -52,7 +52,7 @@ class MathModel with ChangeNotifier {
     print(result);
   }
 
-  void checkHistory({toPrevious = true}) {
+  void checkHistory({@required toPrevious}) {
     if (toPrevious) {
       if (resultIndex>0) {
         resultIndex--;
@@ -67,9 +67,17 @@ class MathModel with ChangeNotifier {
       }
     }
     webViewController.evaluateJavascript("delAll()");
-    String history = "r'${latexExp[resultIndex]}'";
-    print(history);
-    webViewController.evaluateJavascript("addString($history)");
+    List<int> uniCode = latexExp[resultIndex].runes.toList();
+    for (var i = 0; i < uniCode.length; i++) {
+      if (uniCode[i] == 92) {
+        uniCode.insert(i, 92);
+        i++;
+      }
+    }
+    print(uniCode);
+    String history = String.fromCharCodes(uniCode);
+    print('history: ' + history);
+    webViewController.evaluateJavascript("addString('$history')");
     result.last = result[resultIndex];
   }
 

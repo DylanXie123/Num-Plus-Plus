@@ -4,13 +4,10 @@ import 'package:num_plus_plus/src/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    String a = '\\frac';
-    var b = "${a.codeUnits}";
-    print(b);
-    // final lp = LaTexParser('3!\\sin\\left(4\\right)');
-    // print(lp.stream);
-    // // print(lp.outputstack);
-    // print(lp.parse());
+    final lp = LaTexParser('3!\\sin\\left(4\\right)');
+    print(lp.stream);
+    // print(lp.outputstack);
+    print(lp.parse());
   });
 
   test('General Expression Benchmark', () {

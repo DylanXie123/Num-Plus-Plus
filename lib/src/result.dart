@@ -39,7 +39,11 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       child: Consumer<MathModel>(
         builder: (context, model, _) {
           final _textController = TextEditingController();
-          _textController.text = (model.result.last=='')?'':'= ' + model.result.last;
+          if (model.result.last!='' && animationController.status == AnimationStatus.dismissed) {
+            _textController.text = '= ' + model.result.last;
+          } else {
+            _textController.text = model.result.last;
+          }
           return TextField(
             controller: _textController,
             readOnly: true,

@@ -87,7 +87,7 @@ class SettingPage extends StatelessWidget {
             leading: Icon(MaterialCommunityIcons.getIconData("email-edit-outline"),),
             title: Text('Email'),
             onTap: () {
-              _launchURL('mailto:dylanxie123@outlook.com?subject=Num++');
+              _launchURL('mailto:dylanxie123@outlook.com?subject=num%2b%2b');
             },
           ),
           ListTile(
@@ -114,7 +114,8 @@ class SettingPage extends StatelessWidget {
 
 class SettingModel with ChangeNotifier {
   num precision;
-  bool isRadMode = true;
+  bool isRadMode;
+  bool hideKeyboard;
 
   Future changeSlider(double val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -130,10 +131,17 @@ class SettingModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future changeKeyboardMode(bool mode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    hideKeyboard = mode;
+    prefs.setBool('hideKeyboard', hideKeyboard);
+  }
+
   Future initVal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     precision = prefs.getDouble('precision') ?? 10;
     isRadMode = prefs.getBool('isRadMode') ?? true;
+    hideKeyboard = prefs.getBool('hideKeyboard') ?? false;
     notifyListeners();
   }
 
