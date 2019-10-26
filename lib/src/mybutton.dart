@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mathmodel.dart';
 import 'settingpage.dart';
@@ -478,8 +477,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
           widget.mathModel.checkHistory(toPrevious: true);
         } catch (e) {
           final snackBar = SnackBar(
-            content: Text('No History Yet'),
-            duration: Duration(milliseconds: 500,),
+            content: Text('This is the first result'),
+            duration: Duration(milliseconds: 700,),
             action: SnackBarAction(
               label: 'OK',
               onPressed: (){},
@@ -501,8 +500,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
           widget.mathModel.checkHistory(toPrevious: false);
         } catch (e) {
           final snackBar = SnackBar(
-            content: Text('No History Yet'),
-            duration: Duration(milliseconds: 500,),
+            content: Text('This is the last result'),
+            duration: Duration(milliseconds: 700,),
             action: SnackBarAction(
               label: 'OK',
               onPressed: (){},

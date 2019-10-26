@@ -51,6 +51,7 @@ var mathField = MQ.MathField(mathFieldSpan, {
 
 function addCmd(message) {
     mathField.cmd(message);
+    mathField.focus();
     post();
 }
 

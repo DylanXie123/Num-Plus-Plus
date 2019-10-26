@@ -22,7 +22,7 @@ A scientific & intutive calculator written in Flutter.
 <!-- ## Structure -->
 ## Plan
 I will try to implement these features in future release. Besides, feel free to open an issue.
-- [ ] Show History
+- [x] Show History
 - [ ] Solve Function
 - [ ] Plot Function
 - [ ] Matrix Calculation

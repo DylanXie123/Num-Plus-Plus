@@ -8,10 +8,10 @@ import 'latex.dart';
 class MathModel with ChangeNotifier {
   List<String> latexExp = [''];
   List<String> result = [''];
-  int resultIndex = 0;
-  int precision = 10;
-  bool isRadMode = true;
+  int _resultIndex = 0;
   bool _isClearable = false;
+  int precision;
+  bool isRadMode;
   
   WebViewController webViewController;
   AnimationController clearAnimationController;
@@ -45,7 +45,7 @@ class MathModel with ChangeNotifier {
       result.add(result.last);
       latexExp.add(latexExp.last);
       _isClearable = true;
-      resultIndex = result.length - 1;
+      _resultIndex = result.length - 1;
       equalAnimationController.forward();
       notifyListeners();
     }
@@ -54,31 +54,30 @@ class MathModel with ChangeNotifier {
 
   void checkHistory({@required toPrevious}) {
     if (toPrevious) {
-      if (resultIndex>0) {
-        resultIndex--;
+      if (_resultIndex>0) {
+        _resultIndex--;
       } else {
         throw 'Out of Range';
       }
     } else {
-      if (resultIndex<result.length-1) {
-        resultIndex++;
+      if (_resultIndex<result.length-1) {
+        _resultIndex++;
       } else {
         throw 'Out of Range';
       }
     }
     webViewController.evaluateJavascript("delAll()");
-    List<int> uniCode = latexExp[resultIndex].runes.toList();
+    List<int> uniCode = latexExp[_resultIndex].runes.toList();
     for (var i = 0; i < uniCode.length; i++) {
       if (uniCode[i] == 92) {
         uniCode.insert(i, 92);
         i++;
       }
     }
-    print(uniCode);
     String history = String.fromCharCodes(uniCode);
-    print('history: ' + history);
+    equalAnimationController.reset();
     webViewController.evaluateJavascript("addString('$history')");
-    result.last = result[resultIndex];
+    result.last = result[_resultIndex];
   }
 
   void toNotClearable() {
