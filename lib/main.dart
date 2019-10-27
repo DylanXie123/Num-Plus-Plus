@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final mathModel = Provider.of<MathModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -66,17 +65,12 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: MathBox(),
-            ),
+            Expanded(child: MathBox(),),
             Result(),
-            MathKeyBoard(
-              mathModel: mathModel,
-            ),
+            MathKeyBoard(),
           ],
         ),
       ),
     );
   }
 }
-

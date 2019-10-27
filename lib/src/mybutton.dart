@@ -41,11 +41,7 @@ class MyButton extends StatelessWidget {
 
 class MathKeyBoard extends StatelessWidget {
 
-  final MathModel mathModel;
-
-  const MathKeyBoard({Key key, @required this.mathModel}) : super(key: key);
-
-  List<Widget> _buildLowButton() {
+  List<Widget> _buildLowButton(MathModel mathModel) {
     List<Widget> button = [];
 
     for (var i = 7; i <= 9; i++) {
@@ -143,6 +139,7 @@ class MathKeyBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final mathModel = Provider.of<MathModel>(context, listen: false);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -155,7 +152,7 @@ class MathKeyBoard extends StatelessWidget {
             child: GridView.count(
               physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 5,
-              children: _buildLowButton(),
+              children: _buildLowButton(mathModel),
             ),
           ),
         ),
@@ -275,6 +272,10 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         widget.mathModel.addExpression('\\sin');
         widget.mathModel.addExpression('(');
       },
+      onLongPress: () {
+        widget.mathModel.addExpression('\\arcsin');
+        widget.mathModel.addExpression('(');
+      },
     ));
 
     button.add(MyButton(
@@ -285,6 +286,10 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         widget.mathModel.addExpression('\\cos');
         widget.mathModel.addExpression('(');
       },
+      onLongPress: () {
+        widget.mathModel.addExpression('\\arccos');
+        widget.mathModel.addExpression('(');
+      },
     ));
 
     button.add(MyButton(
@@ -293,6 +298,10 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontColor: fontColor,
       onPressed: () {
         widget.mathModel.addExpression('\\\\tan');
+        widget.mathModel.addExpression('(');
+      },
+      onLongPress: () {
+        widget.mathModel.addExpression('\\arctan');
         widget.mathModel.addExpression('(');
       },
     ));
@@ -339,42 +348,6 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontColor: fontColor,
       onPressed: () {
         widget.mathModel.addExpression('\\ln');
-        widget.mathModel.addExpression('(');
-      },
-    ));
-
-    button.add(MyButton(
-      child: Icon(// arcsin
-        IconData(0xe902, fontFamily: 'Keyboard'),
-        color: fontColor,
-        size: iconSize,
-      ),
-      onPressed: () {
-        widget.mathModel.addExpression('\\arcsin');
-        widget.mathModel.addExpression('(');
-      },
-    ));
-
-    button.add(MyButton(
-      child: Icon(// arccos
-        IconData(0xe901, fontFamily: 'Keyboard'),
-        color: fontColor,
-        size: iconSize,
-      ),
-      onPressed: () {
-        widget.mathModel.addExpression('\\arccos');
-        widget.mathModel.addExpression('(');
-      },
-    ));
-
-    button.add(MyButton(
-      child: Icon(// arctan
-        IconData(0xe903, fontFamily: 'Keyboard'),
-        color: fontColor,
-        size: iconSize,
-      ),
-      onPressed: () {
-        widget.mathModel.addExpression('\\arctan');
         widget.mathModel.addExpression('(');
       },
     ));
@@ -465,6 +438,33 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         widget.mathModel.addExpression('^');
       },
     ));
+
+    button.add(MyButton(
+      child: Text('M'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addExpression('\\\\bmatrix');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('C+'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addKey('Shift-Spacebar');
+      },
+    ));
+
+    button.add(MyButton(
+      child: Text('R+'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        widget.mathModel.addKey('Shift-Enter');
+      },
+    ));   
 
     button.add(MyButton(
       child: Icon(Icons.arrow_back, color: fontColor,),
