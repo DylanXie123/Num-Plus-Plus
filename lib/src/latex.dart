@@ -1,5 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:vector_math/vector_math_64.dart';
 import 'dart:math' as math;
 
 /// 1. Tokenize input string
@@ -344,4 +345,30 @@ class LaTexParser  {
     
   }
   
+}
+
+class MatrixParser {
+  final String inputString;
+  final bool isRadMode;
+  List<String> matrixString;
+
+  MatrixParser(this.inputString, {this.isRadMode = true}) {
+    String temp = inputString.replaceFirst(r'\begin{bmatrix}', '');
+    temp = temp.replaceFirst(r'\end{bmatrix}', '');
+    matrixString = temp.split(RegExp(r'&|\\\\'));
+  }
+
+  Matrix2 parse() {
+    List<double> matrixNumber = [];
+    for (var i = 0; i < matrixString.length; i++) {
+      final lp = LaTexParser(matrixString[i], isRadMode: isRadMode);
+      Expression exp = lp.parse();
+      num val = exp.evaluate(EvaluationType.REAL, ContextModel());
+      matrixNumber.add(val);
+    }
+    assert(matrixNumber.length == 4);
+    print(matrixNumber);
+    return Matrix2.fromList(matrixNumber);
+  }
+
 }
