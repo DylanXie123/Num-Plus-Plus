@@ -44,7 +44,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+
+  TabController tabController;
+  List tabs = ["Basic", "Matrix"];
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: tabs.length, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,12 +76,22 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
+        title: TabBar(
+          controller: tabController,
+          labelColor: Colors.black,
+          tabs: <Widget>[
+            Tab(text: 'Basic',),
+            Tab(text: 'Matrix',),
+          ],
+          onTap: null,
+          // TODO: Display a matrix when tap matrix button
+        ),
       ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Expanded(child: MathBox(),),
-            Result(),
+            Result(tabController: tabController,),
             MathKeyBoard(),
           ],
         ),

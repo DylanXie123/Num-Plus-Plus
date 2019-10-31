@@ -4,6 +4,10 @@ import 'package:provider/provider.dart';
 import 'mathmodel.dart';
 
 class Result extends StatefulWidget {
+  final TabController tabController;
+  
+  Result({@required this.tabController});
+
   @override
   _ResultState createState() => _ResultState();
 }
@@ -44,16 +48,35 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
           } else {
             _textController.text = model.result.last;
           }
-          return TextField(
-            controller: _textController,
-            readOnly: true,
-            textAlign: TextAlign.right,
-            autofocus: true,
-            style: TextStyle(
-              fontFamily: 'Minion-Pro',
-              fontSize: animation.value - 5,
-            ),
-            decoration: null,
+          if (model.latexExp.last.contains('matrix')) {
+            widget.tabController.index = 1;
+          } else {
+            widget.tabController.index = 0;
+          }
+          return TabBarView(
+            controller: widget.tabController,
+            children: <Widget>[
+              TextField(
+                controller: _textController,
+                readOnly: true,
+                textAlign: TextAlign.right,
+                autofocus: true,
+                style: TextStyle(
+                  fontFamily: 'Minion-Pro',
+                  fontSize: animation.value - 5,
+                ),
+              ),
+              ToggleButtons(
+                children: <Widget>[
+                  Text('Invert'),
+                  Text('TBD'),
+                ],
+                isSelected: [false, false],
+                onPressed: (index) {
+                  print(index);
+                },
+              ),
+            ],
           );
         }
       ),
