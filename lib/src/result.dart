@@ -20,6 +20,10 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    final mathModel = Provider.of<MathModel>(context, listen: false);
+    mathModel.addListener(() {
+      mathModel.indexCheck()?animationController.forward():animationController.reset();
+    });
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);
     animation = Tween<double>(begin: 30.0, end: 60.0).animate(curve)
@@ -34,8 +38,6 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final mathModel = Provider.of<MathModel>(context, listen: false);
-    mathModel.equalAnimationController = animationController;
     return Container(
       height: animation.value,
       width: double.infinity,
@@ -43,16 +45,16 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       child: Consumer<MathModel>(
         builder: (context, model, _) {
           final _textController = TextEditingController();
-          if (model.result.last!='' && animationController.status == AnimationStatus.dismissed) {
-            _textController.text = '= ' + model.result.last;
+          if (model.result!='' && animationController.status == AnimationStatus.dismissed) {
+            _textController.text = '= ' + model.result;
           } else {
-            _textController.text = model.result.last;
+            _textController.text = model.result;
           }
-          if (model.latexExp.last.contains('matrix')) {
-            widget.tabController.index = 1;
-          } else {
-            widget.tabController.index = 0;
-          }
+          // if (model.latexExp.last.contains('matrix')) {
+          //   widget.tabController.index = 1;
+          // } else {
+          //   widget.tabController.index = 0;
+          // }
           return TabBarView(
             controller: widget.tabController,
             children: <Widget>[
@@ -61,6 +63,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
                 readOnly: true,
                 textAlign: TextAlign.right,
                 autofocus: true,
+                decoration: null,
                 style: TextStyle(
                   fontFamily: 'Minion-Pro',
                   fontSize: animation.value - 5,

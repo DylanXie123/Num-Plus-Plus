@@ -16,8 +16,10 @@ class SettingPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back,),
           onPressed: () {
-            mathModel.precision = setting.precision.toInt();
-            mathModel.isRadMode = setting.isRadMode;
+            mathModel.changeSetting(
+              precision: setting.precision.toInt(),
+              isRadMode: setting.isRadMode,
+            );
             mathModel.calcNumber();
             Navigator.pop(context);
           },

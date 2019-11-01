@@ -88,46 +88,40 @@ class MathBox extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
     final mathModel = Provider.of<MathModel>(context, listen: false);
     return Stack(
       overflow: Overflow.visible,
       children: <Widget>[
         WebView(
           onWebViewCreated: (controller) {
-            mathModel.webViewController = controller;
-            mathModel.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
+            mathBoxController.webViewController = controller;
+            mathBoxController.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
           },
           javascriptMode: JavascriptMode.unrestricted,
           javascriptChannels: Set.from([
             JavascriptChannel(
               name: 'latexString',
               onMessageReceived: (JavascriptMessage message) {
-                mathModel.latexExp.last = message.message;
+                mathModel.updateExpression(message.message);
                 mathModel.calcNumber();
               }
             ),
           ]),
-          onPageFinished: (str) {
-            assert(mathModel.webViewController != null);
-          },
         ),
-        Consumer<MathModel>(
-          builder: (context, mathModel, _) => Container(
-            color: Colors.grey[50],
-            height: (mathModel.webViewController == null)?double.infinity:0,
-          ),
-        ), // cover initial white when creating webview
-        ClearAnimation(mathModel: mathModel,),
+        // Consumer<MathBoxController>(
+        //   builder: (context, mathBoxController, _) => Container(
+        //     color: Colors.grey[50],
+        //     height: (mathBoxController.webViewController == null)?double.infinity:0,
+        //   ),
+        // ), // cover initial white when creating webview
+        ClearAnimation(),
       ],
     );
   }
 }
 
 class ClearAnimation extends StatefulWidget {
-  final MathModel mathModel;
-
-  const ClearAnimation({Key key, @required this.mathModel, }) : super(key: key);
-  
   @override
   _ClearAnimationState createState() => _ClearAnimationState();
 }
@@ -138,12 +132,13 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   Animation animation;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final size = MediaQuery.of(context).size;
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
-    animation = Tween<double>(begin: 0, end: 1000).animate(curve);
-    widget.mathModel.clearAnimationController = animationController;
+    animation = Tween<double>(begin: 0, end: size.aspectRatio<1?size.height:size.width).animate(curve);
+    Provider.of<MathBoxController>(context, listen: false).clearAnimationController = animationController;
   }
 
   @override
@@ -173,4 +168,36 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
       animation: animation,
     );
   }
+}
+
+class MathBoxController {
+
+  MathModel mathModel;
+  WebViewController webViewController;
+  AnimationController clearAnimationController;
+
+  MathBoxController(this.mathModel);
+
+  void addExpression(String msg, {bool isOperator = false}) {
+    if (mathModel.indexCheck()) {
+      deleteAllExpression();
+      if (isOperator) {
+        webViewController.evaluateJavascript("addCmd('Ans')");
+      }
+    }
+    webViewController.evaluateJavascript("addCmd('$msg')");
+  }
+
+  void addKey(String key) {
+    webViewController.evaluateJavascript("simulateKey('$key')");
+  }
+
+  void deleteExpression() {
+    webViewController.evaluateJavascript("delString()");
+  }
+
+  void deleteAllExpression() {
+    webViewController.evaluateJavascript("delAll()");
+  }
+  
 }

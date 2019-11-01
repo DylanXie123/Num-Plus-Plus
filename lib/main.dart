@@ -9,21 +9,8 @@ import 'src/mybutton.dart';
 import 'src/mathmodel.dart';
 import 'src/settingpage.dart';
 
-void main() async {
-  final mathModel = MathModel();
-  final settings = SettingModel();
-  await settings.initVal();
-  mathModel.precision = settings.precision.toInt();
-  mathModel.isRadMode = settings.isRadMode;
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: settings,),
-        ChangeNotifierProvider.value(value: mathModel,),
-      ],
-      child: MyApp(),
-    ),
-  );
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +26,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (_) => SettingModel(),),
+          ChangeNotifierProvider(builder: (_) => MathModel(),),
+          ProxyProvider<MathModel, MathBoxController>(
+            builder: (context, mathModel, _) => MathBoxController(mathModel),
+          ),
+        ],
+        child: HomePage(),
+      ),
     );
   }
 }

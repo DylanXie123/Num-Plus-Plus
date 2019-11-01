@@ -1,103 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 // import 'function.dart';
 import 'latex.dart';
 
 class MathModel with ChangeNotifier {
-  List<String> latexExp = [''];
-  List<String> result = [''];
-  int _resultIndex = 0;
-  bool _isClearable = false;
-  int precision;
-  bool isRadMode;
+  List<String> _latexExp = [''];
+  List<String> _result = [''];
+  int _resultIndex = -1;
+  int _precision = 10;
+  bool _isRadMode = true;
   
-  WebViewController webViewController;
   AnimationController clearAnimationController;
-  AnimationController equalAnimationController;
+
+  String get result => _result.last;
+
+  void changeSetting({int precision, bool isRadMode}) {
+    this._precision = precision;
+    this._isRadMode = isRadMode;
+  }
+
+  bool indexCheck() => 
+    _resultIndex+1 == _latexExp.length ? true : false;
+
+  void pointLast() {
+    _resultIndex = _latexExp.length - 1;
+    notifyListeners();
+  }
+
+  void updateExpression(String expression) {
+    if (_resultIndex+1 == _latexExp.length) {
+      _latexExp.add('');
+      _result.add('');
+    } else {
+      _latexExp[_resultIndex+1] = expression;
+    }
+  }
 
   void calcNumber() {
-    print('exp: ' + latexExp.toString());
-    if (latexExp.last.isEmpty) {
-      result.last = '';
+    print('exp: ' + _latexExp.toString());
+    if (_latexExp.last.isEmpty) {
+      _result.last = '';
     } else {
       try {
         LaTexParser lp;
-        if (result.length <= 1) {
-          lp = LaTexParser(latexExp.last, isRadMode: isRadMode);
+        if (_result.length <= 1) {
+          lp = LaTexParser(_latexExp.last, isRadMode: _isRadMode);
         } else {
-          lp = LaTexParser(latexExp.last.replaceAll('Ans', '{'+result[result.length-2].toString()+'}'), isRadMode: isRadMode);
+          lp = LaTexParser(_latexExp.last.replaceAll('Ans', '{'+_result[_result.length-2].toString()+'}'), isRadMode: _isRadMode);
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
-        result.last = calc(mathexp, precision).toString();
+        print('Result Length: ' + _result.length.toString());
+        _result.last = calc(mathexp, _precision).toString();
       } catch (e) {
-        result.last = '';
+        _result.last = '';
         print('Error: '+ e.toString());
       }
     }
     notifyListeners();
   }
 
-  void pressEqual() {
-    if (result.last.isNotEmpty) {
-      result.add(result.last);
-      latexExp.add(latexExp.last);
-      _isClearable = true;
-      _resultIndex = result.length - 1;
-      equalAnimationController.forward();
-      notifyListeners();
-    }
-    print(result);
-  }
-
-  void checkHistory({@required toPrevious}) {
+  String checkHistory({@required toPrevious}) {
     if (toPrevious) {
-      if (_resultIndex>0) {
-        _resultIndex--;
-      } else {
+      if (_resultIndex<0) {
         throw 'Out of Range';
       }
     } else {
-      if (_resultIndex<result.length-1) {
+      if (_resultIndex+2<_result.length) {
         _resultIndex++;
       } else {
         throw 'Out of Range';
       }
     }
-    webViewController.evaluateJavascript("delAll()");
-    List<int> uniCode = latexExp[_resultIndex].runes.toList();
+    List<int> uniCode = _latexExp[_resultIndex].runes.toList();
     for (var i = 0; i < uniCode.length; i++) {
       if (uniCode[i] == 92) {
         uniCode.insert(i, 92);
         i++;
       }
     }
-    String history = String.fromCharCodes(uniCode);
-    equalAnimationController.reset();
-    webViewController.evaluateJavascript("addString('$history')");
-    result.last = result[_resultIndex];
-  }
-
-  void toNotClearable() {
-    _isClearable = false;
-    equalAnimationController.reset();
-  }
-
-  void addExpression(String msg, {bool isOperator = false}) {
-    if (_isClearable) {
-      webViewController.evaluateJavascript("delAll()");
-      toNotClearable();
-      if (isOperator) {
-        webViewController.evaluateJavascript("addCmd('Ans')");
-      }
-    }
-    webViewController.evaluateJavascript("addCmd('$msg')");
-  }
-
-  void addKey(String key) {
-    webViewController.evaluateJavascript("simulateKey('$key')");
+    return String.fromCharCodes(uniCode);
   }
 
 }
