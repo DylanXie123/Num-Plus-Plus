@@ -95,8 +95,8 @@ class MathBox extends StatelessWidget {
       children: <Widget>[
         WebView(
           onWebViewCreated: (controller) {
+            controller.loadUrl("http://localhost:8080/assets/html/homepage.html");
             mathBoxController.webViewController = controller;
-            mathBoxController.webViewController.loadUrl("http://localhost:8080/assets/html/homepage.html");
           },
           javascriptMode: JavascriptMode.unrestricted,
           javascriptChannels: Set.from([
@@ -105,6 +105,12 @@ class MathBox extends StatelessWidget {
               onMessageReceived: (JavascriptMessage message) {
                 mathModel.updateExpression(message.message);
                 mathModel.calcNumber();
+              }
+            ),
+            JavascriptChannel(
+              name: 'clearable',
+              onMessageReceived: (JavascriptMessage message) {
+                mathModel.changeClearable(message.message == 'false'?false:true);
               }
             ),
           ]),
@@ -172,32 +178,31 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
 
 class MathBoxController {
 
-  MathModel mathModel;
-  WebViewController webViewController;
+  WebViewController _webViewController;
   AnimationController clearAnimationController;
 
-  MathBoxController(this.mathModel);
+  set webViewController(WebViewController controller) {
+    this._webViewController = controller;
+  }
 
   void addExpression(String msg, {bool isOperator = false}) {
-    if (mathModel.indexCheck()) {
-      deleteAllExpression();
-      if (isOperator) {
-        webViewController.evaluateJavascript("addCmd('Ans')");
-      }
-    }
-    webViewController.evaluateJavascript("addCmd('$msg')");
+    _webViewController.evaluateJavascript("addCmd('$msg', {isOperator: ${isOperator.toString()}})");
+  }
+
+  void equal() {
+    _webViewController.evaluateJavascript("equal()");
   }
 
   void addKey(String key) {
-    webViewController.evaluateJavascript("simulateKey('$key')");
+    _webViewController.evaluateJavascript("simulateKey('$key')");
   }
 
   void deleteExpression() {
-    webViewController.evaluateJavascript("delString()");
+    _webViewController.evaluateJavascript("delString()");
   }
 
   void deleteAllExpression() {
-    webViewController.evaluateJavascript("delAll()");
+    _webViewController.evaluateJavascript("delAll()");
   }
   
 }

@@ -22,7 +22,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
     super.initState();
     final mathModel = Provider.of<MathModel>(context, listen: false);
     mathModel.addListener(() {
-      mathModel.indexCheck()?animationController.forward():animationController.reset();
+      mathModel.isClearable?animationController.forward():animationController.reset();
     });
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);

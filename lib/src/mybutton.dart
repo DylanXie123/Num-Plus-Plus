@@ -42,7 +42,7 @@ class MyButton extends StatelessWidget {
 
 class MathKeyBoard extends StatelessWidget {
 
-  List<Widget> _buildLowButton(MathBoxController mathBoxController, MathModel mathModel) {
+  List<Widget> _buildLowButton(MathBoxController mathBoxController) {
     List<Widget> button = [];
 
     for (var i = 7; i <= 9; i++) {
@@ -62,16 +62,11 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Icon(MaterialCommunityIcons.getIconData("backspace-outline")),
-      onPressed: () {
-        mathBoxController.deleteExpression();
-      },
+      onPressed: mathBoxController.deleteExpression,
       onLongPress: () async {
         mathBoxController.deleteAllExpression();
-        if (mathModel.result != '') {
-          mathBoxController.deleteAllExpression();
-          await mathBoxController.clearAnimationController?.forward();
-          mathBoxController.clearAnimationController?.reset();
-        } 
+        await mathBoxController.clearAnimationController?.forward();
+        mathBoxController.clearAnimationController?.reset();
       },
     ));
 
@@ -156,7 +151,7 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Text('='),
-      onPressed: mathModel.pointLast,
+      onPressed: mathBoxController.equal,
     ));
 
     button.add(MyButton(
@@ -186,7 +181,6 @@ class MathKeyBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
-    final mathModel = Provider.of<MathModel>(context, listen: false);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -199,7 +193,7 @@ class MathKeyBoard extends StatelessWidget {
             child: GridView.count(
               physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 6,
-              children: _buildLowButton(mathBoxController, mathModel),
+              children: _buildLowButton(mathBoxController),
             ),
           ),
         ),
@@ -434,8 +428,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       },
       onLongPress: () {
         try {
-          final mathModel = Provider.of<MathModel>(context, listen: false);
-          mathModel.checkHistory(toPrevious: true);
+          final expression = Provider.of<MathModel>(context, listen: false).checkHistory(toPrevious: true);
+          mathBoxController.addExpression(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the first result'),
@@ -457,8 +451,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       },
       onLongPress: () {
         try {
-          final mathModel = Provider.of<MathModel>(context, listen: false);
-          mathModel.checkHistory(toPrevious: false);
+          final expression = Provider.of<MathModel>(context, listen: false).checkHistory(toPrevious: false);
+          mathBoxController.addExpression(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the last result'),

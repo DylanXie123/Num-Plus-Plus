@@ -7,34 +7,32 @@ import 'latex.dart';
 class MathModel with ChangeNotifier {
   List<String> _latexExp = [''];
   List<String> _result = [''];
-  int _resultIndex = -1;
   int _precision = 10;
   bool _isRadMode = true;
-  
-  AnimationController clearAnimationController;
+  bool _isClearable = false;
+
+  int _resultIndex = 0;
 
   String get result => _result.last;
+  bool get isClearable => _isClearable;
+  
+  void changeClearable(bool b) {
+    _isClearable = b;
+    if (_isClearable) {
+      _latexExp.add('');
+      _result.add(_result.last);
+      _resultIndex = _latexExp.length - 1;
+    }
+    notifyListeners();
+  }
 
   void changeSetting({int precision, bool isRadMode}) {
     this._precision = precision;
     this._isRadMode = isRadMode;
   }
 
-  bool indexCheck() => 
-    _resultIndex+1 == _latexExp.length ? true : false;
-
-  void pointLast() {
-    _resultIndex = _latexExp.length - 1;
-    notifyListeners();
-  }
-
   void updateExpression(String expression) {
-    if (_resultIndex+1 == _latexExp.length) {
-      _latexExp.add('');
-      _result.add('');
-    } else {
-      _latexExp[_resultIndex+1] = expression;
-    }
+    _latexExp.last = expression;
   }
 
   void calcNumber() {
@@ -51,7 +49,6 @@ class MathModel with ChangeNotifier {
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
-        print('Result Length: ' + _result.length.toString());
         _result.last = calc(mathexp, _precision).toString();
       } catch (e) {
         _result.last = '';
@@ -63,7 +60,9 @@ class MathModel with ChangeNotifier {
 
   String checkHistory({@required toPrevious}) {
     if (toPrevious) {
-      if (_resultIndex<0) {
+      if (_resultIndex>0) {
+        _resultIndex--;
+      } else {
         throw 'Out of Range';
       }
     } else {
@@ -80,7 +79,10 @@ class MathModel with ChangeNotifier {
         i++;
       }
     }
-    return String.fromCharCodes(uniCode);
+    _latexExp.last = String.fromCharCodes(uniCode);
+    _result.last = _result[_resultIndex];
+    notifyListeners();
+    return _latexExp.last;
   }
 
 }

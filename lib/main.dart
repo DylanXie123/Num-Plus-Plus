@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(builder: (_) => SettingModel(),),
           ChangeNotifierProvider(builder: (_) => MathModel(),),
-          ProxyProvider<MathModel, MathBoxController>(
-            builder: (context, mathModel, _) => MathBoxController(mathModel),
-          ),
+          Provider(builder: (context) => MathBoxController(),),
         ],
         child: HomePage(),
       ),

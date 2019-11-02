@@ -49,34 +49,64 @@ var mathField = MQ.MathField(mathFieldSpan, {
     },
 });
 
-function addCmd(message) {
+var isClearable = false;
+
+document.body.onclick = function() {
+    isClearable = false;
+    postClearable();
+}
+
+function addCmd(message, {isOperator = false}) {
+    if(isClearable) {
+        delAll();
+        isClearable = false;
+        postClearable();
+        if(isOperator) {
+            mathField.cmd('Ans');
+        }
+    }
     mathField.cmd(message);
     mathField.focus();
-    post();
+    postLaTex();
+}
+
+function equal() {
+    isClearable = true;
+    postClearable();
 }
 
 function addString(message) {
     mathField.write(message);
-    post();
+    postLaTex();
 }
 
 function delString() {
     mathField.keystroke('Backspace');
-    post();
+    isClearable = false;
+    postLaTex();
+    postClearable();
 }
 
 function delAll() {
     mathField.keystroke('Ctrl-A Backspace');
-    post();
+    isClearable = false;
+    postLaTex();
+    postClearable();
 }
 
 function simulateKey(key) {
     mathField.keystroke(key);
-    post();
+    isClearable = false;
+    postLaTex();
+    postClearable();
 }
 
-function post() {
+function postLaTex() {
     latexString.postMessage(mathField.latex());
+}
+
+function postClearable() {
+    clearable.postMessage(isClearable.toString());
 }
 
 </script>
