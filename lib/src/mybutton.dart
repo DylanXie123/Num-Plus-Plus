@@ -429,7 +429,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       onLongPress: () {
         try {
           final expression = Provider.of<MathModel>(context, listen: false).checkHistory(toPrevious: true);
-          mathBoxController.addExpression(expression);
+          mathBoxController.deleteAllExpression();
+          mathBoxController.addString(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the first result'),
@@ -452,7 +453,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       onLongPress: () {
         try {
           final expression = Provider.of<MathModel>(context, listen: false).checkHistory(toPrevious: false);
-          mathBoxController.addExpression(expression);
+          mathBoxController.deleteAllExpression();
+          mathBoxController.addString(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the last result'),

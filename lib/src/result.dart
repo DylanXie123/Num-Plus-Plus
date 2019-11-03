@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:num_plus_plus/src/mathbox.dart';
 import 'package:provider/provider.dart';
 
 import 'mathmodel.dart';
@@ -42,23 +43,18 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       height: animation.value,
       width: double.infinity,
       alignment: Alignment.centerRight,
-      child: Consumer<MathModel>(
-        builder: (context, model, _) {
-          final _textController = TextEditingController();
-          if (model.result!='' && animationController.status == AnimationStatus.dismissed) {
-            _textController.text = '= ' + model.result;
-          } else {
-            _textController.text = model.result;
-          }
-          // if (model.latexExp.last.contains('matrix')) {
-          //   widget.tabController.index = 1;
-          // } else {
-          //   widget.tabController.index = 0;
-          // }
-          return TabBarView(
-            controller: widget.tabController,
-            children: <Widget>[
-              TextField(
+      child: TabBarView(
+        controller: widget.tabController,
+        children: <Widget>[
+          Consumer<MathModel>(
+            builder: (_, model, __) {
+              final _textController = TextEditingController();
+              if (model.result!='' && animationController.status == AnimationStatus.dismissed) {
+                _textController.text = '= ' + model.result;
+              } else {
+                _textController.text = model.result;
+              }
+              return TextField(
                 controller: _textController,
                 readOnly: true,
                 textAlign: TextAlign.right,
@@ -68,20 +64,29 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
                   fontFamily: 'Minion-Pro',
                   fontSize: animation.value - 5,
                 ),
-              ),
-              ToggleButtons(
+              );
+            },
+          ),
+          Consumer<MatrixModel>(
+            builder:(_, model, child) {
+              final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+              return ToggleButtons(
                 children: <Widget>[
                   Text('Invert'),
                   Text('TBD'),
                 ],
                 isSelected: [false, false],
                 onPressed: (index) {
-                  print(index);
+                  if (index==0) {
+                    model.invert();
+                    mathBoxController.deleteAllExpression();
+                    mathBoxController.addString(model.display());
+                  }
                 },
-              ),
-            ],
-          );
-        }
+              );
+            },
+          ),
+        ],
       ),
     );
   }

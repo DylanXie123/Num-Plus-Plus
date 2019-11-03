@@ -1,14 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:num_plus_plus/src/latex.dart';
+import 'package:ml_linalg/linalg.dart';
 
 void main() {
+  test('Parser Test', () {
+    const matrixString = r'\begin{bmatrix}1&2\\3&4\end{bmatrix}\div2';
+    MatrixParser mp = MatrixParser(matrixString);
+    Iterable res = mp.parse();
+    print(res);
+  });
   test('Test', () {
-    final str = r'\begin{bmatrix}4+5&2\\\sin\left(86\right)&6\end{bmatrix}';
-    final mp = MatrixParser(str);
-    print(mp.parse());
-    // List<double> l = [0.5,0.0,0.0,0.0,0.0,0.3333333432674408,0.0,0.0,0.0,0.0,0.25,0.0,0.0,0.0,0.0,1.0];
-    // Matrix4 t = Matrix4.fromList(l);
-    // print(Matrix4.inverted(t));
+    final matrix = Matrix.fromList([
+      [1.0, 2.0, 3.0, 4.0],
+      [5.0, 6.0, 7.0, 8.0],
+      [9.0, .0, -2.0, -3.0],
+    ]);
+    var temp = matrix.toList();
+    List rows = List(temp.length);
+    for (var i = 0; i < temp.length; i++) {
+      rows[i] = temp[i].join('&');
+    }
+    print(rows);
   });
 
 }

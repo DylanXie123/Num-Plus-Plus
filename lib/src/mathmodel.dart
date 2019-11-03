@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:ml_linalg/matrix.dart';
 
 // import 'function.dart';
 import 'latex.dart';
@@ -7,8 +8,8 @@ import 'latex.dart';
 class MathModel with ChangeNotifier {
   List<String> _latexExp = [''];
   List<String> _result = [''];
-  int _precision = 10;
-  bool _isRadMode = true;
+  int _precision;
+  bool _isRadMode;
   bool _isClearable = false;
 
   int _resultIndex = 0;
@@ -83,6 +84,42 @@ class MathModel with ChangeNotifier {
     _result.last = _result[_resultIndex];
     notifyListeners();
     return _latexExp.last;
+  }
+
+}
+
+class MatrixModel {
+  List<String> _matrixExp = [''];
+  List _resultExp = [''];
+
+  void updateExpression(String expression) {
+    _matrixExp.last = expression;
+  }
+
+  void invert() {
+    final mp = MatrixParser(_matrixExp.last);
+    Matrix matrix = mp.parse();
+    if (matrix.rowsNum == matrix.columnsNum) {
+      List<List<double>> temp = List.filled(matrix.rowsNum, List.filled(matrix.rowsNum, 0.0));
+      for (var i = 0; i < temp.length; i++) {
+        temp[i][i] = 1;
+      }
+      Matrix identity = Matrix.fromList(temp);
+      _resultExp.last = identity / matrix;
+    } else {
+      throw 'Not a square matrix';
+    }
+  }
+
+  String display() {
+    var matrixList = _resultExp.last.toList();
+    List rows = List(matrixList.length);
+    for (var i = 0; i < matrixList.length; i++) {
+      rows[i] = matrixList[i].join('&');
+    }
+    String matrixString = rows.join(r'\\\\');
+    matrixString = r'\\begin{bmatrix}' + matrixString + r'\\end{bmatrix}';
+    return matrixString;
   }
 
 }

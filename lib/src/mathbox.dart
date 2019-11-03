@@ -90,6 +90,7 @@ class MathBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
     final mathModel = Provider.of<MathModel>(context, listen: false);
+    final matrixModel = Provider.of<MatrixModel>(context, listen: false);
     return Stack(
       overflow: Overflow.visible,
       children: <Widget>[
@@ -103,8 +104,12 @@ class MathBox extends StatelessWidget {
             JavascriptChannel(
               name: 'latexString',
               onMessageReceived: (JavascriptMessage message) {
-                mathModel.updateExpression(message.message);
-                mathModel.calcNumber();
+                if (message.message.contains('matrix')) {
+                  matrixModel.updateExpression(message.message);
+                } else {
+                  mathModel.updateExpression(message.message);
+                  mathModel.calcNumber();
+                }
               }
             ),
             JavascriptChannel(
@@ -187,6 +192,10 @@ class MathBoxController {
 
   void addExpression(String msg, {bool isOperator = false}) {
     _webViewController.evaluateJavascript("addCmd('$msg', {isOperator: ${isOperator.toString()}})");
+  }
+
+  void addString(String msg) {
+    _webViewController.evaluateJavascript("addString('$msg')");
   }
 
   void equal() {

@@ -102,6 +102,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.4"
+  injector:
+    dependency: transitive
+    description:
+      name: injector
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.8"
   matcher:
     dependency: transitive
     description:
@@ -130,6 +137,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.9.6+3"
+  ml_linalg:
+    dependency: "direct main"
+    description:
+      name: ml_linalg
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "12.3.0"
   path:
     dependency: transitive
     description:
@@ -234,7 +248,7 @@ packages:
     source: hosted
     version: "5.1.4"
   vector_math:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: vector_math
       url: "https://pub.flutter-io.cn"
@@ -254,6 +268,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.5.0"
+  xrange:
+    dependency: transitive
+    description:
+      name: xrange
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.8"
   yaml:
     dependency: transitive
     description:

@@ -9,17 +9,12 @@ import 'mathmodel.dart';
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final setting = Provider.of<SettingModel>(context, listen: false);
     final mathModel = Provider.of<MathModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back,),
           onPressed: () {
-            mathModel.changeSetting(
-              precision: setting.precision.toInt(),
-              isRadMode: setting.isRadMode,
-            );
             mathModel.calcNumber();
             Navigator.pop(context);
           },
@@ -115,9 +110,13 @@ class SettingPage extends StatelessWidget {
 }
 
 class SettingModel with ChangeNotifier {
-  num precision;
-  bool isRadMode;
-  bool hideKeyboard;
+  num precision = 10;
+  bool isRadMode = true;
+  bool hideKeyboard = false;
+
+  SettingModel() {
+    initVal();
+  }
 
   Future changeSlider(double val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

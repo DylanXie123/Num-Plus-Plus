@@ -21,18 +21,28 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
       ),
     );
-    return MaterialApp(
-      title: 'Num++',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(builder: (_) => SettingModel(),),
-          ChangeNotifierProvider(builder: (_) => MathModel(),),
-          Provider(builder: (context) => MathBoxController(),),
-        ],
-        child: HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(builder: (_) => SettingModel(),),
+        ChangeNotifierProxyProvider<SettingModel, MathModel>(
+          initialBuilder: (_) => MathModel(),
+          builder: (_, settings, model) {
+            model.changeSetting(
+              precision: settings.precision.toInt(), 
+              isRadMode: settings.isRadMode
+            );
+            return model;
+          },
+        ),
+        Provider(builder: (context) => MatrixModel(),),
+        Provider(builder: (context) => MathBoxController(),),
+      ],
+      child: MaterialApp(
+        title: 'Num++',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomePage(),
       ),
     );
   }
