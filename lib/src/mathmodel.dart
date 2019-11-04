@@ -16,10 +16,11 @@ class MathModel with ChangeNotifier {
 
   String get result => _result.last;
   bool get isClearable => _isClearable;
+  int get resultLength => _result.length;
   
   void changeClearable(bool b) {
     _isClearable = b;
-    if (_isClearable) {
+    if (_isClearable && _latexExp.last.isNotEmpty) {
       _latexExp.add('');
       _result.add(_result.last);
       _resultIndex = _latexExp.length - 1;
@@ -96,8 +97,35 @@ class MatrixModel {
     _matrixExp.last = expression;
   }
 
+  void calc() {
+    final mp = MatrixParser(_matrixExp.last);
+    Matrix matrix = mp.parse();
+    _resultExp.last = matrix;
+  }
+
+  void norm() {
+    final mp = MatrixParser(_matrixExp.last);
+    if (mp.outputstack.length > 1) {
+      throw 'Unable to do norm';
+    }
+    Matrix matrix = mp.parse();
+    _resultExp.last = matrix.norm();
+  }
+
+  void transpose() {
+    final mp = MatrixParser(_matrixExp.last);
+    if (mp.outputstack.length > 1) {
+      throw 'Unable to do transpose';
+    }
+    Matrix matrix = mp.parse();
+    _resultExp.last = matrix.transpose();
+  }
+
   void invert() {
     final mp = MatrixParser(_matrixExp.last);
+    if (mp.outputstack.length > 1) {
+      throw 'Unable to do invert';
+    }
     Matrix matrix = mp.parse();
     if (matrix.rowsNum == matrix.columnsNum) {
       List<List<double>> temp = List.filled(matrix.rowsNum, List.filled(matrix.rowsNum, 0.0));
@@ -143,7 +171,7 @@ num intCheck(num a) {
   }
 }
 
-// TODO: live calc to transfer decimal to fraction
+// TODO: calc to transfer decimal to fraction
 List<int> deci2frac(num a) {
   double esp = 1e-15;
   List<int> res = [];

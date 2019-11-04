@@ -57,11 +57,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   TabController tabController;
   List tabs = ["Basic", "Matrix"];
+  ValueNotifier<int> tabIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
+    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+    tabController.addListener(() {
+      tabIndex.value = tabController.index;
+      // TODO: Throw Exception here: AnimationController.stop() called after AnimationController.dispose()
+      mathBoxController.deleteAllExpression();
+      if (tabController.index == 1) {
+        mathBoxController.addExpression('\\\\bmatrix');
+      }
+    });
   }
 
   @override
@@ -87,16 +97,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Tab(text: 'Basic',),
             Tab(text: 'Matrix',),
           ],
-          onTap: null,
-          // TODO: Display a matrix when tap matrix button
         ),
       ),
       body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Expanded(child: MathBox(),),
-            Result(tabController: tabController,),
-            MathKeyBoard(),
+            ValueListenableBuilder(
+              valueListenable: tabIndex,
+              builder: (context, index, _) => index==0?Result():MatrixButton(),
+            ),
+            ExpandKeyBoard(),
+            ValueListenableBuilder(
+              valueListenable: tabIndex,
+              builder: (context, index, _) => MathKeyBoard(mode: index,),
+            ),
           ],
         ),
       ),
