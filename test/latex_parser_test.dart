@@ -5,7 +5,7 @@ import 'package:num_plus_plus/src/latex.dart';
 void main() {
   test('Unit Test', () {
     final lp = LaTexParser('3!\\sin\\left(4\\right)');
-    print(lp.stream);
+    // print(lp.stream);
     // print(lp.outputstack);
     print(lp.parse());
   });

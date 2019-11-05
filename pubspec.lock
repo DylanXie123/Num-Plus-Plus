@@ -102,13 +102,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.4"
-  injector:
-    dependency: transitive
+  linalg:
+    dependency: "direct main"
     description:
-      name: injector
+      name: linalg
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.8"
+    version: "0.3.2"
   matcher:
     dependency: transitive
     description:
@@ -137,13 +137,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.9.6+3"
-  ml_linalg:
-    dependency: "direct main"
-    description:
-      name: ml_linalg
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "12.3.0"
   path:
     dependency: transitive
     description:
@@ -268,13 +261,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.5.0"
-  xrange:
-    dependency: transitive
-    description:
-      name: xrange
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.8"
   yaml:
     dependency: transitive
     description:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:ml_linalg/matrix.dart';
+import 'package:linalg/linalg.dart';
 
 // import 'function.dart';
 import 'latex.dart';
@@ -92,62 +92,52 @@ class MathModel with ChangeNotifier {
 class MatrixModel {
   List<String> _matrixExp = [''];
   List _resultExp = [''];
+  int _precision;
+  bool _isRadMode;
+
+  get result => _resultExp.last;
 
   void updateExpression(String expression) {
     _matrixExp.last = expression;
   }
 
   void calc() {
-    final mp = MatrixParser(_matrixExp.last);
+    final mp = MatrixParser(_matrixExp.last, precision: _precision);
     Matrix matrix = mp.parse();
     _resultExp.last = matrix;
   }
 
   void norm() {
-    final mp = MatrixParser(_matrixExp.last);
-    if (mp.outputstack.length > 1) {
-      throw 'Unable to do norm';
-    }
+    final mp = MatrixParser(_matrixExp.last, precision: _precision);
     Matrix matrix = mp.parse();
-    _resultExp.last = matrix.norm();
+    _resultExp.last = matrix.det();
   }
 
   void transpose() {
-    final mp = MatrixParser(_matrixExp.last);
-    if (mp.outputstack.length > 1) {
-      throw 'Unable to do transpose';
-    }
+    final mp = MatrixParser(_matrixExp.last, precision: _precision);
     Matrix matrix = mp.parse();
     _resultExp.last = matrix.transpose();
   }
 
   void invert() {
-    final mp = MatrixParser(_matrixExp.last);
-    if (mp.outputstack.length > 1) {
-      throw 'Unable to do invert';
-    }
+    final mp = MatrixParser(_matrixExp.last, precision: _precision);
     Matrix matrix = mp.parse();
-    if (matrix.rowsNum == matrix.columnsNum) {
-      List<List<double>> temp = List.filled(matrix.rowsNum, List.filled(matrix.rowsNum, 0.0));
-      for (var i = 0; i < temp.length; i++) {
-        temp[i][i] = 1;
-      }
-      Matrix identity = Matrix.fromList(temp);
-      _resultExp.last = identity / matrix;
-    } else {
-      throw 'Not a square matrix';
-    }
+    _resultExp.last = matrix.inverse();
   }
 
   String display() {
-    var matrixList = _resultExp.last.toList();
-    List rows = List(matrixList.length);
-    for (var i = 0; i < matrixList.length; i++) {
-      rows[i] = matrixList[i].join('&');
+    List<String> matrixRows = [];
+    for (var i = 0; i < _resultExp.last.m; i++) {
+      matrixRows.add(_resultExp.last[i].join('&'));
     }
-    String matrixString = rows.join(r'\\\\');
+    String matrixString = matrixRows.join(r'\\\\');
     matrixString = r'\\begin{bmatrix}' + matrixString + r'\\end{bmatrix}';
     return matrixString;
+  }
+
+  void changeSetting({int precision, bool isRadMode}) {
+    this._precision = precision;
+    this._isRadMode = isRadMode;
   }
 
 }
@@ -159,7 +149,6 @@ num calc(Expression mathexp, int precision) {
   }
   val = num.parse(val.toStringAsFixed(precision));
   val = intCheck(val);
-  print('Calc Result: ' + val.toString());
   return val;
 }
 

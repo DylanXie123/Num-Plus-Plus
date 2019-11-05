@@ -105,7 +105,7 @@ class MatrixButton extends StatelessWidget {
                     case 3:
                       model.norm();
                       mathBoxController.deleteAllExpression();
-                      mathBoxController.addString(model.display());
+                      mathBoxController.addString(model.result.toString());
                       break;
                     case 4:
                       mathBoxController.addKey('Shift-Enter');

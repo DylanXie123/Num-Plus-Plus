@@ -191,26 +191,32 @@ class MathBoxController {
   }
 
   void addExpression(String msg, {bool isOperator = false}) {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("addCmd('$msg', {isOperator: ${isOperator.toString()}})");
   }
 
   void addString(String msg) {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("addString('$msg')");
   }
 
   void equal() {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("equal()");
   }
 
   void addKey(String key) {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("simulateKey('$key')");
   }
 
   void deleteExpression() {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("delString()");
   }
 
   void deleteAllExpression() {
+    assert(_webViewController != null);
     _webViewController.evaluateJavascript("delAll()");
   }
   

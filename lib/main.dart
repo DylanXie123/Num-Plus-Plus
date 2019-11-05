@@ -25,16 +25,21 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(builder: (_) => SettingModel(),),
         ChangeNotifierProxyProvider<SettingModel, MathModel>(
-          initialBuilder: (_) => MathModel(),
-          builder: (_, settings, model) {
-            model.changeSetting(
+          initialBuilder: (context) => MathModel(),
+          builder: (context, settings, model) =>
+            model..changeSetting(
               precision: settings.precision.toInt(), 
               isRadMode: settings.isRadMode
-            );
-            return model;
-          },
+            ),
         ),
-        Provider(builder: (context) => MatrixModel(),),
+        ProxyProvider<SettingModel, MatrixModel>(
+          initialBuilder: (context) => MatrixModel(),
+          builder: (context, settings, model) =>
+            model..changeSetting(
+              precision: settings.precision.toInt(), 
+              isRadMode: settings.isRadMode
+            ),
+        ),
         Provider(builder: (context) => MathBoxController(),),
       ],
       child: MaterialApp(
