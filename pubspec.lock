@@ -102,6 +102,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.4"
+  linalg:
+    dependency: "direct main"
+    description:
+      name: linalg
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.2"
   matcher:
     dependency: transitive
     description:

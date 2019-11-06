@@ -25,7 +25,7 @@ I will try to implement these features in future release. Besides, feel free to 
 - [x] Show History
 - [ ] Solve Function
 - [ ] Plot Function
-- [ ] Matrix Calculation
+- [x] Matrix Calculation
 - [ ] Complex Calculation
 - [ ] Symbol Calculation(diff, int)
 

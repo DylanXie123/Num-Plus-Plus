@@ -9,21 +9,8 @@ import 'src/mybutton.dart';
 import 'src/mathmodel.dart';
 import 'src/settingpage.dart';
 
-void main() async {
-  final mathModel = MathModel();
-  final settings = SettingModel();
-  await settings.initVal();
-  mathModel.precision = settings.precision.toInt();
-  mathModel.isRadMode = settings.isRadMode;
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: settings,),
-        ChangeNotifierProvider.value(value: mathModel,),
-      ],
-      child: MyApp(),
-    ),
-  );
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -34,20 +21,60 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
       ),
     );
-    return MaterialApp(
-      title: 'Num++',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(builder: (_) => SettingModel(),),
+        ChangeNotifierProxyProvider<SettingModel, MathModel>(
+          initialBuilder: (context) => MathModel(),
+          builder: (context, settings, model) =>
+            model..changeSetting(
+              precision: settings.precision.toInt(), 
+              isRadMode: settings.isRadMode
+            ),
+        ),
+        ChangeNotifierProxyProvider<SettingModel, MatrixModel>(
+          initialBuilder: (context) => MatrixModel(),
+          builder: (context, settings, model) =>
+            model..changeSetting(
+              precision: settings.precision.toInt(), 
+              isRadMode: settings.isRadMode
+            ),
+        ),
+        ListenableProvider<CalculationMode>(
+          builder: (context) => CalculationMode(Mode.Basic),
+          dispose: (context, value) => value.dispose(),
+        ),
+        Provider(builder: (context) => MathBoxController(),),
+      ],
+      child: MaterialApp(
+        title: 'num++',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomePage(),
       ),
-      home: HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+
+  TabController tabController;
+  List tabs = ["Basic", "Matrix"];
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: tabs.length, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mathModel = Provider.of<MathModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -62,21 +89,41 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
+        title: TabBar(
+          controller: tabController,
+          labelColor: Colors.black,
+          tabs: <Widget>[
+            Tab(text: 'Basic',),
+            Tab(text: 'Matrix',),
+          ],
+          onTap: (index) {
+            final mode = Provider.of<CalculationMode>(context, listen: false);
+            final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+            mathBoxController.deleteAllExpression();
+            if (index==0) {
+              mode.value = Mode.Basic;
+            } else {
+              mode.value = Mode.Matrix;
+              mathBoxController.addExpression('\\\\bmatrix');
+            }
+          },
+        ),
       ),
       body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Expanded(
-              child: MathBox(),
+            Expanded(child: MathBox(),),
+            Consumer<CalculationMode>(
+              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
             ),
-            Result(),
-            MathKeyBoard(
-              mathModel: mathModel,
+            Consumer<CalculationMode>(
+              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
             ),
+            MathKeyBoard(),
           ],
         ),
       ),
     );
   }
 }
-

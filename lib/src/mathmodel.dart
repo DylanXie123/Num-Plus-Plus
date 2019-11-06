@@ -1,58 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:linalg/linalg.dart';
 
 // import 'function.dart';
 import 'latex.dart';
 
 class MathModel with ChangeNotifier {
-  List<String> latexExp = [''];
-  List<String> result = [''];
-  int _resultIndex = 0;
+  List<String> _latexExp = [''];
+  List<String> _result = [''];
+  int _precision;
+  bool _isRadMode;
   bool _isClearable = false;
-  int precision;
-  bool isRadMode;
+  int _resultIndex = 0;
+
+  AnimationController equalAnimation;
+
+  String get result => _result.last;
+  int get resultLength => _result.length;
   
-  WebViewController webViewController;
-  AnimationController clearAnimationController;
-  AnimationController equalAnimationController;
+  void changeClearable(bool b) {
+    _isClearable = b;
+    if (_isClearable && _latexExp.last.isNotEmpty) {
+      _latexExp.add('');
+      _result.add(_result.last);
+      _resultIndex = _latexExp.length - 1;
+      equalAnimation.forward();
+    } else {
+      equalAnimation.reset();
+    }
+  }
+
+  void changeSetting({int precision, bool isRadMode}) {
+    this._precision = precision;
+    this._isRadMode = isRadMode;
+  }
+
+  void updateExpression(String expression) {
+    _latexExp.last = expression;
+  }
 
   void calcNumber() {
-    print('exp: ' + latexExp.toString());
-    if (latexExp.last.isEmpty) {
-      result.last = '';
+    print('exp: ' + _latexExp.toString());
+    if (_latexExp.last.isEmpty) {
+      _result.last = '';
     } else {
       try {
         LaTexParser lp;
-        if (result.length <= 1) {
-          lp = LaTexParser(latexExp.last, isRadMode: isRadMode);
+        if (_result.length <= 1) {
+          lp = LaTexParser(_latexExp.last, isRadMode: _isRadMode);
         } else {
-          lp = LaTexParser(latexExp.last.replaceAll('Ans', '{'+result[result.length-2].toString()+'}'), isRadMode: isRadMode);
+          lp = LaTexParser(_latexExp.last.replaceAll('Ans', '{'+_result[_result.length-2].toString()+'}'), isRadMode: _isRadMode);
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
-        result.last = calc(mathexp, precision).toString();
+        _result.last = calc(mathexp, _precision).toString();
       } catch (e) {
-        result.last = '';
+        _result.last = '';
         print('Error: '+ e.toString());
       }
     }
     notifyListeners();
   }
 
-  void pressEqual() {
-    if (result.last.isNotEmpty) {
-      result.add(result.last);
-      latexExp.add(latexExp.last);
-      _isClearable = true;
-      _resultIndex = result.length - 1;
-      equalAnimationController.forward();
-      notifyListeners();
-    }
-    print(result);
-  }
-
-  void checkHistory({@required toPrevious}) {
+  String checkHistory({@required toPrevious}) {
+    // TODO: Have index problem
     if (toPrevious) {
       if (_resultIndex>0) {
         _resultIndex--;
@@ -60,46 +71,99 @@ class MathModel with ChangeNotifier {
         throw 'Out of Range';
       }
     } else {
-      if (_resultIndex<result.length-1) {
+      if (_resultIndex+2<_result.length) {
         _resultIndex++;
       } else {
         throw 'Out of Range';
       }
     }
-    webViewController.evaluateJavascript("delAll()");
-    List<int> uniCode = latexExp[_resultIndex].runes.toList();
+    List<int> uniCode = _latexExp[_resultIndex].runes.toList();
     for (var i = 0; i < uniCode.length; i++) {
       if (uniCode[i] == 92) {
         uniCode.insert(i, 92);
         i++;
       }
     }
-    String history = String.fromCharCodes(uniCode);
-    equalAnimationController.reset();
-    webViewController.evaluateJavascript("addString('$history')");
-    result.last = result[_resultIndex];
+    _latexExp.last = String.fromCharCodes(uniCode);
+    _result.last = _result[_resultIndex];
+    notifyListeners();
+    return _latexExp.last;
   }
 
-  void toNotClearable() {
-    _isClearable = false;
-    equalAnimationController.reset();
+}
+
+class MatrixModel with ChangeNotifier {
+  List<String> _matrixExpression = [''];
+  List _result = [''];
+  int _precision;
+  bool _isRadMode;
+  bool single = true;
+
+  get result => _result.last;
+
+  void updateExpression(String expression) {
+    _matrixExpression.last = expression;
+    final mp = MatrixParser(_matrixExpression.last)..tokenize();
+    single = mp.length>1?false:true;
+    notifyListeners();
   }
 
-  void addExpression(String msg, {bool isOperator = false}) {
-    if (_isClearable) {
-      webViewController.evaluateJavascript("delAll()");
-      toNotClearable();
-      if (isOperator) {
-        webViewController.evaluateJavascript("addCmd('Ans')");
-      }
+  void calc() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
+    _result.last = matrix;
+    _matrixExpression.add(_matrixExpression.last);
+    _result.add(_result.last);
+  }
+
+  void norm() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
+    _result.last = matrix.det();
+    _matrixExpression.add(_matrixExpression.last);
+    _result.add(_result.last);
+  }
+
+  void transpose() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
+    _result.last = matrix.transpose();
+    _matrixExpression.add(_matrixExpression.last);
+    _result.add(_result.last);
+  }
+
+  void invert() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
+    _result.last = matrix.inverse();
+    _matrixExpression.add(_matrixExpression.last);
+    _result.add(_result.last);
+  }
+
+  String display() {
+    List<String> matrixRows = [];
+    for (var i = 0; i < _result.last.m; i++) {
+      matrixRows.add(_result.last[i].join('&'));
     }
-    webViewController.evaluateJavascript("addCmd('$msg')");
+    String matrixString = matrixRows.join(r'\\\\');
+    matrixString = r'\\begin{bmatrix}' + matrixString + r'\\end{bmatrix}';
+    return matrixString;
   }
 
-  void addKey(String key) {
-    webViewController.evaluateJavascript("simulateKey('$key')");
+  void changeSetting({int precision, bool isRadMode}) {
+    this._precision = precision;
+    this._isRadMode = isRadMode;
   }
 
+}
+
+class CalculationMode extends ValueNotifier<Mode> {
+  CalculationMode(Mode value) : super(value);
+}
+
+enum Mode {
+  Basic,
+  Matrix,
 }
 
 num calc(Expression mathexp, int precision) {  
@@ -109,7 +173,6 @@ num calc(Expression mathexp, int precision) {
   }
   val = num.parse(val.toStringAsFixed(precision));
   val = intCheck(val);
-  print('Calc Result: ' + val.toString());
   return val;
 }
 
@@ -121,7 +184,7 @@ num intCheck(num a) {
   }
 }
 
-// TODO: live calc to transfer decimal to fraction
+// TODO: calc to transfer decimal to fraction
 List<int> deci2frac(num a) {
   double esp = 1e-15;
   List<int> res = [];
