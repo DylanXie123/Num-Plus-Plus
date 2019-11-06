@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
               isRadMode: settings.isRadMode
             ),
         ),
-        ProxyProvider<SettingModel, MatrixModel>(
+        ChangeNotifierProxyProvider<SettingModel, MatrixModel>(
           initialBuilder: (context) => MatrixModel(),
           builder: (context, settings, model) =>
             model..changeSetting(
@@ -40,10 +40,14 @@ class MyApp extends StatelessWidget {
               isRadMode: settings.isRadMode
             ),
         ),
+        ListenableProvider<CalculationMode>(
+          builder: (context) => CalculationMode(Mode.Basic),
+          dispose: (context, value) => value.dispose(),
+        ),
         Provider(builder: (context) => MathBoxController(),),
       ],
       child: MaterialApp(
-        title: 'Num++',
+        title: 'num++',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -62,21 +66,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   TabController tabController;
   List tabs = ["Basic", "Matrix"];
-  ValueNotifier<int> tabIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
-    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
-    tabController.addListener(() {
-      tabIndex.value = tabController.index;
-      // TODO: Throw Exception here: AnimationController.stop() called after AnimationController.dispose()
-      mathBoxController.deleteAllExpression();
-      if (tabController.index == 1) {
-        mathBoxController.addExpression('\\\\bmatrix');
-      }
-    });
   }
 
   @override
@@ -102,6 +96,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Tab(text: 'Basic',),
             Tab(text: 'Matrix',),
           ],
+          onTap: (index) {
+            final mode = Provider.of<CalculationMode>(context, listen: false);
+            final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+            mathBoxController.deleteAllExpression();
+            if (index==0) {
+              mode.value = Mode.Basic;
+            } else {
+              mode.value = Mode.Matrix;
+              mathBoxController.addExpression('\\\\bmatrix');
+            }
+          },
         ),
       ),
       body: SafeArea(
@@ -109,15 +114,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Expanded(child: MathBox(),),
-            ValueListenableBuilder(
-              valueListenable: tabIndex,
-              builder: (context, index, _) => index==0?Result():MatrixButton(),
+            Consumer<CalculationMode>(
+              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
             ),
-            ExpandKeyBoard(),
-            ValueListenableBuilder(
-              valueListenable: tabIndex,
-              builder: (context, index, _) => MathKeyBoard(mode: index,),
+            Consumer<CalculationMode>(
+              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
             ),
+            MathKeyBoard(),
           ],
         ),
       ),

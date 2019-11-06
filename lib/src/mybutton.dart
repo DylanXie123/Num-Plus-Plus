@@ -41,10 +41,6 @@ class MyButton extends StatelessWidget {
 }
 
 class MathKeyBoard extends StatelessWidget {
-  final int mode; // 0 for basic, 1 for matrix
-
-  MathKeyBoard({@required this.mode});
-
   List<Widget> _buildLowButton(MathBoxController mathBoxController) {
     List<Widget> button = [];
 
@@ -117,16 +113,18 @@ class MathKeyBoard extends StatelessWidget {
       onPressed: () {mathBoxController.addExpression('.');},
     ));
 
-    button.add(MyButton(
-      child: mode==0?
-        Text('='):
-        Icon(
-          MaterialCommunityIcons.getIconData("matrix"),
-          size: 40.0,
-        ),
-      onPressed: () {
-        mode==0?mathBoxController.equal():mathBoxController.addExpression('\\\\bmatrix');
-      },
+    button.add(Consumer<CalculationMode>(
+      builder: (context, mode, _) => MyButton(
+        child: mode.value==Mode.Basic?
+          Text('='):
+          Icon(
+            MaterialCommunityIcons.getIconData("matrix"),
+            size: 40.0,
+          ),
+        onPressed: () {
+          mode.value==Mode.Basic?mathBoxController.equal():mathBoxController.addExpression('\\\\bmatrix');
+        },
+      ),
     ));
 
     button.add(MyButton(

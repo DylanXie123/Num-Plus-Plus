@@ -354,7 +354,7 @@ class LaTexParser extends Parser {
     if (result.length==1) {
       return result[0];  
     } else {
-      throw 'Parse Errow';
+      throw 'Parse Error';
     }
     
   }
@@ -365,6 +365,8 @@ class MatrixParser extends Parser {
   final String inputString;
   final bool isRadMode;
   final int precision;
+
+  int get length => _stream.length;
 
   MatrixParser(this.inputString, {this.isRadMode = true, this.precision = 10}) : super(inputString, isRadMode);
 
@@ -481,7 +483,7 @@ class MatrixParser extends Parser {
     if (result.length==1) {
       return result[0];
     } else {
-      throw 'Parse Errow';
+      throw 'Parse Error';
     }
     
   }

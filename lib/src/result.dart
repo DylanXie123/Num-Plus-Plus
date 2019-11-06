@@ -18,10 +18,8 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     final mathModel = Provider.of<MathModel>(context, listen: false);
-    mathModel.addListener(() {
-      mathModel.isClearable?animationController.forward():animationController.reset();
-    });
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
+    mathModel.equalAnimation = animationController;
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutBack);
     animation = Tween<double>(begin: 30.0, end: 60.0).animate(curve)
       ..addListener(() {setState(() {});});
@@ -64,64 +62,98 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
   }
 }
 
+class SingleMatrixButton extends StatelessWidget {
+  final Widget child;
+  final VoidCallback onPressed;
+
+  const SingleMatrixButton({Key key, @required this.child, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: child,
+      onPressed: onPressed,
+      color: Colors.blueAccent[400],
+      textColor: Colors.white,
+    );
+  }
+}
+
 class MatrixButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MatrixModel>(
-      builder:(_, model, child) {
-        final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
-        return SizedBox(
-          height: 40.0,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              ToggleButtons(
-                children: <Widget>[
-                  Text('Invert'),
-                  Text('Calculate'),
-                  Text('Transpose'),
-                  Text('Norm'),
-                  Text('Add Row'),
-                  Text('Add Column'),
-                ],
-                isSelected: List.filled(6, false),
-                onPressed: (index) {
-                  switch (index) {
-                    case 0:
-                      model.invert();
-                      mathBoxController.deleteAllExpression();
-                      mathBoxController.addString(model.display());
-                      break;
-                    case 1:
-                      model.calc();
-                      mathBoxController.deleteAllExpression();
-                      mathBoxController.addString(model.display());
-                      break;
-                    case 2:
-                      model.transpose();
-                      mathBoxController.deleteAllExpression();
-                      mathBoxController.addString(model.display());
-                      break;
-                    case 3:
-                      model.norm();
-                      mathBoxController.deleteAllExpression();
-                      mathBoxController.addString(model.result.toString());
-                      break;
-                    case 4:
-                      mathBoxController.addKey('Shift-Enter');
-                      break;
-                    case 5:
-                      mathBoxController.addKey('Shift-Spacebar');
-                      break;
-                    default:
-                      throw 'Unknown type';
-                  }
+    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+    return SizedBox(
+      height: 40.0,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          Consumer<MatrixModel>(
+            builder: (_, model, child) => model.single?
+              SizedBox(height: 0.0,):
+              SingleMatrixButton(
+                child: child,
+                onPressed: () {
+                  model.calc();
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addString(model.display());
                 },
               ),
-            ],
+            child: Text('Calculate'),
           ),
-        );
-      },
+          Consumer<MatrixModel>(
+            builder: (_, model, child) => model.single?
+              SingleMatrixButton(
+                child: child,
+                onPressed: () {
+                  model.invert();
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addString(model.display());
+                },
+              ):
+              SizedBox(height: 0.0,),
+            child: Text('Invert'),
+          ),
+          Consumer<MatrixModel>(
+            builder: (_, model, child) => model.single?
+              SingleMatrixButton(
+                child: child,
+                onPressed: () {
+                  model.transpose();
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addString(model.display());
+                },
+              ):
+              SizedBox(height: 0.0,),
+            child: Text('Transpose'),
+          ),
+          Consumer<MatrixModel>(
+            builder: (_, model, child) => model.single?
+              SingleMatrixButton(
+                child: child,
+                onPressed: () {
+                  model.norm();
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addString(model.display());
+                },
+              ):
+              SizedBox(height: 0.0,),
+            child: Text('Norm'),
+          ),
+          SingleMatrixButton(
+            child: Text('Add Row'),
+            onPressed: () {
+              mathBoxController.addKey('Shift-Spacebar');
+            },
+          ),
+          SingleMatrixButton(
+            child: Text('Add Column'),
+            onPressed: () {
+              mathBoxController.addKey('Shift-Enter');
+            },
+          ),
+        ],
+      ),
     );
   }
 }
