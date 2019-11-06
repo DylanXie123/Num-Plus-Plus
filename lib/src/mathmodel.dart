@@ -63,6 +63,7 @@ class MathModel with ChangeNotifier {
   }
 
   String checkHistory({@required toPrevious}) {
+    // TODO: Have index problem
     if (toPrevious) {
       if (_resultIndex>0) {
         _resultIndex--;

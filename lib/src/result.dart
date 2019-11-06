@@ -70,11 +70,20 @@ class SingleMatrixButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      child: child,
-      onPressed: onPressed,
-      color: Colors.blueAccent[400],
-      textColor: Colors.white,
+    return Padding(
+      padding: EdgeInsets.all(2.0),
+      child: OutlineButton(
+        child: child,
+        onPressed: onPressed,
+        highlightedBorderColor: Colors.blue,
+        highlightColor: Colors.blue[200],
+        splashColor: Colors.blueAccent,
+        borderSide: BorderSide(
+          color: Colors.blue,
+          width: 2.0,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+      ),
     );
   }
 }
@@ -134,7 +143,7 @@ class MatrixButton extends StatelessWidget {
                 onPressed: () {
                   model.norm();
                   mathBoxController.deleteAllExpression();
-                  mathBoxController.addString(model.display());
+                  mathBoxController.addString(model.result.toString());
                 },
               ):
               SizedBox(height: 0.0,),
