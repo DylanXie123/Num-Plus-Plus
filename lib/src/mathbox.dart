@@ -106,7 +106,7 @@ class MathBox extends StatelessWidget {
               onMessageReceived: (JavascriptMessage message) {
                 if (message.message.contains('matrix')) {
                   matrixModel.updateExpression(message.message);
-                } else {
+                } else if (message.message.isNotEmpty) {
                   mathModel.updateExpression(message.message);
                   mathModel.calcNumber();
                 }

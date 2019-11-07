@@ -111,7 +111,7 @@ class MatrixButton extends StatelessWidget {
             child: Text('Calculate'),
           ),
           Consumer<MatrixModel>(
-            builder: (_, model, child) => model.single?
+            builder: (_, model, child) => model.square?
               SingleMatrixButton(
                 child: child,
                 onPressed: () {
@@ -122,6 +122,19 @@ class MatrixButton extends StatelessWidget {
               ):
               SizedBox(height: 0.0,),
             child: Text('Invert'),
+          ),
+          Consumer<MatrixModel>(
+            builder: (_, model, child) => model.square?
+              SingleMatrixButton(
+                child: child,
+                onPressed: () {
+                  model.norm();
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addString(model.result.toString());
+                },
+              ):
+              SizedBox(height: 0.0,),
+            child: Text('Norm'),
           ),
           Consumer<MatrixModel>(
             builder: (_, model, child) => model.single?
@@ -135,19 +148,6 @@ class MatrixButton extends StatelessWidget {
               ):
               SizedBox(height: 0.0,),
             child: Text('Transpose'),
-          ),
-          Consumer<MatrixModel>(
-            builder: (_, model, child) => model.single?
-              SingleMatrixButton(
-                child: child,
-                onPressed: () {
-                  model.norm();
-                  mathBoxController.deleteAllExpression();
-                  mathBoxController.addString(model.result.toString());
-                },
-              ):
-              SizedBox(height: 0.0,),
-            child: Text('Norm'),
           ),
           SingleMatrixButton(
             child: Text('Add Row'),

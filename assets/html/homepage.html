@@ -77,7 +77,6 @@ function equal() {
 
 function addString(message) {
     mathField.write(message);
-    postLaTex();
 }
 
 function delString() {
@@ -97,7 +96,6 @@ function delAll() {
 function simulateKey(key) {
     mathField.keystroke(key);
     isClearable = false;
-    postLaTex();
     postClearable();
 }
 

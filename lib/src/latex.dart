@@ -365,16 +365,14 @@ class MatrixParser extends Parser {
   final String inputString;
   final bool isRadMode;
   final int precision;
-
-  int get length => _stream.length;
+  bool square;
+  bool single;
 
   MatrixParser(this.inputString, {this.isRadMode = true, this.precision = 10}) : super(inputString, isRadMode);
 
   @override
   void tokenize() {
-    final matrix = (string('\\begin{bmatrix}') & any().starLazy(string('\\end{bmatrix}')).flatten() & string('\\end{bmatrix}')).pick(1);
-
-    final basic = matrix.map((v)=>[v, 'b']);
+    final matrix = (string('\\begin{bmatrix}') & any().starLazy(string('\\end{bmatrix}')).flatten() & string('\\end{bmatrix}')).pick(1).map((v)=>[v, 'b']);
 
     final plus = char('+').map((v)=>[v, ['o', 2]]);
 
@@ -386,7 +384,7 @@ class MatrixParser extends Parser {
 
     final oper = plus | minus | times | divide;
     
-    final tokenize = (basic | oper).star().end();
+    final tokenize = (matrix | oper).star().end();
 
     _stream = tokenize.parse(inputString).value;
 
@@ -395,6 +393,12 @@ class MatrixParser extends Parser {
         _stream.insert(i+1, ['\\times', ['o', 3]]);
         i++;
       }
+    }
+
+    if (_stream.length == 1 && _stream[0][1] == 'b') {
+      single = true;
+    } else {
+      single = false;
     }
   }
 
@@ -414,6 +418,11 @@ class MatrixParser extends Parser {
           }
         }
         _stream[i][0] = Matrix(source);
+        if (single && _stream[i][0].m == _stream[i][0].n) {
+          square = true;
+        } else {
+          square = false;
+        }
       }
     }
   }
