@@ -39,18 +39,14 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       alignment: Alignment.centerRight,
       child: Consumer<MathModel>(
         builder: (_, model, __) {
-          final _textController = TextEditingController();
+          String text;
           if (model.result!='' && animationController.status == AnimationStatus.dismissed) {
-            _textController.text = '= ' + model.result;
+            text = '= ' + model.result;
           } else {
-            _textController.text = model.result;
+            text = model.result;
           }
-          return TextField(
-            controller: _textController,
-            readOnly: true,
-            textAlign: TextAlign.right,
-            autofocus: true,
-            decoration: null,
+          return SelectableText(
+            text,
             style: TextStyle(
               fontFamily: 'Minion-Pro',
               fontSize: animation.value - 5,

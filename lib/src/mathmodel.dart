@@ -92,19 +92,22 @@ class MathModel with ChangeNotifier {
 }
 
 class MatrixModel with ChangeNotifier {
-  List<String> _matrixExpHistory = [''];
+  List<String> _matrixExpHistory = [];
   String _matrixExression;
   Matrix _matrix;
   int _precision;
-  bool single = true;
-  bool square = true;
+  bool _single = true;
+  bool _square = true;
+
+  bool get single => _single;
+  bool get square => _square;
 
   void updateExpression(String expression) {
     _matrixExression = expression;
     final mp = MatrixParser(_matrixExression, precision: _precision);
     _matrix = mp.parse();
-    single = mp.single;
-    square = mp.square;
+    _single = mp.single;
+    _square = mp.square;
     notifyListeners();
   }
 
@@ -116,8 +119,8 @@ class MatrixModel with ChangeNotifier {
   void norm() {
     _matrixExpHistory.add(_matrixExression);
     _matrixExression = _matrix.det().toString();
-    single = false;
-    square = false;
+    _single = false;
+    _square = false;
     notifyListeners();
   }
 
