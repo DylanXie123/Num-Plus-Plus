@@ -130,7 +130,7 @@ class MatrixButton extends StatelessWidget {
                 onPressed: () {
                   model.norm();
                   mathBoxController.deleteAllExpression();
-                  mathBoxController.addString(model.result.toString());
+                  mathBoxController.addString(model.display());
                 },
               ):
               SizedBox(height: 0.0,),

@@ -92,80 +92,68 @@ class MathModel with ChangeNotifier {
 }
 
 class MatrixModel with ChangeNotifier {
-  List<String> _matrixExpression = [''];
-  List _result = [''];
+  List<String> _matrixExpHistory = [''];
+  String _matrixExression;
+  Matrix _matrix;
   int _precision;
-  bool _isRadMode;
   bool single = true;
   bool square = true;
 
-  num get result => _result.last;
-
   void updateExpression(String expression) {
-    _matrixExpression.last = expression;
-    final mp = MatrixParser(_matrixExpression.last);
-    mp.tokenize();
-    mp.matrixParse();
+    _matrixExression = expression;
+    final mp = MatrixParser(_matrixExression, precision: _precision);
+    _matrix = mp.parse();
     single = mp.single;
     square = mp.square;
     notifyListeners();
   }
 
   void calc() {
-    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
-    Matrix matrix = mp.parse();
-    _result.last = matrix;
-    _keepExpression(_result.last);
-    _result.add(_result.last);
+    _matrixExpHistory.add(_matrixExression);
+    updateExpression(matrix2String(_matrix));
   }
 
   void norm() {
-    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
-    Matrix matrix = mp.parse();
-    _result.last = matrix.det();
-    _matrixExpression.add('');
-    _result.add(_result.last);
+    _matrixExpHistory.add(_matrixExression);
+    _matrixExression = _matrix.det().toString();
+    single = false;
+    square = false;
+    notifyListeners();
   }
 
   void transpose() {
-    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
-    Matrix matrix = mp.parse();
-    _result.last = matrix.transpose();
-    _keepExpression(_result.last);
-    _result.add(_result.last);
+    _matrixExpHistory.add(_matrixExression);
+    updateExpression(matrix2String(_matrix.transpose()));
   }
 
   void invert() {
-    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
-    Matrix matrix = mp.parse();
-    _result.last = matrix.inverse();
-    _keepExpression(_result.last);
-    _result.add(_result.last);
+    _matrixExpHistory.add(_matrixExression);
+    updateExpression(matrix2String(_matrix.inverse()));
   }
 
   String display() {
-    List<String> matrixRows = [];
-    for (var i = 0; i < _result.last.m; i++) {
-      matrixRows.add(_result.last[i].join('&'));
+    List<int> uniCode = _matrixExression.runes.toList();
+    for (var i = 0; i < uniCode.length; i++) {
+      if (uniCode[i] == 92) {
+        uniCode.insert(i, 92);
+        i++;
+      }
     }
-    String matrixString = matrixRows.join(r'\\\\');
-    matrixString = r'\\begin{bmatrix}' + matrixString + r'\\end{bmatrix}';
-    return matrixString;
+    return String.fromCharCodes(uniCode);
   }
 
-  void _keepExpression(Matrix inputMatrix) {
+  String matrix2String(Matrix matrix) {
     List<String> matrixRows = [];
-    for (var i = 0; i < inputMatrix.m; i++) {
-      matrixRows.add(inputMatrix[i].join('&'));
+    for (var i = 0; i < matrix.m; i++) {
+      matrixRows.add(matrix[i].join('&'));
     }
     String matrixString = matrixRows.join(r'\\');
     matrixString = r'\begin{bmatrix}' + matrixString + r'\end{bmatrix}';
-    _matrixExpression.add(matrixString);
+    return matrixString;
   }
 
-  void changeSetting({int precision, bool isRadMode}) {
+  void changeSetting({int precision}) {
     this._precision = precision;
-    this._isRadMode = isRadMode;
   }
 
 }

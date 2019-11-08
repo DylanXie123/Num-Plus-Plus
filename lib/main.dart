@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           initialBuilder: (context) => MathModel(),
           builder: (context, settings, model) =>
             model..changeSetting(
-              precision: settings.precision.toInt(), 
+              precision: settings.precision.toInt(),
               isRadMode: settings.isRadMode
             ),
         ),
@@ -36,8 +36,7 @@ class MyApp extends StatelessWidget {
           initialBuilder: (context) => MatrixModel(),
           builder: (context, settings, model) =>
             model..changeSetting(
-              precision: settings.precision.toInt(), 
-              isRadMode: settings.isRadMode
+              precision: settings.precision.toInt(),
             ),
         ),
         ListenableProvider<CalculationMode>(
@@ -90,6 +89,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           },
         ),
         title: TabBar(
+          indicatorColor: Colors.blueAccent[400],
           controller: tabController,
           labelColor: Colors.black,
           tabs: <Widget>[
