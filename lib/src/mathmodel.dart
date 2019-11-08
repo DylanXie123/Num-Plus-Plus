@@ -98,40 +98,48 @@ class MatrixModel with ChangeNotifier {
   bool _isRadMode;
   bool single = true;
   bool square = true;
-  Matrix matrix;
 
-  bool get result => _result.last;
+  num get result => _result.last;
 
   void updateExpression(String expression) {
     _matrixExpression.last = expression;
-    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
-    matrix = mp.parse();
+    final mp = MatrixParser(_matrixExpression.last);
+    mp.tokenize();
+    mp.matrixParse();
     single = mp.single;
     square = mp.square;
     notifyListeners();
   }
 
   void calc() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
     _result.last = matrix;
-    _matrixExpression.add(_matrixExpression.last);
+    _keepExpression(_result.last);
     _result.add(_result.last);
   }
 
   void norm() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
     _result.last = matrix.det();
-    _matrixExpression.add(_matrixExpression.last);
+    _matrixExpression.add('');
     _result.add(_result.last);
   }
 
   void transpose() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
     _result.last = matrix.transpose();
-    _matrixExpression.add(_matrixExpression.last);
+    _keepExpression(_result.last);
     _result.add(_result.last);
   }
 
   void invert() {
+    final mp = MatrixParser(_matrixExpression.last, precision: _precision);
+    Matrix matrix = mp.parse();
     _result.last = matrix.inverse();
-    _matrixExpression.add(_matrixExpression.last);
+    _keepExpression(_result.last);
     _result.add(_result.last);
   }
 
@@ -143,6 +151,16 @@ class MatrixModel with ChangeNotifier {
     String matrixString = matrixRows.join(r'\\\\');
     matrixString = r'\\begin{bmatrix}' + matrixString + r'\\end{bmatrix}';
     return matrixString;
+  }
+
+  void _keepExpression(Matrix inputMatrix) {
+    List<String> matrixRows = [];
+    for (var i = 0; i < inputMatrix.m; i++) {
+      matrixRows.add(inputMatrix[i].join('&'));
+    }
+    String matrixString = matrixRows.join(r'\\');
+    matrixString = r'\begin{bmatrix}' + matrixString + r'\end{bmatrix}';
+    _matrixExpression.add(matrixString);
   }
 
   void changeSetting({int precision, bool isRadMode}) {
