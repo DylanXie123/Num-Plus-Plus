@@ -3,7 +3,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:linalg/linalg.dart';
 import 'dart:math' as math;
 
-import 'mathmodel.dart';
+import 'package:num_plus_plus/src/backend/mathmodel.dart';
 
 abstract class Parser {
   final bool isRadMode;

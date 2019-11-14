@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
-import 'mathmodel.dart';
+import 'package:num_plus_plus/src/backend/mathmodel.dart';
 
 class Server {
   // class from inAppBrowser

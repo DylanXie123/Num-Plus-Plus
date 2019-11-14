@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 
-import 'mathbox.dart';
-import 'mathmodel.dart';
-import 'settingpage.dart';
+import 'package:num_plus_plus/src/widgets/mathbox.dart';
+import 'package:num_plus_plus/src/pages/settingpage.dart';
+import 'package:num_plus_plus/src/backend/mathmodel.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;

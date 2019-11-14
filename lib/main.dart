@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import 'src/mathbox.dart';
-import 'src/result.dart';
-import 'src/mybutton.dart';
-import 'src/mathmodel.dart';
-import 'src/settingpage.dart';
+import 'package:num_plus_plus/src/widgets/mathbox.dart';
+import 'package:num_plus_plus/src/widgets/result.dart';
+import 'package:num_plus_plus/src/widgets/matrixbutton.dart';
+import 'package:num_plus_plus/src/widgets/keyboard.dart';
+import 'package:num_plus_plus/src/backend/mathmodel.dart';
+import 'package:num_plus_plus/src/pages/settingpage.dart';
 
 void main() {
   runApp(MyApp());

@@ -3,7 +3,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:linalg/linalg.dart';
 
 // import 'function.dart';
-import 'latex.dart';
+import 'package:num_plus_plus/src/backend/latex.dart';
 
 class MathModel with ChangeNotifier {
   List<String> _latexExp = [''];

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:num_plus_plus/src/latex.dart';
+
+import 'package:num_plus_plus/src/backend/latex.dart';
 
 void main() {
   test('Unit Test', () {

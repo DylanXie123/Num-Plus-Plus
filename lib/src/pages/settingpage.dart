@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import 'mathmodel.dart';
+import 'package:num_plus_plus/src/backend/mathmodel.dart';
 
 class SettingPage extends StatelessWidget {
   @override
