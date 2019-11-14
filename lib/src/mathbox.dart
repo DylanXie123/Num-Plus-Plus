@@ -104,11 +104,12 @@ class MathBox extends StatelessWidget {
             JavascriptChannel(
               name: 'latexString',
               onMessageReceived: (JavascriptMessage message) {
-                if (message.message.contains('matrix')) {
-                  matrixModel.updateExpression(message.message);
-                } else if (message.message.isNotEmpty) {
+                final mode = Provider.of<CalculationMode>(context, listen: false);
+                if (mode.value == Mode.Basic) {
                   mathModel.updateExpression(message.message);
                   mathModel.calcNumber();
+                } else {
+                  matrixModel.updateExpression(message.message);
                 }
               }
             ),
