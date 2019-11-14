@@ -169,18 +169,20 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   AnimationController animationController;
   Animation keyboardAnimation;
   Animation arrowAnimation;
+  double _height;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final width = MediaQuery.of(context).size.width;
-    animationController = AnimationController(duration: const Duration(milliseconds: 300),vsync: this);
-    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInBack);
-    keyboardAnimation = Tween<double>(begin: (width-10) / 7 * 3, end: 0).animate(curve);
-    arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
-    animationController.addListener((){
+    _height = (MediaQuery.of(context).size.width - 10) / 7 * 3;
+
+    animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
+    keyboardAnimation = Tween<double>(begin: _height, end: 0).animate(animationController);
+    arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(animationController);
+    animationController.addListener(() {
       setState(() {});
     });
+
     final setting = Provider.of<SettingModel>(context, listen: false);
     if (setting.hideKeyboard == true) {
       animationController.value = 1;
@@ -193,55 +195,59 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     final mathBoxController = Provider.of<MathBoxController>(context, listen:false);
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
-        if (detail.delta.dy>0) {// move down
-          animationController.forward();
-          setting.changeKeyboardMode(true);
-        } else {
+        if (keyboardAnimation.value - detail.delta.dy > 0 && keyboardAnimation.value - detail.delta.dy < _height) {
+          // TODO: Better to use nonlinear animation
+          animationController.value = 1 - (keyboardAnimation.value-detail.delta.dy)/_height;
+        }
+      },
+      onVerticalDragEnd: (detail) {
+        if (keyboardAnimation.value > _height*0.8) {
           animationController.reverse();
           setting.changeKeyboardMode(false);
+        } else {
+          animationController.forward();
+          setting.changeKeyboardMode(true);
         }
       },
       child: Container(
-        height: arrowAnimation.value + keyboardAnimation.value,
         margin: EdgeInsets.symmetric(horizontal: 5.0),
-        child: Material(
-          clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
-          elevation: 8.0,
           color: Colors.blueAccent[400],
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: arrowAnimation.value,
-                width: double.infinity,
-                color: Colors.blueAccent[400],
-                child: FlatButton(
-                  splashColor: Colors.transparent,
-                  onPressed: () {
-                    if (animationController.status == AnimationStatus.dismissed) {
-                      animationController.forward();
-                      setting.changeKeyboardMode(true);
-                    } else {
-                      animationController.reverse();
-                      setting.changeKeyboardMode(false);
-                    }
-                  },
-                  child: Icon(
-                    (keyboardAnimation.value > 20.0)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
-                    color: Colors.grey[200],
-                  ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: arrowAnimation.value,
+              width: double.infinity,
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  if (animationController.status == AnimationStatus.dismissed) {
+                    animationController.forward();
+                    setting.changeKeyboardMode(true);
+                  } else {
+                    animationController.reverse();
+                    setting.changeKeyboardMode(false);
+                  }
+                },
+                child: Icon(
+                  (keyboardAnimation.value > _height*0.8)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
+                  color: Colors.grey[200],
                 ),
               ),
-              Expanded(
-                child: GridView.count(
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 7,
-                  children: _buildUpButton(mathBoxController),
-                ),
+            ),
+            SizedBox(
+              height: keyboardAnimation.value,
+              child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 7,
+                children: _buildUpButton(mathBoxController),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
