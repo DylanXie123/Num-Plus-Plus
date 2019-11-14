@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
@@ -160,6 +161,13 @@ class MathKeyBoard extends StatelessWidget {
 
 }
 
+const AnimationConstant = 8.0;
+
+class AtanCurve extends Curve {
+  @override
+  double transform(double t) => atan(AnimationConstant*2*t-AnimationConstant)/(2*atan(AnimationConstant))+0.5;
+}
+
 class ExpandKeyBoard extends StatefulWidget {
   @override
   _ExpandKeyBoardState createState() => _ExpandKeyBoardState();
@@ -177,8 +185,9 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     _height = (MediaQuery.of(context).size.width - 10) / 7 * 3;
 
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
-    keyboardAnimation = Tween<double>(begin: _height, end: 0).animate(animationController);
-    arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(animationController);
+    final curve = CurvedAnimation(parent: animationController, curve: AtanCurve());
+    keyboardAnimation = Tween<double>(begin: _height, end: 0).animate(curve);
+    arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
     animationController.addListener(() {
       setState(() {});
     });
@@ -196,12 +205,18 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         if (keyboardAnimation.value - detail.delta.dy > 0 && keyboardAnimation.value - detail.delta.dy < _height) {
-          // TODO: Better to use nonlinear animation
-          animationController.value = 1 - (keyboardAnimation.value-detail.delta.dy)/_height;
+          double y = keyboardAnimation.value - detail.delta.dy;
+          animationController.value = (tan(atan(AnimationConstant)-y*atan(AnimationConstant)*2/_height)+AnimationConstant)/AnimationConstant/2;
         }
       },
       onVerticalDragEnd: (detail) {
-        if (keyboardAnimation.value > _height*0.8) {
+        if (detail.primaryVelocity > 0.0) {
+          animationController.animateTo(1.0, duration: const Duration(milliseconds: 200));
+          setting.changeKeyboardMode(true);
+        } else if (detail.primaryVelocity < 0.0) {
+          animationController.animateBack(0.0, duration: const Duration(milliseconds: 200));
+          setting.changeKeyboardMode(false);
+        } else if (keyboardAnimation.value > _height*0.8) {
           animationController.reverse();
           setting.changeKeyboardMode(false);
         } else {
