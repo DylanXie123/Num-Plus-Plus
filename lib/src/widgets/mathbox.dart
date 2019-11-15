@@ -8,6 +8,7 @@ import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
 import 'package:num_plus_plus/src/backend/mathmodel.dart';
+import 'package:num_plus_plus/src/pages/settingpage.dart';
 
 class Server {
   // class from inAppBrowser
@@ -97,6 +98,12 @@ class MathBox extends StatelessWidget {
           onWebViewCreated: (controller) {
             controller.loadUrl("http://localhost:8080/assets/html/homepage.html");
             mathBoxController.webViewController = controller;
+          },
+          onPageFinished: (s) {
+            final setting = Provider.of<SettingModel>(context, listen: false);
+            if (setting.initPage == 1) {
+              mathBoxController.addExpression('\\\\bmatrix');
+            }
           },
           javascriptMode: JavascriptMode.unrestricted,
           javascriptChannels: Set.from([
