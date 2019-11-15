@@ -9,6 +9,7 @@ import 'package:num_plus_plus/src/widgets/matrixbutton.dart';
 import 'package:num_plus_plus/src/widgets/keyboard.dart';
 import 'package:num_plus_plus/src/backend/mathmodel.dart';
 import 'package:num_plus_plus/src/pages/settingpage.dart';
+import 'package:num_plus_plus/src/pages/functionpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -134,10 +135,32 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: <Widget>[
             Expanded(child: MathBox(),),
             Consumer<CalculationMode>(
-              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
+              builder: (context, mathMode, _) {
+                switch (mathMode.value) {
+                  case Mode.Basic:
+                    return Result();
+                    break;
+                  case Mode.Matrix:
+                    return MatrixButton();
+                    break;
+                  case Mode.Function:
+                    return OutlineButton(
+                      child: Text('Analyze'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FunctionPage()),
+                        );
+                      },
+                    );
+                    break;
+                  default:
+                    throw 'Error';
+                }
+              },
             ),
             Consumer<CalculationMode>(
-              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
+              builder: (context, mathMode, _) => mathMode.value!=Mode.Matrix?ExpandKeyBoard():SizedBox(height: 0.0,),
             ),
             MathKeyBoard(),
           ],

@@ -169,6 +169,7 @@ class CalculationMode extends ValueNotifier<Mode> {
 enum Mode {
   Basic,
   Matrix,
+  Function,
 }
 
 num calc(Expression mathexp, int precision) {  
