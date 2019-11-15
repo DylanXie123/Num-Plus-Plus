@@ -92,7 +92,6 @@ class MathBox extends StatelessWidget {
     final mathModel = Provider.of<MathModel>(context, listen: false);
     final matrixModel = Provider.of<MatrixModel>(context, listen: false);
     return Stack(
-      overflow: Overflow.visible,
       children: <Widget>[
         WebView(
           onWebViewCreated: (controller) {
@@ -121,12 +120,6 @@ class MathBox extends StatelessWidget {
             ),
           ]),
         ),
-        // Consumer<MathBoxController>(
-        //   builder: (context, mathBoxController, _) => Container(
-        //     color: Colors.grey[50],
-        //     height: (mathBoxController.webViewController == null)?double.infinity:0,
-        //   ),
-        // ), // cover initial white when creating webview
         ClearAnimation(),
       ],
     );
