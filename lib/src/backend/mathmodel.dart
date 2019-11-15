@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:linalg/linalg.dart';
 
-// import 'function.dart';
 import 'package:num_plus_plus/src/backend/latex.dart';
 
 class MathModel with ChangeNotifier {
-  List<String> _latexExp = [''];
-  List<String> _result = [''];
+  List<String> _expressionHistory = [];
+  List<String> _resultHistory = [];
+  String _expression = '';
+  String _result = '';
   int _precision;
   bool _isRadMode;
   bool _isClearable = false;
@@ -15,15 +16,21 @@ class MathModel with ChangeNotifier {
 
   AnimationController equalAnimation;
 
-  String get result => _result.last;
-  int get resultLength => _result.length;
+  String get result => _result;
+  bool get isAnsReady {
+    if (_resultHistory.length > 1 && _resultIndex == _resultHistory.length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   
   void changeClearable(bool b) {
     _isClearable = b;
-    if (_isClearable && _latexExp.last.isNotEmpty) {
-      _latexExp.add('');
-      _result.add(_result.last);
-      _resultIndex = _latexExp.length - 1;
+    if (_isClearable && _expression.isNotEmpty) {
+      _expressionHistory.add(_expression);
+      _resultHistory.add(_result);
+      _resultIndex = _expressionHistory.length;
       equalAnimation.forward();
     } else {
       equalAnimation.reset();
@@ -36,26 +43,26 @@ class MathModel with ChangeNotifier {
   }
 
   void updateExpression(String expression) {
-    _latexExp.last = expression;
+    _expression = expression;
   }
 
   void calcNumber() {
-    print('exp: ' + _latexExp.toString());
-    if (_latexExp.last.isEmpty) {
-      _result.last = '';
+    print('exp: ' + _expression.toString());
+    if (_expression.isEmpty) {
+      _result = '';
     } else {
       try {
         LaTexParser lp;
-        if (_result.length <= 1) {
-          lp = LaTexParser(_latexExp.last, isRadMode: _isRadMode);
+        if (_resultHistory.length < 1) {
+          lp = LaTexParser(_expression, isRadMode: _isRadMode);
         } else {
-          lp = LaTexParser(_latexExp.last.replaceAll('Ans', '{'+_result[_result.length-2].toString()+'}'), isRadMode: _isRadMode);
+          lp = LaTexParser(_expression.replaceAll('Ans', '{'+_resultHistory[_resultHistory.length-1].toString()+'}'), isRadMode: _isRadMode);
         }
         Expression mathexp = lp.parse();
         print('Parsed: ' + mathexp.toString());
-        _result.last = calc(mathexp, _precision).toString();
+        _result = calc(mathexp, _precision).toString();
       } catch (e) {
-        _result.last = '';
+        _result = '';
         print('Error: '+ e.toString());
       }
     }
@@ -63,30 +70,24 @@ class MathModel with ChangeNotifier {
   }
 
   String checkHistory({@required toPrevious}) {
-    if (toPrevious) {
-      if (_resultIndex>0) {
-        _resultIndex--;
-      } else {
-        throw 'Out of Range';
-      }
+    if (toPrevious && _resultIndex > 0) {
+      _resultIndex--;
+    } else if (!toPrevious && _resultIndex + 1 < _resultHistory.length) {
+      _resultIndex++;
     } else {
-      if (_resultIndex+2<_result.length) {
-        _resultIndex++;
-      } else {
-        throw 'Out of Range';
-      }
+      throw 'Out of Range';
     }
-    List<int> uniCode = _latexExp[_resultIndex].runes.toList();
+    List<int> uniCode = _expressionHistory[_resultIndex].runes.toList();
     for (var i = 0; i < uniCode.length; i++) {
       if (uniCode[i] == 92) {
         uniCode.insert(i, 92);
         i++;
       }
     }
-    _latexExp.last = String.fromCharCodes(uniCode);
-    _result.last = _result[_resultIndex];
+    _expression = String.fromCharCodes(uniCode);
+    _result = _resultHistory[_resultIndex];
     notifyListeners();
-    return _latexExp.last;
+    return _expression;
   }
 
 }
@@ -188,7 +189,6 @@ num intCheck(num a) {
   }
 }
 
-// TODO: calc to transfer decimal to fraction
 List<int> deci2frac(num a) {
   double esp = 1e-15;
   List<int> res = [];
