@@ -191,17 +191,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     animationController.addListener(() {
       setState(() {});
     });
-
-    final setting = Provider.of<SettingModel>(context, listen: false);
-    if (setting.hideKeyboard == true) {
-      animationController.value = 1;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
     final mathBoxController = Provider.of<MathBoxController>(context, listen:false);
+    if (setting.hideKeyboard == true) {
+      animationController.value = 1;
+    }
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         if (keyboardAnimation.value - detail.delta.dy > 0 && keyboardAnimation.value - detail.delta.dy < _height) {
@@ -526,12 +524,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        final length = Provider.of<MathModel>(context, listen: false).resultLength;
-        if (length > 1) {
+        if (Provider.of<MathModel>(context, listen: false).isAnsReady) {
           mathBoxController.addExpression('Ans');
         } else {
           final snackBar = SnackBar(
-            content: Text('No History Yet'),
+            content: Text('Unable to input Ans now'),
             duration: Duration(milliseconds: 500,),
             action: SnackBarAction(
               label: 'OK',

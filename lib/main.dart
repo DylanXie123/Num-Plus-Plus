@@ -75,6 +75,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final mode = Provider.of<CalculationMode>(context, listen: false);
+    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+    final setting = Provider.of<SettingModel>(context);
+    tabController.index = setting.initPage;
+    switch (tabController.index) {
+      case 0:
+        mode.value = Mode.Basic;
+        break;
+      case 1:
+        mode.value = Mode.Matrix;
+        break;
+      default:
+        throw 'Unknown type';
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -98,14 +112,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Tab(text: 'Matrix',),
           ],
           onTap: (index) {
-            final mode = Provider.of<CalculationMode>(context, listen: false);
-            final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+            setting.changeInitpage(index);
             mathBoxController.deleteAllExpression();
-            if (index==0) {
-              mode.value = Mode.Basic;
-            } else {
-              mode.value = Mode.Matrix;
-              mathBoxController.addExpression('\\\\bmatrix');
+            switch (index) {
+              case 0:
+                mode.value = Mode.Basic;
+                break;
+              case 1:
+                mode.value = Mode.Matrix;
+                mathBoxController.addExpression('\\\\bmatrix');
+                break;
+              default:
+                throw 'Unknown type';
             }
           },
         ),

@@ -113,6 +113,7 @@ class SettingModel with ChangeNotifier {
   num precision = 10;
   bool isRadMode = true;
   bool hideKeyboard = false;
+  int initPage = 0;
 
   SettingModel() {
     initVal();
@@ -138,11 +139,18 @@ class SettingModel with ChangeNotifier {
     prefs.setBool('hideKeyboard', hideKeyboard);
   }
 
+  Future changeInitpage(int val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    initPage = val;
+    prefs.setInt('initPage', initPage);
+  }
+
   Future initVal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     precision = prefs.getDouble('precision') ?? 10;
     isRadMode = prefs.getBool('isRadMode') ?? true;
     hideKeyboard = prefs.getBool('hideKeyboard') ?? false;
+    initPage = prefs.getInt('initPage') ?? 0;
     notifyListeners();
   }
 
