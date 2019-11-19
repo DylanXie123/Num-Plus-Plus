@@ -17,7 +17,7 @@ class MathModel with ChangeNotifier {
   AnimationController equalAnimation;
 
   String get result => _result;
-  bool get isAnsReady {
+  bool get hasHistory {
     if (_resultHistory.length > 1 && _resultIndex == _resultHistory.length) {
       return true;
     } else {
@@ -160,6 +160,38 @@ class MatrixModel with ChangeNotifier {
     this._precision = precision;
   }
 
+}
+
+class FunctionModel {
+  String _expressionString = '';
+  Expression _expression;
+
+  void updateExpression(String exp) {
+    _expressionString = exp;
+    _expression = LaTexParser(_expressionString).parse();
+  }
+
+  num _calc(num input) {
+    ContextModel cm = ContextModel();
+    cm.bindVariable(Variable('x'), Number(input));
+    return _expression.evaluate(EvaluationType.REAL, cm);
+  }
+
+  num solve() {
+    return _calc(1);
+  }
+
+  void integral() {
+
+  }
+
+  void derivative() {
+
+  }
+
+  void plot() {
+
+  }
 }
 
 class CalculationMode extends ValueNotifier<Mode> {

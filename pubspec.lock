@@ -88,13 +88,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  function_tree:
-    dependency: "direct main"
-    description:
-      name: function_tree
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.6"
   image:
     dependency: transitive
     description:
