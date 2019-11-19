@@ -188,16 +188,57 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     final curve = CurvedAnimation(parent: animationController, curve: AtanCurve());
     keyboardAnimation = Tween<double>(begin: _height, end: 0).animate(curve);
     arrowAnimation = Tween<double>(begin: 15.0, end: 35.0).animate(curve);
-    animationController.addListener(() {
-      setState(() {});
-    });
+  }
+
+  Widget _buildAnimation(BuildContext context, Widget child) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
+        color: Colors.blueAccent[400],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(
+            height: arrowAnimation.value,
+            width: double.infinity,
+            child: FlatButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {
+                final setting = Provider.of<SettingModel>(context, listen: false);
+                if (animationController.status == AnimationStatus.dismissed) {
+                  animationController.forward();
+                  setting.changeKeyboardMode(true);
+                } else {
+                  animationController.reverse();
+                  setting.changeKeyboardMode(false);
+                }
+              },
+              child: Icon(
+                (keyboardAnimation.value > _height*0.8)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
+                color: Colors.grey[200],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: keyboardAnimation.value,
+            child: GridView.count(
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 7,
+              children: _buildUpButton(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
-    final mathBoxController = Provider.of<MathBoxController>(context, listen:false);
-    if (setting.hideKeyboard == true) {
+    if (setting.hideKeyboard) {
       animationController.value = 1;
     }
     return GestureDetector(
@@ -222,51 +263,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
           setting.changeKeyboardMode(true);
         }
       },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
-          color: Colors.blueAccent[400],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SizedBox(
-              height: arrowAnimation.value,
-              width: double.infinity,
-              child: FlatButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  if (animationController.status == AnimationStatus.dismissed) {
-                    animationController.forward();
-                    setting.changeKeyboardMode(true);
-                  } else {
-                    animationController.reverse();
-                    setting.changeKeyboardMode(false);
-                  }
-                },
-                child: Icon(
-                  (keyboardAnimation.value > _height*0.8)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
-                  color: Colors.grey[200],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: keyboardAnimation.value,
-              child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 7,
-                children: _buildUpButton(mathBoxController),
-              ),
-            ),
-          ],
-        ),
+      child: AnimatedBuilder(
+        builder: _buildAnimation,
+        animation: animationController,
       ),
     );
   }
 
-  List<Widget> _buildUpButton(MathBoxController mathBoxController) {
+  List<Widget> _buildUpButton() {
+    final mathBoxController = Provider.of<MathBoxController>(context, listen:false);
     List<Widget> button = [];
     const fontSize = 25.0;
     const iconSize = 45.0;
@@ -468,7 +473,6 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
         color: fontColor,
       ),
       onPressed: () {
-        Provider.of<CalculationMode>(context, listen: false).value = Mode.Function;
         mathBoxController.addExpression('x');
       },
     ));
@@ -526,7 +530,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        if (Provider.of<MathModel>(context, listen: false).isAnsReady) {
+        if (Provider.of<MathModel>(context, listen: false).hasHistory) {
           mathBoxController.addExpression('Ans');
         } else {
           final snackBar = SnackBar(
