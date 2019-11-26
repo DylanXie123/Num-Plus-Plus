@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
         title: 'num++',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          canvasColor: Colors.white,
         ),
         home: HomePage(),
       ),
