@@ -133,17 +133,36 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Expanded(child: MathBox(),),
-            Consumer<CalculationMode>(
-              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
-            ),
-            Consumer<CalculationMode>(
-              builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
+            Expanded(
+              child: Stack(
+                alignment: AlignmentDirectional.bottomCenter,
+                children: <Widget>[
+                  MathBox(),
+                  SlidComponent(),
+                ],
+              ),
             ),
             MathKeyBoard(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SlidComponent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Consumer<CalculationMode>(
+          builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
+        ),
+        Consumer<CalculationMode>(
+          builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
+        ),
+      ],
     );
   }
 }
