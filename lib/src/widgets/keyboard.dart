@@ -41,6 +41,8 @@ class MyButton extends StatelessWidget {
   }
 }
 
+const AspectRatio = 1.2;
+
 class MathKeyBoard extends StatelessWidget {
   List<Widget> _buildLowButton(MathBoxController mathBoxController) {
     List<Widget> button = [];
@@ -146,13 +148,14 @@ class MathKeyBoard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
     return Container(
-      height: width / 5 * 4,
+      height: width / 5 * 4 / AspectRatio,
       child: Material(
         color: Colors.grey[300],
         elevation: 15.0,
         child: GridView.count(
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: 5,
+          childAspectRatio: AspectRatio,
           children: _buildLowButton(mathBoxController),
         ),
       ),
@@ -182,7 +185,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _height = (MediaQuery.of(context).size.width - 10) / 7 * 3;
+    _height = (MediaQuery.of(context).size.width - 10) / 7 * 3 / AspectRatio;
 
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: AtanCurve());
@@ -198,7 +201,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     final setting = Provider.of<SettingModel>(context, listen: false);
     final mathBoxController = Provider.of<MathBoxController>(context, listen:false);
     if (setting.hideKeyboard == true) {
-      animationController.value = 1;
+      animationController.animateTo(1.0, duration: const Duration(milliseconds: 200));
     }
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
@@ -257,6 +260,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
               child: GridView.count(
                 physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 7,
+                childAspectRatio: AspectRatio,
                 children: _buildUpButton(mathBoxController),
               ),
             ),
