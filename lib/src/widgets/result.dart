@@ -50,6 +50,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
               fontFamily: 'Minion-Pro',
               fontSize: animation.value - 5,
             ),
+            maxLines: 1,
           );
         },
       ),

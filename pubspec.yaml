@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   math_expressions: ^1.1.1
-  webview_flutter: ^0.3.13
+  webview_flutter: ^0.3.16
   mime: ^0.9.6+3
   petitparser: ^2.4.0
   function_tree: ^0.2.6
