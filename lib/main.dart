@@ -135,9 +135,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: <Widget>[
             Expanded(
               child: Stack(
-                alignment: AlignmentDirectional.bottomCenter,
+                alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  MathBox(),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(child: MathBox(),),
+                      SizedBox(height: 95.0,),
+                    ],
+                  ),
                   SlidComponent(),
                 ],
               ),

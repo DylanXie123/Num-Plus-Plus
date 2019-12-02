@@ -144,12 +144,11 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   Animation animation;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final size = MediaQuery.of(context).size;
+  void initState() {
+    super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
-    animation = Tween<double>(begin: 0, end: size.aspectRatio<1?size.height:size.width).animate(curve);
+    animation = Tween<double>(begin: 0, end: 1500).animate(curve);
     Provider.of<MathBoxController>(context, listen: false).clearAnimationController = animationController;
   }
 
