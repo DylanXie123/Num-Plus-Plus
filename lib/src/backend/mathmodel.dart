@@ -196,6 +196,12 @@ class FunctionModel {
 
 class CalculationMode extends ValueNotifier<Mode> {
   CalculationMode(Mode value) : super(value);
+
+  void changeMode(Mode newMode) {
+    if (newMode != value) {
+      value = newMode;
+    }
+  }
 }
 
 enum Mode {

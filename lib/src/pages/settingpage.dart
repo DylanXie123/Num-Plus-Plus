@@ -114,6 +114,7 @@ class SettingModel with ChangeNotifier {
   bool isRadMode = true;
   bool hideKeyboard = false;
   int initPage = 0;
+  bool isLoaded = false;
 
   SettingModel() {
     initVal();
@@ -151,6 +152,7 @@ class SettingModel with ChangeNotifier {
     isRadMode = prefs.getBool('isRadMode') ?? true;
     hideKeyboard = prefs.getBool('hideKeyboard') ?? false;
     initPage = prefs.getInt('initPage') ?? 0;
+    isLoaded = true;
     notifyListeners();
   }
 

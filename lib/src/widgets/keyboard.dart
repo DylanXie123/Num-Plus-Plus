@@ -231,6 +231,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
               physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 7,
               children: _buildUpButton(),
+              childAspectRatio: AspectRatio,
             ),
           ),
         ],
@@ -241,8 +242,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
-    if (setting.hideKeyboard == true) {
-      animationController.animateTo(1.0, duration: const Duration(milliseconds: 200));
+    if (setting.isLoaded && setting.hideKeyboard) {
+      animationController.value = 1;
     }
     return GestureDetector(
       onVerticalDragUpdate: (detail) {

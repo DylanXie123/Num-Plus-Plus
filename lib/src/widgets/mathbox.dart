@@ -116,12 +116,10 @@ class MathBox extends StatelessWidget {
                   matrixModel.updateExpression(message.message);
                 } else {
                   if (message.message.contains(RegExp('x|y'))) {
-                    mode.value = Mode.Function;
+                    mode.changeMode(Mode.Function);
                     functionModel.updateExpression(message.message);
                   } else {
-                    if (mode.value != Mode.Basic) {
-                      mode.value = Mode.Basic;
-                    }
+                    mode.changeMode(Mode.Basic);
                     mathModel.updateExpression(message.message);
                     mathModel.calcNumber();
                   }

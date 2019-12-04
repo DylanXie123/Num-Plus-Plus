@@ -9,6 +9,7 @@ import 'package:num_plus_plus/src/widgets/matrixbutton.dart';
 import 'package:num_plus_plus/src/widgets/keyboard.dart';
 import 'package:num_plus_plus/src/backend/mathmodel.dart';
 import 'package:num_plus_plus/src/pages/settingpage.dart';
+import 'package:num_plus_plus/src/pages/functionpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -79,19 +80,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final mode = Provider.of<CalculationMode>(context, listen: false);
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
-    final setting = Provider.of<SettingModel>(context);
-    tabController.index = setting.initPage;
-    switch (tabController.index) {
-      case 0:
-        if (mode.value == Mode.Matrix) {
-          mode.value = Mode.Basic;
-        }
-        break;
-      case 1:
-        mode.value = Mode.Matrix;
-        break;
-      default:
-        throw 'Unknown type';
+    final setting = Provider.of<SettingModel>(context, listen: false);
+    if(setting.isLoaded) {
+      tabController.index = setting.initPage;
+      switch (tabController.index) {
+        case 0:
+          if (mode.value == Mode.Matrix) {
+            mode.value = Mode.Basic;
+          }
+          break;
+        case 1:
+          mode.changeMode(Mode.Matrix);
+          break;
+        default:
+          throw 'Unknown type';
+      }
     }
     return Scaffold(
       appBar: AppBar(
@@ -117,14 +120,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
           onTap: (index) {
             setting.changeInitpage(index);
-            mathBoxController.deleteAllExpression();
             switch (index) {
               case 0:
-                mode.value = Mode.Basic;
+                if (mode.value == Mode.Matrix) {
+                  mode.value = Mode.Basic;
+                  mathBoxController.deleteAllExpression();
+                }
                 break;
               case 1:
-                mode.value = Mode.Matrix;
-                mathBoxController.addExpression('\\\\bmatrix');
+                if (mode.value != Mode.Matrix) {
+                  mode.value = Mode.Matrix;
+                  mathBoxController.deleteAllExpression();
+                  mathBoxController.addExpression('\\\\bmatrix');
+                }
                 break;
               default:
                 throw 'Unknown type';
@@ -166,10 +174,30 @@ class SlidComponent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Consumer<CalculationMode>(
-          builder: (context, mathMode, _) => mathMode.value==Mode.Basic?Result():MatrixButton(),
+          builder: (context, mathMode, _) {
+            switch (mathMode.value) {
+              case Mode.Basic:
+                return Result();
+                break;
+              case Mode.Matrix:
+                return MatrixButton();
+                break;
+              case Mode.Function:
+                return OutlineButton(
+                  child: Text('Analyze'),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FunctionPage()),
+                    );
+                  },
+                );
+                break;
+              default:
+                throw 'Error';
+            }
+          },
         ),
         Consumer<CalculationMode>(
-          builder: (context, mathMode, _) => mathMode.value==Mode.Basic?ExpandKeyBoard():SizedBox(height: 0.0,),
+          builder: (context, mathMode, _) => mathMode.value!=Mode.Matrix?ExpandKeyBoard():SizedBox(height: 0.0,),
         ),
       ],
     );
