@@ -92,6 +92,8 @@ class MathBox extends StatelessWidget {
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
     final mathModel = Provider.of<MathModel>(context, listen: false);
     final matrixModel = Provider.of<MatrixModel>(context, listen: false);
+    final functionModel = Provider.of<FunctionModel>(context, listen: false);
+    final mode = Provider.of<CalculationMode>(context, listen: false);
     return Stack(
       children: <Widget>[
         WebView(
@@ -110,12 +112,19 @@ class MathBox extends StatelessWidget {
             JavascriptChannel(
               name: 'latexString',
               onMessageReceived: (JavascriptMessage message) {
-                final mode = Provider.of<CalculationMode>(context, listen: false);
-                if (mode.value == Mode.Basic) {
-                  mathModel.updateExpression(message.message);
-                  mathModel.calcNumber();
-                } else {
+                if (mode.value == Mode.Matrix) {
                   matrixModel.updateExpression(message.message);
+                } else {
+                  if (message.message.contains(RegExp('x|y'))) {
+                    mode.value = Mode.Function;
+                    functionModel.updateExpression(message.message);
+                  } else {
+                    if (mode.value != Mode.Basic) {
+                      mode.value = Mode.Basic;
+                    }
+                    mathModel.updateExpression(message.message);
+                    mathModel.calcNumber();
+                  }
                 }
               }
             ),

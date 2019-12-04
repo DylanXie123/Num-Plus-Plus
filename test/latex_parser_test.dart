@@ -5,7 +5,7 @@ import 'package:num_plus_plus/src/backend/latex.dart';
 
 void main() {
   test('Unit Test', () {
-    final lp = LaTexParser('3!\\sin\\left(4\\right)');
+    final lp = LaTexParser('\\sin\\left(45-\\frac{\\log_3\\left(45+\\frac{\\sin\\left(2\\right)}{\\sqrt{2}}\\right)}{x\\pi}\\right)+e^{-1}');
     // print(lp.stream);
     // print(lp.outputstack);
     print(lp.parse());

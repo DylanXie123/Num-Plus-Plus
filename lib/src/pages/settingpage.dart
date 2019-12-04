@@ -77,7 +77,7 @@ class SettingPage extends StatelessWidget {
             leading: Icon(MaterialCommunityIcons.getIconData("github-circle")),
             title: Text('Github'),
             onTap: () {
-              _launchURL('https://github.com/DXie123/Num-Plus-Plus');
+              _launchURL('https://github.com/DylanXie123/Num-Plus-Plus');
             },
           ),
           ListTile(

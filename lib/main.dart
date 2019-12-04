@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
               precision: settings.precision.toInt(),
             ),
         ),
+        Provider(builder: (context) => FunctionModel(),),
         ListenableProvider<CalculationMode>(
           builder: (context) => CalculationMode(Mode.Basic),
           dispose: (context, value) => value.dispose(),
@@ -82,7 +83,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     tabController.index = setting.initPage;
     switch (tabController.index) {
       case 0:
-        mode.value = Mode.Basic;
+        if (mode.value == Mode.Matrix) {
+          mode.value = Mode.Basic;
+        }
         break;
       case 1:
         mode.value = Mode.Matrix;
