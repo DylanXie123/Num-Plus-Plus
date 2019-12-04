@@ -171,14 +171,14 @@ class FunctionModel {
     _expression = LaTexParser(_expressionString).parse();
   }
 
-  num _calc(num input) {
+  num calc(num input) {
     ContextModel cm = ContextModel();
     cm.bindVariable(Variable('x'), Number(input));
     return _expression.evaluate(EvaluationType.REAL, cm);
   }
 
   num solve() {
-    return _calc(1);
+    return calc(1);
   }
 
   void integral() {

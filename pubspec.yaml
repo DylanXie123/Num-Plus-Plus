@@ -33,6 +33,7 @@ dependencies:
   url_launcher: ^5.1.4
   flutter_launcher_icons: ^0.7.3
   linalg: ^0.3.2
+  fl_chart: ^0.5.0
 
 flutter_icons:
   android: true
