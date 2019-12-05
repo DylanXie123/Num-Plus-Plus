@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -114,7 +116,7 @@ class SettingModel with ChangeNotifier {
   bool isRadMode = true;
   bool hideKeyboard = false;
   int initPage = 0;
-  bool isLoaded = false;
+  Completer loading = Completer();
 
   SettingModel() {
     initVal();
@@ -152,7 +154,7 @@ class SettingModel with ChangeNotifier {
     isRadMode = prefs.getBool('isRadMode') ?? true;
     hideKeyboard = prefs.getBool('hideKeyboard') ?? false;
     initPage = prefs.getInt('initPage') ?? 0;
-    isLoaded = true;
+    loading.complete();
     notifyListeners();
   }
 

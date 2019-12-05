@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
+        Provider(builder: (context) => MathBoxController(),),
         ChangeNotifierProvider(builder: (_) => SettingModel(),),
         ChangeNotifierProxyProvider<SettingModel, MathModel>(
           initialBuilder: (context) => MathModel(),
@@ -42,11 +43,25 @@ class MyApp extends StatelessWidget {
             ),
         ),
         Provider(builder: (context) => FunctionModel(),),
-        ListenableProvider<CalculationMode>(
-          builder: (context) => CalculationMode(Mode.Basic),
+        ListenableProxyProvider<SettingModel, CalculationMode>(
+          initialBuilder: (context) => CalculationMode(Mode.Basic),
+          builder: (context, settings, model) {
+            if (settings.loading.isCompleted) {
+              switch (settings.initPage) {
+                case 0:
+                  if (model.value == Mode.Matrix) {
+                    model.value = Mode.Basic;
+                  }
+                  break;
+                case 1:
+                  model.changeMode(Mode.Matrix);
+                  break;
+              }
+            }
+            return model;
+          },
           dispose: (context, value) => value.dispose(),
         ),
-        Provider(builder: (context) => MathBoxController(),),
       ],
       child: MaterialApp(
         title: 'num++',
@@ -81,21 +96,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     final mode = Provider.of<CalculationMode>(context, listen: false);
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
     final setting = Provider.of<SettingModel>(context, listen: false);
-    if(setting.isLoaded) {
-      tabController.index = setting.initPage;
-      switch (tabController.index) {
-        case 0:
-          if (mode.value == Mode.Matrix) {
-            mode.value = Mode.Basic;
-          }
-          break;
-        case 1:
-          mode.changeMode(Mode.Matrix);
-          break;
-        default:
-          throw 'Unknown type';
-      }
-    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -110,34 +110,42 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             );
           },
         ),
-        title: TabBar(
-          indicatorColor: Colors.blueAccent[400],
-          controller: tabController,
-          labelColor: Colors.black,
-          tabs: <Widget>[
-            Tab(text: 'Basic',),
-            Tab(text: 'Matrix',),
-          ],
-          onTap: (index) {
-            setting.changeInitpage(index);
-            switch (index) {
-              case 0:
-                if (mode.value == Mode.Matrix) {
-                  mode.value = Mode.Basic;
-                  mathBoxController.deleteAllExpression();
-                }
-                break;
-              case 1:
-                if (mode.value != Mode.Matrix) {
-                  mode.value = Mode.Matrix;
-                  mathBoxController.deleteAllExpression();
-                  mathBoxController.addExpression('\\\\bmatrix');
-                }
-                break;
-              default:
-                throw 'Unknown type';
+        title: FutureBuilder(
+          future: setting.loading.future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              tabController.index = setting.initPage;
             }
-          },
+            return TabBar(
+              indicatorColor: Colors.blueAccent[400],
+              controller: tabController,
+              labelColor: Colors.black,
+              tabs: <Widget>[
+                Tab(text: 'Basic',),
+                Tab(text: 'Matrix',),
+              ],
+              onTap: (index) {
+                setting.changeInitpage(index);
+                switch (index) {
+                  case 0:
+                    if (mode.value == Mode.Matrix) {
+                      mode.value = Mode.Basic;
+                      mathBoxController.deleteAllExpression();
+                    }
+                    break;
+                  case 1:
+                    if (mode.value != Mode.Matrix) {
+                      mode.value = Mode.Matrix;
+                      mathBoxController.deleteAllExpression();
+                      mathBoxController.addExpression('\\\\bmatrix');
+                    }
+                    break;
+                  default:
+                    throw 'Unknown type';
+                }
+              },
+            );
+          }
         ),
       ),
       body: SafeArea(

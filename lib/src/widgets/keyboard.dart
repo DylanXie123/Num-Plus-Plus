@@ -118,7 +118,7 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(Consumer<CalculationMode>(
       builder: (context, mode, _) => MyButton(
-        child: mode.value==Mode.Basic?
+        child: mode.value!=Mode.Matrix?
           Text('='):
           Icon(
             MaterialCommunityIcons.getIconData("matrix"),
@@ -242,35 +242,40 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final setting = Provider.of<SettingModel>(context, listen: false);
-    if (setting.isLoaded && setting.hideKeyboard) {
-      animationController.value = 1;
-    }
-    return GestureDetector(
-      onVerticalDragUpdate: (detail) {
-        if (keyboardAnimation.value - detail.delta.dy > 0 && keyboardAnimation.value - detail.delta.dy < _height) {
-          double y = keyboardAnimation.value - detail.delta.dy;
-          animationController.value = (tan(atan(AnimationConstant)-y*atan(AnimationConstant)*2/_height)+AnimationConstant)/AnimationConstant/2;
+    return FutureBuilder(
+      future: setting.loading.future,
+      builder: (context, snapshot) {
+        if (setting.loading.isCompleted && setting.hideKeyboard) {
+          animationController.value = 1;
         }
-      },
-      onVerticalDragEnd: (detail) {
-        if (detail.primaryVelocity > 0.0) {
-          animationController.animateTo(1.0, duration: const Duration(milliseconds: 200));
-          setting.changeKeyboardMode(true);
-        } else if (detail.primaryVelocity < 0.0) {
-          animationController.animateBack(0.0, duration: const Duration(milliseconds: 200));
-          setting.changeKeyboardMode(false);
-        } else if (keyboardAnimation.value > _height*0.8) {
-          animationController.reverse();
-          setting.changeKeyboardMode(false);
-        } else {
-          animationController.forward();
-          setting.changeKeyboardMode(true);
-        }
-      },
-      child: AnimatedBuilder(
-        builder: _buildAnimation,
-        animation: animationController,
-      ),
+        return GestureDetector(
+          onVerticalDragUpdate: (detail) {
+            if (keyboardAnimation.value - detail.delta.dy > 0 && keyboardAnimation.value - detail.delta.dy < _height) {
+              double y = keyboardAnimation.value - detail.delta.dy;
+              animationController.value = (tan(atan(AnimationConstant)-y*atan(AnimationConstant)*2/_height)+AnimationConstant)/AnimationConstant/2;
+            }
+          },
+          onVerticalDragEnd: (detail) {
+            if (detail.primaryVelocity > 0.0) {
+              animationController.animateTo(1.0, duration: const Duration(milliseconds: 200));
+              setting.changeKeyboardMode(true);
+            } else if (detail.primaryVelocity < 0.0) {
+              animationController.animateBack(0.0, duration: const Duration(milliseconds: 200));
+              setting.changeKeyboardMode(false);
+            } else if (keyboardAnimation.value > _height*0.8) {
+              animationController.reverse();
+              setting.changeKeyboardMode(false);
+            } else {
+              animationController.forward();
+              setting.changeKeyboardMode(true);
+            }
+          },
+          child: AnimatedBuilder(
+            builder: _buildAnimation,
+            animation: animationController,
+          ),
+        );
+      }
     );
   }
 
