@@ -81,12 +81,6 @@ class Server {
 }
 
 class MathBox extends StatelessWidget {
-  final _server = Server();
-
-  MathBox() {
-    _server.start();
-  }
-  
   @override
   Widget build(BuildContext context) {
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
@@ -153,9 +147,9 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 400),vsync: this);
+    animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
     final curve = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
-    animation = Tween<double>(begin: 0, end: 1500).animate(curve);
+    animation = Tween<double>(begin: 0, end: 2000).animate(curve);
     Provider.of<MathBoxController>(context, listen: false).clearAnimationController = animationController;
   }
 

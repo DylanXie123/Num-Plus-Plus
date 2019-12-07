@@ -81,7 +81,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-
+  final Server _server = Server();
   TabController tabController;
   List tabs = ["Basic", "Matrix"];
 
@@ -89,6 +89,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
+    _server.start();
+  }
+
+  @override
+  void dispose() {
+    _server.close();
+    super.dispose();
   }
 
   @override
@@ -102,7 +109,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         backgroundColor: Colors.transparent,
         brightness: Brightness.light,
         leading: IconButton(
-          icon: Icon(MaterialCommunityIcons.getIconData("settings-outline"), color: Colors.grey,),
+          icon: Icon(
+            MaterialCommunityIcons.getIconData("settings-outline"),
+            color: Colors.grey,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -148,28 +158,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           }
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Expanded(child: MathBox(),),
-                      SizedBox(height: 95.0,),
-                    ],
-                  ),
-                  SlidComponent(),
-                ],
-              ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                MathBox(),
+                SlidComponent(),
+              ],
             ),
-            MathKeyBoard(),
-          ],
-        ),
+          ),
+          MathKeyBoard(),
+        ],
       ),
     );
   }
@@ -194,7 +195,9 @@ class SlidComponent extends StatelessWidget {
                 return OutlineButton(
                   child: Text('Analyze'),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => FunctionPage()),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FunctionPage()),
                     );
                   },
                 );
@@ -205,7 +208,10 @@ class SlidComponent extends StatelessWidget {
           },
         ),
         Consumer<CalculationMode>(
-          builder: (context, mathMode, _) => mathMode.value!=Mode.Matrix?ExpandKeyBoard():SizedBox(height: 0.0,),
+          builder: (context, mathMode, _) =>
+            mathMode.value!=Mode.Matrix?
+            ExpandKeyBoard():
+            SizedBox(height: 0.0,),
         ),
       ],
     );

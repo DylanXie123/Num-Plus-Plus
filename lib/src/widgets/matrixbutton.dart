@@ -34,8 +34,9 @@ class MatrixButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
-    return SizedBox(
+    return Container(
       height: 40.0,
+      color: Colors.white,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
