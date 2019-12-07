@@ -331,22 +331,22 @@ class LaTexParser extends Parser {
         case '\\abs':
           result.add(Abs(result.removeLast()));
           break;
-        // case '!':
-        //   try {
-        //     num t = result.removeLast().evaluate(EvaluationType.REAL, ContextModel());
-        //     if (t.ceil() == t.floor() && t>=0 && t<20) {
-        //       int a = t.toInt();
-        //       int y = 1;
-        //       while(a > 0) {
-        //         y *= a;
-        //         a--;
-        //       }
-        //       result.add(Number(y));
-        //     } else {
-        //       throw 'Unable to do factorial';
-        //     }
-        //   } catch (e) {}
-        //   break;
+        case '!':
+          try {
+            num t = result.removeLast().evaluate(EvaluationType.REAL, ContextModel());
+            if (t.ceil() == t.floor() && t>=0 && t<20) {
+              int a = t.toInt();
+              int y = 1;
+              while(a > 0) {
+                y *= a;
+                a--;
+              }
+              result.add(Number(y));
+            } else {
+              throw 'Unable to do factorial';
+            }
+          } catch (e) {}
+          break;
         default:
           if (_outputStack[i] is String) {
             result.add(Variable(_outputStack[i]));

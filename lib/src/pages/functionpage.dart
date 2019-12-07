@@ -8,82 +8,138 @@ class FunctionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Function'),),
-      body: Center(
-        child: Consumer<FunctionModel>(
-          builder: (context, model, _) => LineChart(
-            LineChartData(
-              lineBarsData: [
-                LineChartBarData(
-                  spots: _plotData(model.calc),
-                  isCurved: true,
-                  show: true,
-                  dotData: FlDotData(
-                    show: false,
-                  ),
-                ),
-              ],
-              gridData: FlGridData(
-                drawVerticalGrid: true,
-                show: false,
-              ),
-              titlesData: FlTitlesData(
-                bottomTitles: SideTitles(
-                  showTitles: true,
-                  getTitles: (value) {
-                    if(value.remainder(5) == 0) {
-                      return value.toInt().toString();
-                    } else {
-                      return null;
-                    }
-                  }
-                ),
-                leftTitles: SideTitles(
-                  showTitles: true,
-                  getTitles: (value) {
-                    if(value.remainder(5) == 0) {
-                      return value.toInt().toString();
-                    } else {
-                      return null;
-                    }
-                  }
-                ),
-              ),
-              lineTouchData: LineTouchData(
-                touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-                ),
-              ),
-            ),
-          ),
-        ),
+      appBar: AppBar(title: Text('Plot'),),
+      body: Container(
+        padding: EdgeInsets.all(5.0),
+        width: double.infinity,
+        height: double.infinity,
+        child: FunctionChart(),
       ),
     );
   }
 }
 
-typedef FunctionCalc = num Function(num x);
+typedef CalculationFunction = num Function(num x);
 
-List<FlSpot> _plotData(FunctionCalc calc, {double start = -5.0, double end = 5.0}) {
-  const interval = 50;
-  double step = (end - start) / interval;
-  List<FlSpot> spots = [];
-  for (var i = 0; i < interval; i++) {
-    var result = calc(start+step*i);
-    if (result.isFinite) {
-      spots.add(FlSpot(start+step*i, result));
-    } else {
-      // spots.add(FlSpot(i.toDouble(), 0));
-    }
+class FunctionChart extends StatefulWidget {
+  @override
+  _FunctionChartState createState() => _FunctionChartState();
+}
+
+class _FunctionChartState extends State<FunctionChart> {
+  List<double> xCoordinate = <double>[];
+  List<FlSpot> _spots = <FlSpot>[];
+  double start = -6.0;
+  double end = 6.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _spots = _plotData(Provider.of<FunctionModel>(context, listen: false).calc, start, end);
   }
-  // var temp = List<FlSpot>.generate(interval, (index) {
-  //   var result = calc(start+step*index);
-  //   if (result.isFinite) {
-  //     return FlSpot(index.toDouble(), result);
-  //   } else {
-  //     return FlSpot(index.toDouble(), 0.0);
-  //   }
-  // });
-  // temp.removeAt(5);
-  return spots;
+
+  List<FlSpot> _plotData(CalculationFunction calc, double start, double end) {
+    const interval = 500;
+    double step = (end - start) / interval;
+    List<FlSpot> spots = [];
+    for (var i = 0; i < interval; i++) {
+      var result = calc(start+step*i);
+      if (result.isFinite) {
+        spots.add(FlSpot(start+step*i, result));
+      }
+    }
+    return spots;
+  }
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    // onTap: () {
+    //   print('tap');
+    // },
+    onScaleStart: (detail) {
+      print('object');
+    },
+    child: LineChart(
+      LineChartData(
+        lineBarsData: [
+          LineChartBarData(
+            spots: _spots,
+            isCurved: true,
+            dotData: FlDotData(
+              show: false,
+            ),
+          ),
+          LineChartBarData(
+            spots: [
+              FlSpot(start, 0),
+              FlSpot(end, 0),
+            ],
+            colors: [Colors.black],
+            dotData: FlDotData(
+              show: false,
+            ),
+          ),
+          LineChartBarData(
+            spots: [
+              FlSpot(0, -5.0),
+              FlSpot(0, 5.0),
+            ],
+            colors: [Colors.black],
+            dotData: FlDotData(
+              show: false,
+            ),
+          ),
+        ],
+        gridData: FlGridData(
+          show: false,
+          getDrawingHorizontalGridLine: (value) {
+            return FlLine();
+          }
+        ),
+        titlesData: FlTitlesData(
+          bottomTitles: SideTitles(
+            showTitles: false,
+            getTitles: (value) {
+              if(value.remainder(5) == 0) {
+                return value.toInt().toString();
+              } else {
+                return null;
+              }
+            }
+          ),
+          leftTitles: SideTitles(
+            showTitles: false,
+            getTitles: (value) {
+              if(value.remainder(5) == 0) {
+                return value.toInt().toString();
+              } else {
+                return null;
+              }
+            }
+          ),
+        ),
+        lineTouchData: LineTouchData(
+          enabled: false,
+          enableNormalTouch: false,
+          handleBuiltInTouches: false,
+          // touchCallback: (response) {
+          //   if (response.touchInput.getOffset().dx != 0.0) {
+          //     if (xCoordinate.length < 2) {
+          //       xCoordinate.add(response.touchInput.getOffset().dx);
+          //     } else {
+          //       xCoordinate.removeAt(0);
+          //       xCoordinate.add(response.touchInput.getOffset().dx);
+          //       setState(() {
+          //         start += xCoordinate[1] - xCoordinate[0];
+          //         end += xCoordinate[1] - xCoordinate[0];
+          //         _spots = _plotData(Provider.of<FunctionModel>(context, listen: false).calc, start, end);
+          //       });
+          //     }
+          //   }
+          // },
+        ),
+      ),
+      swapAnimationDuration: Duration(milliseconds: 10),
+    ),
+  );
 }

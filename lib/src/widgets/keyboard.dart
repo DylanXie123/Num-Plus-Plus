@@ -439,6 +439,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
     ));
 
     button.add(MyButton(
+      child: Text('!'),
+      fontSize: fontSize,
+      fontColor: fontColor,
+      onPressed: () {
+        mathBoxController.addExpression('!');
+      },
+    ));
+
+    button.add(MyButton(
       child: Icon(// *10^n
         IconData(0xe90a, fontFamily: 'Keyboard'),
         color: fontColor,
@@ -476,15 +485,15 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
       },
     ));
 
-    button.add(MyButton(
-      child: Icon(
-        MaterialCommunityIcons.getIconData("function-variant"), 
-        color: fontColor,
-      ),
-      onPressed: () {
-        mathBoxController.addExpression('x');
-      },
-    ));
+    // button.add(MyButton(
+    //   child: Icon(
+    //     MaterialCommunityIcons.getIconData("function-variant"), 
+    //     color: fontColor,
+    //   ),
+    //   onPressed: () {
+    //     mathBoxController.addExpression('x');
+    //   },
+    // ));
 
     button.add(MyButton(
       child: Icon(Icons.arrow_back, color: fontColor,),
