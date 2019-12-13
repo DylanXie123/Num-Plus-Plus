@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:num_plus_plus/src/widgets/mathbox.dart';
 import 'package:num_plus_plus/src/pages/settingpage.dart';
@@ -25,10 +26,11 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: TextStyle(
-        fontSize: fontSize,
-        color: fontColor,
-        fontFamily: 'Minion-Pro',
+      style: GoogleFonts.sourceSerifPro(
+        textStyle: TextStyle(
+          fontSize: fontSize,
+          color: fontColor,
+        ),
       ),
       child: InkResponse(
         splashFactory: InkRipple.splashFactory,

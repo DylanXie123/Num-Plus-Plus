@@ -34,6 +34,8 @@ dependencies:
   flutter_launcher_icons: ^0.7.3
   linalg: ^0.3.2
   fl_chart: ^0.5.0
+  google_fonts: ^0.2.0
+
 flutter_icons:
   android: true
   ios: true
@@ -74,9 +76,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
  
   fonts:
-    - family: Minion-Pro
-      fonts:
-        - asset: assets/fonts/Minion-Pro-Semibold_30656.ttf
+    # - family: Minion-Pro
+    #   fonts:
+    #     - asset: assets/fonts/Minion-Pro-Semibold_30656.ttf
     - family: Keyboard
       fonts:
         - asset: assets/fonts/Keyboard-Icon.ttf

@@ -8,8 +8,8 @@
  * one at http://mozilla.org/MPL/2.0/.
  */
 @font-face {
-  font-family: Symbola;
-  src: url(./font/Symbola.ttf);
+  font-family: SourceSerifPro;
+  src: url(../fonts/SourceSerifPro-Regular.ttf);
 }
 .mq-editable-field {
   display: -moz-inline-box;
@@ -106,7 +106,7 @@
 .mq-math-mode var,
 .mq-math-mode .mq-text-mode,
 .mq-math-mode .mq-nonSymbola {
-  font-family: "Times New Roman", Symbola, serif;
+  font-family: "Times New Roman", SourceSerifPro, serif;
   line-height: .9;
 }
 .mq-math-mode * {
@@ -140,7 +140,7 @@
   min-width: 1ex;
 }
 .mq-math-mode .mq-font {
-  font: 1em "Times New Roman", Symbola, serif;
+  font: 1em "Times New Roman", SourceSerifPro, serif;
 }
 .mq-math-mode .mq-font * {
   font-family: inherit;
@@ -189,10 +189,10 @@
   font-style: normal;
 }
 .mq-math-mode .mq-sans-serif {
-  font-family: sans-serif, Symbola, serif;
+  font-family: sans-serif, SourceSerifPro, serif;
 }
 .mq-math-mode .mq-monospace {
-  font-family: monospace, Symbola, serif;
+  font-family: monospace, SourceSerifPro, serif;
 }
 .mq-math-mode .mq-overline {
   border-top: 1px solid black;
@@ -263,7 +263,7 @@
   display: block;
 }
 .mq-math-mode .mq-operator-name {
-  font-family: Symbola, "Times New Roman", serif;
+  font-family: SourceSerifPro, "Times New Roman", serif;
   line-height: .9;
   font-style: normal;
 }
@@ -372,7 +372,7 @@
 .mq-math-mode,
 .mq-math-mode .mq-editable-field {
   cursor: text;
-  font-family: Symbola, "Times New Roman", serif;
+  font-family: SourceSerifPro, "Times New Roman", serif;
 }
 .mq-math-mode .mq-overarc {
   border-top: 1px solid black;

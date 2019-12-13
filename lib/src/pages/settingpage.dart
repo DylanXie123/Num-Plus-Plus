@@ -43,6 +43,10 @@ class SettingPage extends StatelessWidget {
                   Text('RAD'),
                   Text('DEG'),
                 ],
+                constraints: BoxConstraints(
+                  minWidth: 100,
+                  minHeight: 40,
+                ),
                 isSelected: [setmodel.isRadMode, !setmodel.isRadMode],
                 onPressed: (index) {
                   setmodel.changeRadMode((index==0)?true:false);

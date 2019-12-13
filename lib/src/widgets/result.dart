@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:num_plus_plus/src/backend/mathmodel.dart';
@@ -36,7 +37,6 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       height: animation.value,
       width: double.infinity,
       alignment: Alignment.centerRight,
-      // color: Colors.white,
       child: Consumer<MathModel>(
         builder: (_, model, __) {
           String text;
@@ -47,8 +47,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
           }
           return SelectableText(
             text,
-            style: TextStyle(
-              fontFamily: 'Minion-Pro',
+            style: GoogleFonts.sourceSerifPro(
               fontSize: animation.value - 5,
             ),
             maxLines: 1,
