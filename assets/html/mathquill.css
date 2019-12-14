@@ -94,6 +94,28 @@
 .mq-math-mode .mq-font {
   font: 1em "Times New Roman", serif;
 }
+.mq-math-mode .mq-supsub {
+  text-align: left;
+  font-size: 90%;
+  vertical-align: -0.5em;
+}
+.mq-math-mode .mq-supsub.mq-sup-only {
+  vertical-align: .5em;
+}
+.mq-math-mode .mq-supsub.mq-sup-only .mq-sup {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+.mq-math-mode .mq-supsub .mq-sup {
+  display: block;
+}
+.mq-math-mode .mq-supsub .mq-sub {
+  display: block;
+  float: left;
+}
+.mq-math-mode .mq-supsub .mq-binary-operator {
+  padding: 0 .1em;
+}
 .mq-math-mode .mq-supsub .mq-fraction {
   font-size: 70%;
 }

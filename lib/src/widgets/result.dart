@@ -34,6 +34,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       height: animation.value,
       width: double.infinity,
       alignment: Alignment.centerRight,
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
       child: Consumer<MathModel>(
         builder: (_, model, __) {
           String text;

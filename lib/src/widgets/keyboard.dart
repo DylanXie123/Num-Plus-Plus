@@ -194,47 +194,50 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
   }
 
   Widget _buildAnimation(BuildContext context, Widget child) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0)),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      child: Material(
         color: Colors.blueAccent[400],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SizedBox(
-            height: arrowAnimation.value,
-            width: double.infinity,
-            child: FlatButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onPressed: () {
-                final setting = Provider.of<SettingModel>(context, listen: false);
-                if (animationController.status == AnimationStatus.dismissed) {
-                  animationController.forward();
-                  setting.changeKeyboardMode(true);
-                } else {
-                  animationController.reverse();
-                  setting.changeKeyboardMode(false);
-                }
-              },
-              child: Icon(
-                (keyboardAnimation.value > _height*0.8)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
-                color: Colors.grey[200],
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20.0),
+          topLeft: Radius.circular(20.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: arrowAnimation.value,
+              width: double.infinity,
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  final setting = Provider.of<SettingModel>(context, listen: false);
+                  if (animationController.status == AnimationStatus.dismissed) {
+                    animationController.forward();
+                    setting.changeKeyboardMode(true);
+                  } else {
+                    animationController.reverse();
+                    setting.changeKeyboardMode(false);
+                  }
+                },
+                child: Icon(
+                  (keyboardAnimation.value > _height*0.8)?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
+                  color: Colors.grey[200],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: keyboardAnimation.value,
-            child: GridView.count(
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 7,
-              children: _buildUpButton(),
-              childAspectRatio: AspectRatio,
+            SizedBox(
+              height: keyboardAnimation.value,
+              child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 7,
+                children: _buildUpButton(),
+                childAspectRatio: AspectRatio,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -475,7 +478,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// expo
-        IconData(0xe905, fontFamily: 'Keyboard'),
+        IconData(0xe906, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
