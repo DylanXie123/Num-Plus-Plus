@@ -1,46 +1,16 @@
-<!-- 
-
-    Html Structure 
-
-<span class="mq-editable-field mq-math-mode" id="math-field">
-    <span class="mq-textarea"></span>
-    <span class="mq-root-block mq-empty" mathquill-block-id="1"></span>
-</span>
- -->
-
 <!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="./mathquill.css"/>
-<style type="text/css">
-* {
-    margin: 0;
-    padding: 0;
-}
-.mq-root-block {
-  font-size: 30px;
-  overflow: scroll !important;
-  padding: 10px !important;
-  padding-bottom: 100px !important;
-  text-align: right;
-	position: absolute;
-	right: 0px;
-	top: 0px;
-	/* background-color: yellow; */
-}
-</style>
 <script src="./jquery-3.4.1.min.js"></script>
 <script src="./mathquill.min.js"></script>
 </head>
 
 <body>
-
 <span id="math-field"></span>
-
 <script>
 var MQ = MathQuill.getInterface(2);
 var mathFieldSpan = document.getElementById('math-field');
-
 var mathField = MQ.MathField(mathFieldSpan, {
     spaceBehavesLikeTab: true,
     substituteTextarea: function() {
@@ -54,7 +24,6 @@ document.body.onclick = function() {
     isClearable = false;
     postClearable();
 }
-
 function addCmd(message, {isOperator = false}) {
     if(isClearable) {
         delAll();
@@ -106,7 +75,6 @@ function postLaTex() {
 function postClearable() {
     clearable.postMessage(isClearable.toString());
 }
-
 </script>
 
 </body>

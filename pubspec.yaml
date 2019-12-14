@@ -34,7 +34,6 @@ dependencies:
   flutter_launcher_icons: ^0.7.3
   linalg: ^0.3.2
   fl_chart: ^0.5.0
-  google_fonts: ^0.2.0
 
 flutter_icons:
   android: true
@@ -62,7 +61,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
   - assets/html/
-  - assets/html/font/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -76,9 +74,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
  
   fonts:
-    # - family: Minion-Pro
-    #   fonts:
-    #     - asset: assets/fonts/Minion-Pro-Semibold_30656.ttf
+    - family: TimesNewRoman
+      fonts:
+        - asset: assets/fonts/times.ttf
     - family: Keyboard
       fonts:
         - asset: assets/fonts/Keyboard-Icon.ttf

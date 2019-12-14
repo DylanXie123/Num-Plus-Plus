@@ -148,7 +148,7 @@ class _ClearAnimationState extends State<ClearAnimation> with TickerProviderStat
   void initState() {
     super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 500),vsync: this);
-    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
+    final curve = CurvedAnimation(parent: animationController, curve: Curves.easeInOutCubic);
     animation = Tween<double>(begin: 0, end: 2000).animate(curve);
     Provider.of<MathBoxController>(context, listen: false).clearAnimationController = animationController;
   }
