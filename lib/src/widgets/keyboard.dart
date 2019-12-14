@@ -56,7 +56,7 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Icon(// frac
-        IconData(0xe909, fontFamily: 'Keyboard'),
+        IconData(0xe907, fontFamily: 'Keyboard'),
         size: 60.0,
       ),
       onPressed: () {mathBoxController.addExpression('/', isOperator: true);},
@@ -318,7 +318,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// sqrt
-        IconData(0xe908, fontFamily: 'Keyboard'),
+        IconData(0xe90a, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -329,7 +329,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// exp
-        IconData(0xe904, fontFamily: 'Keyboard'),
+        IconData(0xe905, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -341,7 +341,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// pow2
-        IconData(0xe907, fontFamily: 'Keyboard'),
+        IconData(0xe909, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -364,7 +364,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// arcsin
-        IconData(0xe902, fontFamily: 'Keyboard'),
+        IconData(0xe903, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -376,7 +376,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// arccos
-        IconData(0xe901, fontFamily: 'Keyboard'),
+        IconData(0xe902, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -388,7 +388,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// arctan
-        IconData(0xe903, fontFamily: 'Keyboard'),
+        IconData(0xe904, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -400,7 +400,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// nrt
-        IconData(0xe906, fontFamily: 'Keyboard'),
+        IconData(0xe908, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -411,7 +411,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// abs
-        IconData(0xe900, fontFamily: 'Keyboard'),
+        IconData(0xe901, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
@@ -449,7 +449,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard> with TickerProviderStat
 
     button.add(MyButton(
       child: Icon(// *10^n
-        IconData(0xe90a, fontFamily: 'Keyboard'),
+        IconData(0xe900, fontFamily: 'Keyboard'),
         color: fontColor,
         size: iconSize,
       ),
