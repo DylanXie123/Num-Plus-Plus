@@ -25,27 +25,27 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
-        Provider(builder: (context) => MathBoxController(),),
-        ChangeNotifierProvider(builder: (_) => SettingModel(),),
+        Provider(create: (context) => MathBoxController(),),
+        ChangeNotifierProvider(create: (_) => SettingModel(),),
         ChangeNotifierProxyProvider<SettingModel, MathModel>(
-          initialBuilder: (context) => MathModel(),
-          builder: (context, settings, model) =>
+          create: (context) => MathModel(),
+          update: (context, settings, model) =>
             model..changeSetting(
               precision: settings.precision.toInt(),
               isRadMode: settings.isRadMode
             ),
         ),
         ChangeNotifierProxyProvider<SettingModel, MatrixModel>(
-          initialBuilder: (context) => MatrixModel(),
-          builder: (context, settings, model) =>
+          create: (context) => MatrixModel(),
+          update: (context, settings, model) =>
             model..changeSetting(
               precision: settings.precision.toInt(),
             ),
         ),
-        Provider(builder: (context) => FunctionModel(),),
+        Provider(create: (context) => FunctionModel(),),
         ListenableProxyProvider<SettingModel, CalculationMode>(
-          initialBuilder: (context) => CalculationMode(Mode.Basic),
-          builder: (context, settings, model) {
+          create: (context) => CalculationMode(Mode.Basic),
+          update: (context, settings, model) {
             if (settings.loading.isCompleted) {
               switch (settings.initPage) {
                 case 0:

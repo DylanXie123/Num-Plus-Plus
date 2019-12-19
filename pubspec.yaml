@@ -27,7 +27,7 @@ dependencies:
   webview_flutter: ^0.3.16
   mime: ^0.9.6+3
   petitparser: ^2.4.0
-  provider: ^3.1.0
+  provider: ^3.2.0
   shared_preferences: ^0.5.3+4
   flutter_icons: ^0.3.1
   url_launcher: ^5.1.4
