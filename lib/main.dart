@@ -25,24 +25,23 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
-        Provider(create: (context) => MathBoxController(),),
-        ChangeNotifierProvider(create: (_) => SettingModel(),),
+        Provider(create: (context) => MathBoxController()),
+        ChangeNotifierProvider(create: (_) => SettingModel()),
         ChangeNotifierProxyProvider<SettingModel, MathModel>(
           create: (context) => MathModel(),
-          update: (context, settings, model) =>
-            model..changeSetting(
-              precision: settings.precision.toInt(),
-              isRadMode: settings.isRadMode
-            ),
+          update: (context, settings, model) => model
+            ..changeSetting(
+                precision: settings.precision.toInt(),
+                isRadMode: settings.isRadMode),
         ),
         ChangeNotifierProxyProvider<SettingModel, MatrixModel>(
           create: (context) => MatrixModel(),
-          update: (context, settings, model) =>
-            model..changeSetting(
+          update: (context, settings, model) => model
+            ..changeSetting(
               precision: settings.precision.toInt(),
             ),
         ),
-        Provider(create: (context) => FunctionModel(),),
+        Provider(create: (context) => FunctionModel()),
         ListenableProxyProvider<SettingModel, CalculationMode>(
           create: (context) => CalculationMode(Mode.Basic),
           update: (context, settings, model) {
@@ -80,7 +79,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final Server _server = Server();
   TabController tabController;
   List tabs = ["Basic", "Matrix"];
@@ -101,7 +101,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final mode = Provider.of<CalculationMode>(context, listen: false);
-    final mathBoxController = Provider.of<MathBoxController>(context, listen: false);
+    final mathBoxController =
+        Provider.of<MathBoxController>(context, listen: false);
     final setting = Provider.of<SettingModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
@@ -130,9 +131,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               indicatorColor: Colors.blueAccent[400],
               controller: tabController,
               labelColor: Colors.black,
+              indicator: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               tabs: <Widget>[
-                Tab(text: 'Basic',),
-                Tab(text: 'Matrix',),
+                Tab(text: 'Basic'),
+                Tab(text: 'Matrix'),
               ],
               onTap: (index) {
                 setting.changeInitpage(index);
@@ -155,7 +163,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 }
               },
             );
-          }
+          },
         ),
       ),
       body: Column(
@@ -208,10 +216,11 @@ class SlidComponent extends StatelessWidget {
           },
         ),
         Consumer<CalculationMode>(
-          builder: (context, mathMode, _) =>
-            mathMode.value!=Mode.Matrix?
-            ExpandKeyBoard():
-            SizedBox(height: 0.0,),
+          builder: (context, mathMode, _) => mathMode.value != Mode.Matrix
+              ? ExpandKeyBoard()
+              : SizedBox(
+                  height: 0.0,
+                ),
         ),
       ],
     );
