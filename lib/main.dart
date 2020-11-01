@@ -166,20 +166,21 @@ class _HomePageState extends State<HomePage>
           },
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: <Widget>[
-                MathBox(),
-                SlidComponent(),
-              ],
-            ),
-          ),
-          MathKeyBoard(),
-        ],
-      ),
+      body: MathLiveBox(),
+      // body: Column(
+      //   children: <Widget>[
+      //     Expanded(
+      //       child: Stack(
+      //         alignment: Alignment.bottomCenter,
+      //         children: <Widget>[
+      //           MathBox(),
+      //           SlidComponent(),
+      //         ],
+      //       ),
+      //     ),
+      //     MathKeyBoard(),
+      //   ],
+      // ),
     );
   }
 }
