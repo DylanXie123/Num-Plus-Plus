@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
+        Provider(create: (context) => MathLiveController()),
         Provider(create: (context) => MathBoxController()),
         ChangeNotifierProvider(create: (_) => SettingModel()),
         ChangeNotifierProxyProvider<SettingModel, MathModel>(
@@ -166,21 +167,21 @@ class _HomePageState extends State<HomePage>
           },
         ),
       ),
-      body: MathLiveBox(),
-      // body: Column(
-      //   children: <Widget>[
-      //     Expanded(
-      //       child: Stack(
-      //         alignment: Alignment.bottomCenter,
-      //         children: <Widget>[
-      //           MathBox(),
-      //           SlidComponent(),
-      //         ],
-      //       ),
-      //     ),
-      //     MathKeyBoard(),
-      //   ],
-      // ),
+      // body: MathLiveBox(),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                MathLiveBox(),
+                SlidComponent(),
+              ],
+            ),
+          ),
+          MathKeyBoard(),
+        ],
+      ),
     );
   }
 }

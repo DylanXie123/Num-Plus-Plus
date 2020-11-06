@@ -4,26 +4,31 @@
 <head>
   <meta charset="utf-8" />
   <script src="./mathlive.js"></script>
-  <link rel="stylesheet" href="./mathlive-static.css" />
+  <!-- <link rel="stylesheet" href="./mathlive-static.css" /> -->
 </head>
 
 <body>
-  <p id="mathfield">$$e^{i\pi} + 1 = 0$$</p>
-  
   <script>
-    let mathlive = MathLive.makeMathField('mathfield', {
-      onContentDidChange: (mf) => {
-        console.log(mf.$text("latex-expanded"));
-      },
+    const mfe = new MathfieldElement();
+    mfe.value = '1+2';
+    mfe.addEventListener('input', () => {
+      latexString.postMessage(mfe.getValue());
+      // console.log(mfe.getValue());
     });
+    document.body.appendChild(mfe);
 
     function backspace() {
-      // mathlive.$keystroke();
+      mfe.executeCommand("deletePreviousChar");
+    }
+
+    function deleteAll() {
+      mfe.executeCommand("deleteAll");
     }
 
     function insert(str) {
-      // mathlive.$insert(str);
+      mfe.insert(str);
     }
+
   </script>
 </body>
 

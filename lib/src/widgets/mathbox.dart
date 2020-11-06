@@ -230,31 +230,32 @@ class MathLiveController {
   WebViewController _controller;
 
   set controller(WebViewController newController) {
-    _controller = newController;
+    this._controller = newController;
   }
 
   Future<String> insert(String latex) =>
-      _controller.evaluateJavascript('insert()');
+      _controller.evaluateJavascript("insert('$latex')");
 }
 
-typedef void LaTexChangeCallback(String latexStr);
-
 class MathLiveBox extends StatelessWidget {
-  final MathLiveController mathLiveController;
-
-  const MathLiveBox({
-    Key key,
-    this.mathLiveController,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final mathLiveController =
+        Provider.of<MathLiveController>(context, listen: false);
     return WebView(
       onWebViewCreated: (controller) {
         controller.loadUrl("http://localhost:8080/assets/html/mathbox.html");
-        // mathLiveController.controller = controller;
+        mathLiveController.controller = controller;
       },
       javascriptMode: JavascriptMode.unrestricted,
+      javascriptChannels: Set.from([
+        JavascriptChannel(
+          name: 'latexString',
+          onMessageReceived: (msg) {
+            print(msg.message);
+          },
+        )
+      ]),
     );
   }
 }
