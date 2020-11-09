@@ -71,8 +71,8 @@ class MathKeyBoard extends StatelessWidget {
 
     button.add(MyButton(
       child: Icon(MaterialCommunityIcons.getIconData("backspace-outline")),
-      onPressed: () {},
-      // onPressed: mathController.deleteExpression,
+      onPressed: mathController.backspace,
+      onLongPress: mathController.deleteAll,
       // onLongPress: () async {
       //   mathController.deleteAllExpression();
       //   await mathController.clearAnimationController?.forward();
@@ -328,8 +328,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
   }
 
   List<Widget> _buildUpButton() {
-    final mathBoxController =
-        Provider.of<MathBoxController>(context, listen: false);
+    final mathController =
+        Provider.of<MathLiveController>(context, listen: false);
     List<Widget> button = [];
     const fontSize = 25.0;
     const iconSize = 45.0;
@@ -340,8 +340,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('\\sin');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\sin');
+        mathController.insert('(');
       },
     ));
 
@@ -350,8 +350,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('\\cos');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\cos');
+        mathController.insert('(');
       },
     ));
 
@@ -360,8 +360,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('\\\\tan');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\\\tan');
+        mathController.insert('(');
       },
     ));
 
@@ -373,7 +373,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\sqrt');
+        mathController.insert('\\sqrt');
       },
     ));
 
@@ -385,8 +385,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('e');
-        mathBoxController.addExpression('^');
+        mathController.insert('e');
+        mathController.insert('^');
       },
     ));
 
@@ -398,9 +398,9 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression(')');
-        mathBoxController.addExpression('^');
-        mathBoxController.addExpression('2');
+        mathController.insert(')');
+        mathController.insert('^');
+        mathController.insert('2');
       },
     ));
 
@@ -409,8 +409,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('\\ln');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\ln');
+        mathController.insert('(');
       },
     ));
 
@@ -422,8 +422,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\arcsin');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\arcsin');
+        mathController.insert('(');
       },
     ));
 
@@ -435,8 +435,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\arccos');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\arccos');
+        mathController.insert('(');
       },
     ));
 
@@ -448,8 +448,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\arctan');
-        mathBoxController.addExpression('(');
+        mathController.insert('\\arctan');
+        mathController.insert('(');
       },
     ));
 
@@ -461,7 +461,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\\\nthroot');
+        mathController.insert('\\\\nthroot');
       },
     ));
 
@@ -473,7 +473,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression('\\|');
+        mathController.insert('\\|');
       },
     ));
 
@@ -482,7 +482,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('(');
+        mathController.insert('(');
       },
     ));
 
@@ -491,7 +491,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression(')');
+        mathController.insert(')');
       },
     ));
 
@@ -500,7 +500,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('!');
+        mathController.insert('!');
       },
     ));
 
@@ -514,7 +514,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('E');
+        mathController.insert('E');
       },
     ));
 
@@ -523,11 +523,11 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathBoxController.addExpression('log');
-        mathBoxController.addExpression('_');
-        mathBoxController.addKey('Right');
-        mathBoxController.addExpression('(');
-        mathBoxController.addKey('Left Left');
+        // mathController.insert('log');
+        // mathController.insert('_');
+        // mathController.addKey('Right');
+        // mathController.insert('(');
+        // mathController.addKey('Left Left');
       },
     ));
 
@@ -539,8 +539,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathBoxController.addExpression(')');
-        mathBoxController.addExpression('^');
+        mathController.insert(')');
+        mathController.insert('^');
       },
     ));
 
@@ -550,7 +550,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
     //     color: fontColor,
     //   ),
     //   onPressed: () {
-    //     mathBoxController.addExpression('x');
+    //     mathBoxController.insert('x');
     //   },
     // ));
 
@@ -560,14 +560,14 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         color: fontColor,
       ),
       onPressed: () {
-        mathBoxController.addKey('Left');
+        // mathController.addKey('Left');
       },
       onLongPress: () {
         try {
           final expression = Provider.of<MathModel>(context, listen: false)
               .checkHistory(toPrevious: true);
-          mathBoxController.deleteAllExpression();
-          mathBoxController.addString(expression);
+          // mathController.deleteAllExpression();
+          // mathController.addString(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the first result'),
@@ -590,14 +590,14 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         color: fontColor,
       ),
       onPressed: () {
-        mathBoxController.addKey('Right');
+        // mathController.addKey('Right');
       },
       onLongPress: () {
         try {
           final expression = Provider.of<MathModel>(context, listen: false)
               .checkHistory(toPrevious: false);
-          mathBoxController.deleteAllExpression();
-          mathBoxController.addString(expression);
+          // mathController.deleteAllExpression();
+          // mathController.addString(expression);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text('This is the last result'),
@@ -620,7 +620,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontColor: fontColor,
       onPressed: () {
         if (Provider.of<MathModel>(context, listen: false).hasHistory) {
-          mathBoxController.addExpression('Ans');
+          mathController.insert('Ans');
         } else {
           final snackBar = SnackBar(
             content: Text('Unable to input Ans now'),
