@@ -233,12 +233,12 @@ class MathLiveController {
     this._controller = newController;
   }
 
-  Future<String> insert(String latex) =>
-      _controller.evaluateJavascript("insert('$latex')");
+  Future<String> add(String latex) =>
+      _controller.evaluateJavascript("add('$latex')");
 
   Future<String> backspace() => _controller.evaluateJavascript("backspace()");
 
-  Future<String> deleteAll() => _controller.evaluateJavascript("deleteAll()");
+  Future<String> clear() => _controller.evaluateJavascript("clear()");
 }
 
 class MathLiveBox extends StatelessWidget {

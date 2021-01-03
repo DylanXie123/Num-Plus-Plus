@@ -53,7 +53,7 @@ class MathKeyBoard extends StatelessWidget {
       button.add(MyButton(
         child: Text('$i'),
         onPressed: () {
-          mathController.insert('$i');
+          mathController.add('$i');
         },
       ));
     }
@@ -65,14 +65,14 @@ class MathKeyBoard extends StatelessWidget {
         size: 60.0,
       ),
       onPressed: () {
-        mathController.insert('/');
+        mathController.add('/');
       },
     ));
 
     button.add(MyButton(
       child: Icon(MaterialCommunityIcons.getIconData("backspace-outline")),
       onPressed: mathController.backspace,
-      onLongPress: mathController.deleteAll,
+      onLongPress: mathController.clear,
       // onLongPress: () async {
       //   mathController.deleteAllExpression();
       //   await mathController.clearAnimationController?.forward();
@@ -84,7 +84,7 @@ class MathKeyBoard extends StatelessWidget {
       button.add(MyButton(
         child: Text('$i'),
         onPressed: () {
-          mathController.insert('$i');
+          mathController.add('$i');
         },
       ));
     }
@@ -92,14 +92,14 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('+'),
       onPressed: () {
-        mathController.insert('+');
+        mathController.add('+');
       },
     ));
 
     button.add(MyButton(
       child: Text('-'),
       onPressed: () {
-        mathController.insert('-');
+        mathController.add('-');
       },
     ));
 
@@ -107,7 +107,7 @@ class MathKeyBoard extends StatelessWidget {
       button.add(MyButton(
         child: Text('$i'),
         onPressed: () {
-          mathController.insert('$i');
+          mathController.add('$i');
         },
       ));
     }
@@ -115,28 +115,28 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('×'),
       onPressed: () {
-        mathController.insert('\\\\times');
+        mathController.add('\\\\times');
       },
     ));
 
     button.add(MyButton(
       child: Text('÷'),
       onPressed: () {
-        mathController.insert('\\div');
+        mathController.add('\\div');
       },
     ));
 
     button.add(MyButton(
       child: Text('0'),
       onPressed: () {
-        mathController.insert('0');
+        mathController.add('0');
       },
     ));
 
     button.add(MyButton(
       child: Text('.'),
       onPressed: () {
-        mathController.insert('.');
+        mathController.add('.');
       },
     ));
 
@@ -159,14 +159,14 @@ class MathKeyBoard extends StatelessWidget {
     button.add(MyButton(
       child: Text('π'),
       onPressed: () {
-        mathController.insert('\\pi');
+        mathController.add('\\pi');
       },
     ));
 
     button.add(MyButton(
       child: Text('e'),
       onPressed: () {
-        mathController.insert('e');
+        mathController.add('e');
       },
     ));
 
@@ -340,8 +340,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('\\sin');
-        mathController.insert('(');
+        mathController.add('\\sin');
+        mathController.add('(');
       },
     ));
 
@@ -350,8 +350,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('\\cos');
-        mathController.insert('(');
+        mathController.add('\\cos');
+        mathController.add('(');
       },
     ));
 
@@ -360,8 +360,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('\\\\tan');
-        mathController.insert('(');
+        mathController.add('\\\\tan');
+        mathController.add('(');
       },
     ));
 
@@ -373,7 +373,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\sqrt');
+        mathController.add('\\sqrt');
       },
     ));
 
@@ -385,8 +385,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('e');
-        mathController.insert('^');
+        mathController.add('e');
+        mathController.add('^');
       },
     ));
 
@@ -398,9 +398,9 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert(')');
-        mathController.insert('^');
-        mathController.insert('2');
+        mathController.add(')');
+        mathController.add('^');
+        mathController.add('2');
       },
     ));
 
@@ -409,8 +409,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('\\ln');
-        mathController.insert('(');
+        mathController.add('\\ln');
+        mathController.add('(');
       },
     ));
 
@@ -422,8 +422,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\arcsin');
-        mathController.insert('(');
+        mathController.add('\\arcsin');
+        mathController.add('(');
       },
     ));
 
@@ -435,8 +435,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\arccos');
-        mathController.insert('(');
+        mathController.add('\\arccos');
+        mathController.add('(');
       },
     ));
 
@@ -448,8 +448,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\arctan');
-        mathController.insert('(');
+        mathController.add('\\arctan');
+        mathController.add('(');
       },
     ));
 
@@ -461,7 +461,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\\\nthroot');
+        mathController.add('\\\\nthroot');
       },
     ));
 
@@ -473,7 +473,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert('\\|');
+        mathController.add('\\|');
       },
     ));
 
@@ -482,7 +482,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('(');
+        mathController.add('(');
       },
     ));
 
@@ -491,7 +491,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert(')');
+        mathController.add(')');
       },
     ));
 
@@ -500,7 +500,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('!');
+        mathController.add('!');
       },
     ));
 
@@ -514,7 +514,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.insert('E');
+        mathController.add('E');
       },
     ));
 
@@ -539,8 +539,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
         size: iconSize,
       ),
       onPressed: () {
-        mathController.insert(')');
-        mathController.insert('^');
+        mathController.add(')');
+        mathController.add('^');
       },
     ));
 
@@ -620,7 +620,7 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       fontColor: fontColor,
       onPressed: () {
         if (Provider.of<MathModel>(context, listen: false).hasHistory) {
-          mathController.insert('Ans');
+          mathController.add('Ans');
         } else {
           final snackBar = SnackBar(
             content: Text('Unable to input Ans now'),

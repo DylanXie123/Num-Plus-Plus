@@ -1,5 +1,4 @@
 import { Mathfield } from 'mathlive/dist/public/mathfield'
-import React from 'react';
 
 export default class Controller {
   private mfController!: Mathfield;
@@ -27,6 +26,3 @@ export default class Controller {
     }
   }
 }
-
-export const controller = new Controller();
-export const ControllerContext = React.createContext<Controller>(controller);

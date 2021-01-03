@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { ExpContext } from "../models/expression";
-import { ControllerContext } from '../models/controller';
+import Controller from '../models/controller';
 import MathView from "react-math-view";
 
 export default function MathBox() {
   const exp = useContext(ExpContext);
-  const controller = useContext(ControllerContext);
+  const controller = new Controller();
 
   return (
     <MathView
@@ -14,6 +14,9 @@ export default function MathBox() {
       ref={(mfe) => {
         if (mfe) {
           controller.setController(mfe!);
+          window.add = controller.add;
+          window.backspace = controller.backspace;
+          window.clear = controller.clear;
         }
       }}
     />

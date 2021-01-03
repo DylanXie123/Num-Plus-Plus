@@ -167,7 +167,6 @@ class _HomePageState extends State<HomePage>
           },
         ),
       ),
-      // body: MathLiveBox(),
       body: Column(
         children: <Widget>[
           Expanded(

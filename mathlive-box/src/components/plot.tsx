@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import functionPlot from 'function-plot';
 import { ExpContext } from '../models/expression';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 const Plot = observer(() => {
   const fn = useContext(ExpContext);
