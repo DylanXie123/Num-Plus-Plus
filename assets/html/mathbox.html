@@ -1,35 +1,14 @@
-<!DOCTYPE html>
-<html lang="en-US">
+<!doctype html>
+<html>
 
 <head>
   <meta charset="utf-8" />
-  <script src="./mathlive.js"></script>
-  <!-- <link rel="stylesheet" href="./mathlive-static.css" /> -->
 </head>
 
 <body>
-  <script>
-    const mfe = new MathfieldElement();
-    mfe.value = '1+2';
-    mfe.addEventListener('input', () => {
-      latexString.postMessage(mfe.getValue());
-      // console.log(mfe.getValue());
-    });
-    document.body.appendChild(mfe);
-
-    function backspace() {
-      mfe.executeCommand("deletePreviousChar");
-    }
-
-    function deleteAll() {
-      mfe.executeCommand("deleteAll");
-    }
-
-    function insert(str) {
-      mfe.insert(str);
-    }
-
-  </script>
+  <p id="mf"></p>
+  <p id="result"></p>
+  <script src="main.js"></script>
 </body>
 
 </html>
