@@ -248,7 +248,7 @@ class MathLiveBox extends StatelessWidget {
         Provider.of<MathLiveController>(context, listen: false);
     return WebView(
       onWebViewCreated: (controller) {
-        controller.loadUrl("http://localhost:8080/assets/html/mathbox.html");
+        controller.loadUrl("http://localhost:8080/assets/html/index.html");
         mathLiveController.controller = controller;
       },
       javascriptMode: JavascriptMode.unrestricted,
