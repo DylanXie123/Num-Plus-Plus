@@ -254,7 +254,7 @@ class MathLiveBox extends StatelessWidget {
       javascriptMode: JavascriptMode.unrestricted,
       javascriptChannels: Set.from([
         JavascriptChannel(
-          name: 'latexString',
+          name: 'variable',
           onMessageReceived: (msg) {
             print(msg.message);
           },

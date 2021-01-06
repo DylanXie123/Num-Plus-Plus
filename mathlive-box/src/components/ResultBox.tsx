@@ -2,17 +2,12 @@ import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { ExpContext } from "../models/expression";
 import MathView from 'react-math-view';
-import { Container, List } from "@material-ui/core";
 
 const ResultBox = observer(() => {
   const exp = useContext(ExpContext);
   console.log(exp.latex);
 
-  return (<List>
-    <MathView
-      value={exp.latex}
-      readOnly={true}
-    />
+  return (<div>
     <InfoBox
       title={'Eval'}
       content={exp.eval}
@@ -33,7 +28,7 @@ const ResultBox = observer(() => {
       title={'Diff'}
       content={exp.diff}
     />
-  </List>);
+  </div>);
 });
 
 interface InfoBoxProp {
@@ -42,13 +37,13 @@ interface InfoBoxProp {
 }
 
 function InfoBox(prop: InfoBoxProp) {
-  return (<Container>
+  return (<div>
     <p>{prop.title}</p>
     <MathView
       value={prop.content}
       readOnly={true}
     />
-  </Container>);
+  </div>);
 
 }
 

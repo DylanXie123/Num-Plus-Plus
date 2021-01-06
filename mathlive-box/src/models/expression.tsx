@@ -1,10 +1,11 @@
-import { action, computed, observable } from "mobx";
+import { action, autorun, computed, observable } from "mobx";
 import React from "react";
 import nerdamer from 'nerdamer';
+// import post from './post';
 const nerdamerAll = require('nerdamer/all');
 
 export default class Expression {
-  @observable latex: string = '';
+  latex: string = '';
 
   @observable
   private expression!: nerdamer.Expression;
@@ -71,3 +72,8 @@ export default class Expression {
 
 export const expStore = new Expression();
 export const ExpContext = React.createContext<Expression>(expStore);
+
+autorun(() => {
+  console.log(expStore.variable);
+  window.variable.postMessage(expStore.variable.join());
+})
