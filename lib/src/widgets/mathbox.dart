@@ -7,9 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
-import 'package:num_plus_plus/src/backend/mathmodel.dart';
-import 'package:num_plus_plus/src/pages/settingpage.dart';
-
 class Server {
   // class from inAppBrowser
 
@@ -80,61 +77,6 @@ class Server {
   }
 }
 
-class MathBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final mathBoxController =
-        Provider.of<MathBoxController>(context, listen: false);
-    final mathModel = Provider.of<MathModel>(context, listen: false);
-    final matrixModel = Provider.of<MatrixModel>(context, listen: false);
-    final functionModel = Provider.of<FunctionModel>(context, listen: false);
-    final mode = Provider.of<CalculationMode>(context, listen: false);
-    return Stack(
-      children: <Widget>[
-        WebView(
-          onWebViewCreated: (controller) {
-            controller
-                .loadUrl("http://localhost:8080/assets/html/homepage.html");
-            mathBoxController.webViewController = controller;
-          },
-          onPageFinished: (s) {
-            final setting = Provider.of<SettingModel>(context, listen: false);
-            if (setting.initPage == 1) {
-              mathBoxController.addExpression('\\\\bmatrix');
-            }
-          },
-          javascriptMode: JavascriptMode.unrestricted,
-          javascriptChannels: Set.from([
-            JavascriptChannel(
-                name: 'latexString',
-                onMessageReceived: (JavascriptMessage message) {
-                  if (mode.value == Mode.Matrix) {
-                    matrixModel.updateExpression(message.message);
-                  } else {
-                    if (message.message.contains(RegExp('x|y'))) {
-                      mode.changeMode(Mode.Function);
-                      functionModel.updateExpression(message.message);
-                    } else {
-                      mode.changeMode(Mode.Basic);
-                      mathModel.updateExpression(message.message);
-                      mathModel.calcNumber();
-                    }
-                  }
-                }),
-            JavascriptChannel(
-                name: 'clearable',
-                onMessageReceived: (JavascriptMessage message) {
-                  mathModel.changeClearable(
-                      message.message == 'false' ? false : true);
-                }),
-          ]),
-        ),
-        ClearAnimation(),
-      ],
-    );
-  }
-}
-
 class ClearAnimation extends StatefulWidget {
   @override
   _ClearAnimationState createState() => _ClearAnimationState();
@@ -153,8 +95,8 @@ class _ClearAnimationState extends State<ClearAnimation>
     final curve = CurvedAnimation(
         parent: animationController, curve: Curves.easeInOutCubic);
     animation = Tween<double>(begin: 0, end: 2000).animate(curve);
-    Provider.of<MathBoxController>(context, listen: false)
-        .clearAnimationController = animationController;
+    // Provider.of<MathBoxController>(context, listen: false)
+    //     .clearAnimationController = animationController;
   }
 
   @override
@@ -186,46 +128,6 @@ class _ClearAnimationState extends State<ClearAnimation>
   }
 }
 
-class MathBoxController {
-  WebViewController _webViewController;
-  AnimationController clearAnimationController;
-
-  set webViewController(WebViewController controller) {
-    this._webViewController = controller;
-  }
-
-  void addExpression(String msg, {bool isOperator = false}) {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript(
-        "addCmd('$msg', {isOperator: ${isOperator.toString()}})");
-  }
-
-  void addString(String msg) {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript("addString('$msg')");
-  }
-
-  void equal() {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript("equal()");
-  }
-
-  void addKey(String key) {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript("simulateKey('$key')");
-  }
-
-  void deleteExpression() {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript("delString()");
-  }
-
-  void deleteAllExpression() {
-    assert(_webViewController != null);
-    _webViewController.evaluateJavascript("delAll()");
-  }
-}
-
 class MathLiveController {
   WebViewController _controller;
 
@@ -239,6 +141,8 @@ class MathLiveController {
   Future<String> backspace() => _controller.evaluateJavascript("backspace()");
 
   Future<String> clear() => _controller.evaluateJavascript("clear()");
+
+  Future<String> doSymCalc() => _controller.evaluateJavascript("doSymCalc()");
 }
 
 class MathLiveBox extends StatelessWidget {

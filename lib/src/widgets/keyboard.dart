@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:num_plus_plus/src/widgets/mathbox.dart';
 import 'package:num_plus_plus/src/pages/settingpage.dart';
-import 'package:num_plus_plus/src/backend/mathmodel.dart';
 
 class MyButton extends StatelessWidget {
   final Widget child;
@@ -140,21 +139,21 @@ class MathKeyBoard extends StatelessWidget {
       },
     ));
 
-    button.add(Consumer<CalculationMode>(
-      builder: (context, mode, _) => MyButton(
-        child: mode.value != Mode.Matrix
-            ? Text('=')
-            : Icon(
-                MaterialCommunityIcons.getIconData("matrix"),
-                size: 40.0,
-              ),
-        onPressed: () {
-          // mode.value == Mode.Basic
-          //     ? mathController.equal()
-          //     : mathController.insert('\\\\bmatrix');
-        },
-      ),
-    ));
+    // button.add(Consumer<CalculationMode>(
+    //   builder: (context, mode, _) => MyButton(
+    //     child: mode.value != Mode.Matrix
+    //         ? Text('=')
+    //         : Icon(
+    //             MaterialCommunityIcons.getIconData("matrix"),
+    //             size: 40.0,
+    //           ),
+    //     onPressed: () {
+    //       // mode.value == Mode.Basic
+    //       //     ? mathController.equal()
+    //       //     : mathController.insert('\\\\bmatrix');
+    //     },
+    //   ),
+    // ));
 
     button.add(MyButton(
       child: Text('π'),
@@ -495,12 +494,21 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       },
     ));
 
+    // button.add(MyButton(
+    //   child: Text('!'),
+    //   fontSize: fontSize,
+    //   fontColor: fontColor,
+    //   onPressed: () {
+    //     mathController.add('!');
+    //   },
+    // ));
+
     button.add(MyButton(
-      child: Text('!'),
+      child: Text('x'),
       fontSize: fontSize,
       fontColor: fontColor,
       onPressed: () {
-        mathController.add('!');
+        mathController.add('x');
       },
     ));
 
@@ -564,8 +572,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       },
       onLongPress: () {
         try {
-          final expression = Provider.of<MathModel>(context, listen: false)
-              .checkHistory(toPrevious: true);
+          // final expression = Provider.of<MathModel>(context, listen: false)
+          //     .checkHistory(toPrevious: true);
           // mathController.deleteAllExpression();
           // mathController.addString(expression);
         } catch (e) {
@@ -594,8 +602,8 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       },
       onLongPress: () {
         try {
-          final expression = Provider.of<MathModel>(context, listen: false)
-              .checkHistory(toPrevious: false);
+          // final expression = Provider.of<MathModel>(context, listen: false)
+          //     .checkHistory(toPrevious: false);
           // mathController.deleteAllExpression();
           // mathController.addString(expression);
         } catch (e) {
@@ -614,28 +622,28 @@ class _ExpandKeyBoardState extends State<ExpandKeyBoard>
       },
     ));
 
-    button.add(MyButton(
-      child: Text('Ans'),
-      fontSize: fontSize,
-      fontColor: fontColor,
-      onPressed: () {
-        if (Provider.of<MathModel>(context, listen: false).hasHistory) {
-          mathController.add('Ans');
-        } else {
-          final snackBar = SnackBar(
-            content: Text('Unable to input Ans now'),
-            duration: Duration(
-              milliseconds: 500,
-            ),
-            action: SnackBarAction(
-              label: 'OK',
-              onPressed: () {},
-            ),
-          );
-          Scaffold.of(context).showSnackBar(snackBar);
-        }
-      },
-    ));
+    // button.add(MyButton(
+    //   child: Text('Ans'),
+    //   fontSize: fontSize,
+    //   fontColor: fontColor,
+    //   onPressed: () {
+    //     if (Provider.of<MathModel>(context, listen: false).hasHistory) {
+    //       mathController.add('Ans');
+    //     } else {
+    //       final snackBar = SnackBar(
+    //         content: Text('Unable to input Ans now'),
+    //         duration: Duration(
+    //           milliseconds: 500,
+    //         ),
+    //         action: SnackBarAction(
+    //           label: 'OK',
+    //           onPressed: () {},
+    //         ),
+    //       );
+    //       Scaffold.of(context).showSnackBar(snackBar);
+    //     }
+    //   },
+    // ));
 
     return button;
   }
