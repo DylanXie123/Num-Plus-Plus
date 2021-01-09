@@ -1,50 +1,80 @@
 import { observer } from "mobx-react-lite";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ExpContext } from "../models/expression";
 import MathView from 'react-math-view';
 
+enum DisplayMode {
+  Eval,
+  Symbolic,
+  Plot,
+}
+
 const ResultBox = observer(() => {
   const exp = useContext(ExpContext);
-  console.log(exp.latex);
+  const [display, setDisplay] = useState<DisplayMode>(DisplayMode.Eval);
+
+  useEffect(() => {
+    if (exp.variable) {
+      setDisplay(DisplayMode.Eval);
+    }
+  }, [exp.variable]);
+
+  useEffect(() => {
+    window.doEvalCalc = () => { setDisplay(DisplayMode.Eval); };
+    window.doSymCalc = () => { setDisplay(DisplayMode.Symbolic); };
+    window.doPlot = () => { setDisplay(DisplayMode.Plot); };
+    console.log('run hook');
+  }, []);
+
+  switch (display) {
+    case DisplayMode.Eval:
+      return (<EvalResultBox />);
+    case DisplayMode.Symbolic:
+      return (<SymResultBox />);
+    case DisplayMode.Plot:
+      return (<PlotResultBox />);
+    default:
+      throw Error('Unknown type');
+  }
+});
+
+const EvalResultBox = observer(() => {
+  const exp = useContext(ExpContext);
+  const evalResult = exp.eval;
+  const textResult = exp.text;
+
+  if (evalResult === textResult) {
+    return (<InfoBox content={`=${evalResult}`} />);
+  }
 
   return (<div>
-    <InfoBox
-      title={'Eval'}
-      content={exp.eval}
-    />
-    <InfoBox
-      title={'Text'}
-      content={exp.text}
-    />
-    <InfoBox
-      title={'Roots'}
-      content={exp.solve}
-    />
-    <InfoBox
-      title={'Int'}
-      content={exp.integrate}
-    />
-    <InfoBox
-      title={'Diff'}
-      content={exp.diff}
-    />
+    <InfoBox content={`=${exp.eval}`} />
+    <InfoBox content={`=${exp.text}`} />
   </div>);
 });
 
+const SymResultBox = observer(() => {
+  const exp = useContext(ExpContext);
+
+  return (<div>
+    <InfoBox content={`=${exp.integrate}`} />
+    <InfoBox content={`=${exp.diff}`} />
+  </div>);
+});
+
+const PlotResultBox = observer(() => {
+  throw Error('Not implemented yet');
+});
+
 interface InfoBoxProp {
-  title: string,
   content: string,
 }
 
 function InfoBox(prop: InfoBoxProp) {
-  return (<div>
-    <p>{prop.title}</p>
-    <MathView
-      value={prop.content}
-      readOnly={true}
-    />
-  </div>);
-
+  return (<MathView
+    value={prop.content}
+    readOnly={true}
+  />);
 }
 
 export default ResultBox;
