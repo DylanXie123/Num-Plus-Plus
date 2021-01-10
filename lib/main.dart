@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:num_plus_plus/src/widgets/sym_calc_button.dart';
+import 'package:num_plus_plus/src/widgets/dynamic_button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -23,7 +23,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (context) => MathLiveController()),
-        ChangeNotifierProvider(create: (_) => SettingModel()),
+        ListenableProvider(
+            create: (_) => ValueNotifier<MathMode>(MathMode.Eval)),
+        Provider(create: (_) => SettingModel()),
+        // boolena valuenotifier to represent contain variable or not
       ],
       child: MaterialApp(
         title: 'num++',
@@ -101,7 +104,7 @@ class SlidComponent extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SymCalcButton(),
+        DynamicButton(),
         ExpandKeyBoard(),
       ],
     );

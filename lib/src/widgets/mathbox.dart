@@ -142,7 +142,18 @@ class MathLiveController {
 
   Future<String> clear() => _controller.evaluateJavascript("clear()");
 
-  Future<String> doSymCalc() => _controller.evaluateJavascript("doSymCalc()");
+  Future<String> doIntegrate() =>
+      _controller.evaluateJavascript("doIntegrate()");
+
+  Future<String> doDiff() => _controller.evaluateJavascript("doDiff()");
+}
+
+enum MathMode {
+  Eval,
+  Var,
+  Defint,
+  Limit,
+  Matrix,
 }
 
 class MathLiveBox extends StatelessWidget {
@@ -150,6 +161,8 @@ class MathLiveBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final mathLiveController =
         Provider.of<MathLiveController>(context, listen: false);
+    final mathModel =
+        Provider.of<ValueNotifier<MathMode>>(context, listen: false);
     return WebView(
       onWebViewCreated: (controller) {
         controller.loadUrl("http://localhost:8080/assets/html/index.html");
@@ -160,7 +173,8 @@ class MathLiveBox extends StatelessWidget {
         JavascriptChannel(
           name: 'variable',
           onMessageReceived: (msg) {
-            print(msg.message);
+            final modeCode = int.tryParse(msg.message);
+            mathModel.value = MathMode.values[modeCode];
           },
         )
       ]),

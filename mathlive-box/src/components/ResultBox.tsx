@@ -1,40 +1,18 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, useState } from "react";
-import { ExpContext } from "../models/expression";
+import { ExpContext, Mode } from "../models/expression";
 import MathView from 'react-math-view';
-
-enum DisplayMode {
-  Eval,
-  Symbolic,
-  Plot,
-}
 
 const ResultBox = observer(() => {
   const exp = useContext(ExpContext);
-  const [display, setDisplay] = useState<DisplayMode>(DisplayMode.Eval);
 
-  useEffect(() => {
-    if (exp.variable) {
-      setDisplay(DisplayMode.Eval);
-    }
-  }, [exp.variable]);
-
-  useEffect(() => {
-    window.doEvalCalc = () => { setDisplay(DisplayMode.Eval); };
-    window.doSymCalc = () => { setDisplay(DisplayMode.Symbolic); };
-    window.doPlot = () => { setDisplay(DisplayMode.Plot); };
-    console.log('run hook');
-  }, []);
-
-  switch (display) {
-    case DisplayMode.Eval:
+  switch (exp.mode) {
+    case Mode.Eval:
       return (<EvalResultBox />);
-    case DisplayMode.Symbolic:
+    case Mode.Var:
       return (<SymResultBox />);
-    case DisplayMode.Plot:
-      return (<PlotResultBox />);
     default:
-      throw Error('Unknown type');
+      return (<EvalResultBox />);
   }
 });
 
@@ -53,17 +31,31 @@ const EvalResultBox = observer(() => {
   </div>);
 });
 
+enum SymMode {
+  Int,
+  Diff,
+  Simplify,
+  Plot,
+}
+
 const SymResultBox = observer(() => {
   const exp = useContext(ExpContext);
+  const [mode, setMode] = useState<SymMode>();
 
-  return (<div>
-    <InfoBox content={`=${exp.integrate}`} />
-    <InfoBox content={`=${exp.diff}`} />
-  </div>);
-});
+  useEffect(() => {
+    window.doIntegrate = () => { setMode(SymMode.Int); }
+    window.doDiff = () => { setMode(SymMode.Diff); }
+  }, []);
 
-const PlotResultBox = observer(() => {
-  throw Error('Not implemented yet');
+  if (mode === SymMode.Int) {
+    return <InfoBox content={`=${exp.integrate}`} />;
+  }
+
+  if (mode === SymMode.Diff) {
+    return <InfoBox content={`=${exp.diff}`} />;
+  }
+
+  return (<div />);
 });
 
 interface InfoBoxProp {
@@ -74,6 +66,7 @@ function InfoBox(prop: InfoBoxProp) {
   return (<MathView
     value={prop.content}
     readOnly={true}
+    style={{ outline: 0, fontSize: '1.2em' }}
   />);
 }
 

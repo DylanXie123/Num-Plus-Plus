@@ -2,8 +2,7 @@ interface Window {
   add: (expression: string) => void;
   backspace: () => void;
   clear: () => void;
-  doEvalCalc: () => void;
-  doSymCalc: () => void;
-  doPlot: () => void;
+  doIntegrate: () => void;
+  doDiff: () => void;
   variable: any;
 }

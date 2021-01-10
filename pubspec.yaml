@@ -1,5 +1,5 @@
 name: num_plus_plus
-description: A scientific & intutive calculator written in Flutter.
+description: A scientific & intuitive calculator written in Flutter.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,17 +23,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  math_expressions: ^1.1.1
   webview_flutter: ^1.0.7
   mime: ^0.9.6+3
-  petitparser: ^2.4.0
-  provider: ^3.2.0
+  provider: ^4.3.2+3
   shared_preferences: ^0.5.3+4
   flutter_icons: ^0.3.1
   url_launcher: ^5.4.1
   flutter_launcher_icons: ^0.7.3
-  linalg: ^0.3.2
-  fl_chart: ^0.5.0
 
 flutter_icons:
   android: true
