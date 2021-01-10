@@ -26,6 +26,9 @@
   },
   "watch": {
     "share": {
+      "patterns": [
+        "src"
+      ],
       "extensions": "ts, tsx, css, html"
     }
   },
@@ -34,7 +37,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "share": "react-scripts build && node share.js"
+    "share": "react-scripts build && node share.js",
+    "watch": "npm-watch"
   },
   "eslintConfig": {
     "extends": [
