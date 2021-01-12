@@ -60,14 +60,28 @@ const SymResultBox = observer(() => {
 
 interface InfoBoxProp {
   content: string,
+  hideAdd?: boolean,
 }
 
+// TODO: Auto hide button when content is empty
 function InfoBox(prop: InfoBoxProp) {
-  return (<MathView
-    value={prop.content}
-    readOnly={true}
-    style={{ outline: 0, fontSize: '1.2em' }}
-  />);
+  return (
+    <div style={{ display: 'flex' }}>
+      <MathView
+        value={prop.content}
+        readOnly={true}
+        style={{ outline: 0 }}
+      >
+      </MathView>
+      <button
+        hidden={prop.hideAdd}
+        style={{ height: '50%', marginLeft: '20pt' }}
+        onClick={() => {
+          window.add(prop.content.substr(1));
+        }}>
+        +</button>
+    </div>
+  );
 }
 
 export default ResultBox;
