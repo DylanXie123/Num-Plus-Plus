@@ -21,6 +21,10 @@ const EvalResultBox = observer(() => {
   const evalResult = exp.eval;
   const textResult = exp.text;
 
+  if (evalResult === undefined) {
+    return <div></div>;
+  }
+
   if (evalResult === textResult) {
     return (<InfoBox content={`=${evalResult}`} />);
   }
