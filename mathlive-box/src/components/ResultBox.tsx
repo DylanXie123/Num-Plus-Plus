@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, useState } from "react";
 import { ExpContext, Mode } from "../models/expression";
 import MathView from 'react-math-view';
+import Plot from "./plot";
 
 const ResultBox = observer(() => {
   const exp = useContext(ExpContext);
@@ -11,6 +12,8 @@ const ResultBox = observer(() => {
       return (<EvalResultBox />);
     case Mode.Var:
       return (<SymResultBox />);
+    case Mode.Matrix:
+      return (<MatrixResultBox />);
     default:
       return (<EvalResultBox />);
   }
@@ -30,9 +33,21 @@ const EvalResultBox = observer(() => {
   }
 
   return (<div>
-    <InfoBox content={`=${exp.eval}`} />
-    <InfoBox content={`=${exp.text}`} />
+    <InfoBox content={`=${evalResult}`} />
+    <InfoBox content={`=${textResult}`} />
   </div>);
+});
+
+const MatrixResultBox = observer(() => {
+  const exp = useContext(ExpContext);
+
+  useEffect(() => window.invertMatrix = exp.invertMatrix);
+
+  if (exp.text === undefined) {
+    return <div></div>;
+  }
+
+  return (<InfoBox content={`=${exp.text}`} />);
 });
 
 enum SymMode {
@@ -49,6 +64,7 @@ const SymResultBox = observer(() => {
   useEffect(() => {
     window.doIntegrate = () => { setMode(SymMode.Int); }
     window.doDiff = () => { setMode(SymMode.Diff); }
+    window.doPlot = () => { setMode(SymMode.Plot); }
   }, []);
 
   if (mode === SymMode.Int) {
@@ -57,6 +73,10 @@ const SymResultBox = observer(() => {
 
   if (mode === SymMode.Diff) {
     return <InfoBox content={`=${exp.diff}`} />;
+  }
+
+  if (mode === SymMode.Plot) {
+    return <Plot />;
   }
 
   return (<div />);
@@ -81,6 +101,7 @@ function InfoBox(prop: InfoBoxProp) {
         hidden={prop.hideAdd}
         style={{ height: '50%', marginLeft: '20pt' }}
         onClick={() => {
+          window.clear();
           window.add(prop.content.substr(1));
         }}>
         +</button>

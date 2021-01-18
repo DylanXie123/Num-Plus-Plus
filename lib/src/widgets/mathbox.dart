@@ -146,6 +146,11 @@ class MathLiveController {
       _controller.evaluateJavascript("doIntegrate()");
 
   Future<String> doDiff() => _controller.evaluateJavascript("doDiff()");
+
+  Future<String> doPlot() => _controller.evaluateJavascript("doPlot()");
+
+  Future<String> invertMatrix() =>
+      _controller.evaluateJavascript("invertMatrix()");
 }
 
 enum MathMode {

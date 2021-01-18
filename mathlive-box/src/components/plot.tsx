@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import functionPlot from 'function-plot';
 import { ExpContext } from '../models/expression';
 import { observer } from 'mobx-react-lite';

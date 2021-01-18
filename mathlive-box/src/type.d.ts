@@ -4,5 +4,7 @@ interface Window {
   clear: () => void;
   doIntegrate: () => void;
   doDiff: () => void;
+  doPlot: () => void;
+  invertMatrix: () => void;
   variable: any;
 }
